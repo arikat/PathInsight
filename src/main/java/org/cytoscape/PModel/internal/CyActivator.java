@@ -18,18 +18,14 @@ public class CyActivator extends AbstractCyActivator {
 	public void start(BundleContext context) throws Exception {
 
 		// Add right click menu item to the edge view
-		CyEdgeViewContextMenuFactory EdgeTF = new CtxMenuEdge();
-		CyNodeViewContextMenuFactory NodeTF = new CtxMenu();
-		Properties Props = new Properties();
-		registerAllServices(context, EdgeTF, Props);
-		registerAllServices(context, NodeTF, Props);
 		ArrowShapeBypassTaskFactory ArrowShapeBypass = new ArrowShapeBypassTaskFactory();
 		String menu = "Activation";
-		addMenus(context, ArrowShapeBypass, menu, "8.1", true); //Not appearing in Menu
+		addMenus(context, ArrowShapeBypass, menu, "8.1", true);
 	}
 
-	private void addMenus(BundleContext context, ArrowShapeBypassTaskFactory arrowShapeBypass, String menu, String gravity, boolean exclusive) {
-		String baseMenu = "Apps.Aarya";
+	private void addMenus(BundleContext context, ArrowShapeBypassTaskFactory arrowShapeBypass, String menu,
+			String gravity, boolean exclusive) {
+		String baseMenu = "Apps.Aarya.Activation";
 		Properties props = new Properties();
 		if (menu != null) {
 			props.setProperty("preferredMenu", baseMenu + "." + menu);
@@ -45,6 +41,6 @@ public class CyActivator extends AbstractCyActivator {
 			}
 
 		}
-
+		registerService(context, arrowShapeBypass, EdgeViewTaskFactory.class, props);
 	}
 }
