@@ -20,7 +20,7 @@ import org.cytoscape.application.swing.CyEdgeViewContextMenuFactory;
 import org.cytoscape.application.swing.CyMenuItem;
 import org.cytoscape.application.swing.CyNodeViewContextMenuFactory;
 import org.cytoscape.model.CyNode;
-
+//Class is used to demo swing function - disregard for now
 public class CtxMenu implements CyNodeViewContextMenuFactory, ActionListener {
 	public CyMenuItem createMenuItem(CyNetworkView netView, View<CyNode> nodeView) {        
         JMenuItem jMenu = new JMenuItem("Node Modification");
