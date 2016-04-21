@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1460410540779
+Bnd-LastModified: 1460441226309
 Build-Jdk: 1.8.0_66
 Built-By: ravan
 Bundle-Activator: org.cytoscape.PModel.internal.CyActivator

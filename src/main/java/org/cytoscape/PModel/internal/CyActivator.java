@@ -21,6 +21,9 @@ public class CyActivator extends AbstractCyActivator {
 		ArrowShapeBypassTaskFactory ArrowShapeBypass = new ArrowShapeBypassTaskFactory();
 		String menu = "Activation";
 		addMenus(context, ArrowShapeBypass, menu, "8.1", true);
+		InhibitionTaskFactory InhibitionShapeTask = new InhibitionTaskFactory();
+		String menus = "Inhibition";
+		addMenu(context, InhibitionShapeTask, menus, "8.2", true);
 	}
 
 	private void addMenus(BundleContext context, ArrowShapeBypassTaskFactory arrowShapeBypass, String menu,
@@ -42,5 +45,25 @@ public class CyActivator extends AbstractCyActivator {
 
 		}
 		registerService(context, arrowShapeBypass, EdgeViewTaskFactory.class, props);
+	}
+	private void addMenu(BundleContext context, InhibitionTaskFactory InhibitionShapeTask, String menus,
+			String gravity, boolean exclusive) {
+		String baseMenu = "Apps.Aarya.Inhibition";
+		Properties props = new Properties();
+		if (menus != null) {
+			props.setProperty("preferredMenu", baseMenu + "." + menus);
+			props.setProperty("inMenuBar", "true");
+			props.setProperty("menuGravity", gravity);
+		}
+		if (exclusive) {
+			props = new Properties();
+			if (menus != null) {
+				props.setProperty("inMenuBar", "true");
+				props.setProperty("menuGravity", gravity);
+				props.setProperty("preferredMenu", baseMenu);
+			}
+
+		}
+		registerService(context, InhibitionShapeTask, EdgeViewTaskFactory.class, props);
 	}
 }
