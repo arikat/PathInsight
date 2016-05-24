@@ -16,4 +16,4 @@ public class InhibitionTaskFactory extends AbstractEdgeViewTaskFactory {
 		return new TaskIterator(new Task[] { new InhibitionShapeTask(edgeView, netView) });
 	}
 
-}
+} //Build Task Factory for Finboolcol next

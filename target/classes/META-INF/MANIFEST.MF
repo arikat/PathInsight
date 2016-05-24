@@ -1,19 +1,20 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1460441226309
-Build-Jdk: 1.8.0_66
+Bnd-LastModified: 1464112246238
+Build-Jdk: 1.8.0_92
 Built-By: ravan
 Bundle-Activator: org.cytoscape.PModel.internal.CyActivator
 Bundle-ManifestVersion: 2
 Bundle-Name: org.cytoscape.PModel.PathwayModelling [org.cytoscape.PModel
  ]
 Bundle-SymbolicName: org.cytoscape.PModel.PathwayModelling
-Bundle-Version: 0.0.1.SNAPSHOT
+Bundle-Version: 0.0.2.SNAPSHOT
 Created-By: Apache Maven Bundle Plugin
-Import-Package: javax.swing,org.cytoscape.application.swing;version="[3.
+Import-Package: org.cytoscape.application;version="[3.3,4)",org.cytoscap
+ e.application.events;version="[3.3,4)",org.cytoscape.event;version="[3.
  3,4)",org.cytoscape.model;version="[3.3,4)",org.cytoscape.service.util;
- version="[3.3,4)",org.cytoscape.task;version="[3.3,4)",org.cytoscape.vi
- ew.model;version="[3.3,4)",org.cytoscape.view.presentation.property;ver
- sion="[3.3,4)",org.cytoscape.view.presentation.property.values;version=
- "[3.3,4)",org.cytoscape.work;version="[3.3,4)",org.osgi.framework;versi
- on="[1.5,2)"
+ version="[3.3,4)",org.cytoscape.task;version="[3.3,4)",org.cytoscape.ut
+ il.swing;version="[3.3,4)",org.cytoscape.view.model;version="[3.3,4)",o
+ rg.cytoscape.view.presentation.property;version="[3.3,4)",org.cytoscape
+ .view.presentation.property.values;version="[3.3,4)",org.cytoscape.work
+ ;version="[3.3,4)",org.osgi.framework;version="[1.5,2)",org.w3c.dom
 Tool: Bnd-1.50.0
