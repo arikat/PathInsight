@@ -42,16 +42,11 @@ public class finboolcol extends AbstractTask { //prev AbstractTask
 		//table.getRow(node1.getSUID()).set("bool", String.valueOf(1));
 		//CyRow row = table.getRow(nodes);
 		//row.set(bool, 1, Integer.class);
-        // create a column for the table 
         //CyColumn column = table.getColumn(bool);
         //if (table.getColumn(bool) != null) {
         //table.getRow(bool).set(bool, "wing");
         //table.getRow(nodes.set(bool, new Integer(2)));
         }      
-        // Step 2: populate the table with some data
-        //String[] keys = {"-1"}; //map to the the "name" column
-        //CyRow row = table.getRow(keys[0]);
-        //row.set(bool, new Integer(2));
         //insertTasksAfterCurrentTask(tooty);
         //Class<? extends CyIdentifiable> type = CyEdge.class;
 

@@ -14,9 +14,6 @@ import org.cytoscape.view.presentation.property.ArrowShapeVisualProperty;
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.work.Task;
 import org.cytoscape.work.TaskMonitor;
-import org.cytoscape.PModel.internal.EdgeValueTask;
-import org.cytoscape.PModel.internal.EdgeTableTaskFactory;
-import org.cytoscape.PModel.internal.EdgeManager;
 import org.cytoscape.PModel.internal.finboolcol;
 
 public class InhibitionShapeTask extends AbstractEdgeViewTask {
