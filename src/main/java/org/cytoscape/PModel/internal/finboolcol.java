@@ -20,25 +20,36 @@ import org.cytoscape.PModel.internal.InhibitionShapeTask;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.application.swing.AbstractCyAction;
 
-public class finboolcol extends AbstractTask { //prev AbstractTask
+public class finboolcol extends AbstractTask {
 	public CyNetwork network;
+	
 	//private CyApplicationManager cyApplicationManager;
 	//final List<CyNode> Nodes = network.getNodeList();
+	
 	List<CyNode> Nodes = CyTableUtil.getNodesInState(network,"selected",true);
+	
 	//final List<CyNode> nodes = CyTableUtil.getNodesInState(cyApplicationManager.getCurrentNetwork(),"selected",true);
 	final CyNode node1 =  Nodes.get(0);
+	
+	
 	//final List<Long> node1 = nodes.stream().map(edge -> edge.getSUID()).collect(Collectors.toList());
 	//private static int numImports = 0;
 	//public InhibitionShapeTask tooty;
 	
 	@Override
     public void run(TaskMonitor tm) throws IOException {
-        // Step 1: create a new table
+
 		CyTable table = network.getDefaultNodeTable();
 		String bool = "bool";
 		table.getColumn("bool");
+		
+		
 		//CyNode nod1 = network.getNode(arg0);
+		
+		
 		table.getRow(node1.getSUID()).set(bool, Integer.valueOf(1));
+		
+		
 		//table.getRow(node1.getSUID()).set("bool", String.valueOf(1));
 		//CyRow row = table.getRow(nodes);
 		//row.set(bool, 1, Integer.class);
