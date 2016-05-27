@@ -10,6 +10,7 @@ import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskMonitor;
 import org.cytoscape.work.Tunable;
 import org.cytoscape.model.CyTable;
+import org.cytoscape.model.CyTableUtil;
 import org.cytoscape.application.CyApplicationManager;
 
 public class Createcolumnattempt extends AbstractTask {
@@ -17,17 +18,19 @@ public class Createcolumnattempt extends AbstractTask {
 	public String columnName = "bool";
 	private CyNetwork network;
 	
+	public Createcolumnattempt(CyNetwork network){
+		this.network = network;
+	}
+	
 	//CyNetwork network = CyActivator.cyapplicationManagerService.getCurrentNetwork();
-	//final List<CyNode> Nodes = network.getNodeList();
+	//List<CyNode> Nodes = CyTableUtil.getNodesInState(network,"selected",true); //del if not work
 	//final CyNode node1 =  Nodes.get(0);
 	//final List<CyNode> nodes = network.getNodeList();
 	//final CyNode edge1 =  nodes.get(0);
 	//private static int numImports = 0;
 	//CyRow row = network.getRow(node1);
 	
-	public Createcolumnattempt(CyNetwork network){
-		this.network = network;
-	}
+
 	
 	
 	public void run(TaskMonitor monitor) {
@@ -41,7 +44,11 @@ public class Createcolumnattempt extends AbstractTask {
 		if(nodeTable.getColumn(columnName)== null){
 			nodeTable.createColumn(columnName, Integer.class, true);
 		}
-		else {
+		else if(nodeTable.getColumn(columnName) != null) {
+			List<CyNode> Nodes = CyTableUtil.getNodesInState(network,"selected",true); //del if not work
+			final CyNode node1 =  Nodes.get(0);
+			nodeTable.getRow(node1.getSUID()).set(columnName, Integer.valueOf(1)); //new
+			
 			//row.set(columnName, 1, integer.class);
 			//nodeTable.getRow(edge1).set(columnName, "-1"); //if this doesn't work, create get row separately in diff task.
 		}

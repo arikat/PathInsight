@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1464112246238
+Bnd-LastModified: 1464303006800
 Build-Jdk: 1.8.0_92
 Built-By: ravan
 Bundle-Activator: org.cytoscape.PModel.internal.CyActivator
@@ -10,11 +10,9 @@ Bundle-SymbolicName: org.cytoscape.PModel.PathwayModelling
 Bundle-Version: 0.0.2.SNAPSHOT
 Created-By: Apache Maven Bundle Plugin
 Import-Package: org.cytoscape.application;version="[3.3,4)",org.cytoscap
- e.application.events;version="[3.3,4)",org.cytoscape.event;version="[3.
- 3,4)",org.cytoscape.model;version="[3.3,4)",org.cytoscape.service.util;
- version="[3.3,4)",org.cytoscape.task;version="[3.3,4)",org.cytoscape.ut
- il.swing;version="[3.3,4)",org.cytoscape.view.model;version="[3.3,4)",o
- rg.cytoscape.view.presentation.property;version="[3.3,4)",org.cytoscape
- .view.presentation.property.values;version="[3.3,4)",org.cytoscape.work
- ;version="[3.3,4)",org.osgi.framework;version="[1.5,2)",org.w3c.dom
+ e.model;version="[3.3,4)",org.cytoscape.service.util;version="[3.3,4)",
+ org.cytoscape.task;version="[3.3,4)",org.cytoscape.view.model;version="
+ [3.3,4)",org.cytoscape.view.presentation.property;version="[3.3,4)",org
+ .cytoscape.view.presentation.property.values;version="[3.3,4)",org.cyto
+ scape.work;version="[3.3,4)",org.osgi.framework;version="[1.5,2)"
 Tool: Bnd-1.50.0

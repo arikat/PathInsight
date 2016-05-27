@@ -30,7 +30,7 @@ public class CyActivator extends AbstractCyActivator {
 		createcolumntaskfactory createcolumn = new createcolumntaskfactory(cyApplicationManagerService);
 		String menus2 = "Inhibitioning";
 		aMenu(context, createcolumn, menus2, "8.3", true);
-		TutorialFactory crcolumn = new TutorialFactory();
+		TutorialFactory crcolumn = new TutorialFactory(cyApplicationManagerService);
 		String menus3 = "Inhibitis";
 		bMenu(context, crcolumn, menus3, "8.5", true);
 	}

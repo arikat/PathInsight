@@ -23,6 +23,9 @@ import org.cytoscape.application.swing.AbstractCyAction;
 public class finboolcol extends AbstractTask {
 	public CyNetwork network;
 	
+	public finboolcol(CyNetwork network){
+		this.network = network;
+	}
 	//private CyApplicationManager cyApplicationManager;
 	//final List<CyNode> Nodes = network.getNodeList();
 	
