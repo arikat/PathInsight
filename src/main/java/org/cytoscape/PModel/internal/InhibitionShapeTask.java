@@ -14,11 +14,9 @@ import org.cytoscape.view.presentation.property.ArrowShapeVisualProperty;
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.work.Task;
 import org.cytoscape.work.TaskMonitor;
-import org.cytoscape.PModel.internal.finboolcol;
 
 public class InhibitionShapeTask extends AbstractEdgeViewTask {
 	public static final String BoolVal = "BoolValue";
-	//public finboolcol tooty;
 
 	public InhibitionShapeTask(View<CyEdge> edgeView, CyNetworkView netView) {
 		super(edgeView, netView);

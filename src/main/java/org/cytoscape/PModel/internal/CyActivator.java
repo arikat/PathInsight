@@ -23,16 +23,13 @@ public class CyActivator extends AbstractCyActivator {
 		// Add right click menu item to the edge view
 		ArrowShapeBypassTaskFactory ArrowShapeBypass = new ArrowShapeBypassTaskFactory();
 		String menu = "Activation";
-		addMenus(context, ArrowShapeBypass, menu, "8.1", true);
+		addMenus(context, ArrowShapeBypass, menu, "8.1", true); //take out all menus, put in taskfactory task
 		InhibitionTaskFactory InhibitionShapeTask = new InhibitionTaskFactory();
 		String menus = "Inhibition";
 		addMenu(context, InhibitionShapeTask, menus, "8.2", true);
-		createcolumntaskfactory createcolumn = new createcolumntaskfactory(cyApplicationManagerService);
-		String menus2 = "Inhibitioning";
+		ActivationEdgeFactory createcolumn = new ActivationEdgeFactory(cyApplicationManagerService);
+		String menus2 = "Activation";
 		aMenu(context, createcolumn, menus2, "8.3", true);
-		TutorialFactory crcolumn = new TutorialFactory(cyApplicationManagerService);
-		String menus3 = "Inhibitis";
-		bMenu(context, crcolumn, menus3, "8.5", true);
 	}
 
 	private void addMenus(BundleContext context, ArrowShapeBypassTaskFactory arrowShapeBypass, String menu,
@@ -55,8 +52,9 @@ public class CyActivator extends AbstractCyActivator {
 		}
 		registerService(context, arrowShapeBypass, EdgeViewTaskFactory.class, props);
 	}
-	private void addMenu(BundleContext context, InhibitionTaskFactory InhibitionShapeTask, String menus,
-			String gravity, boolean exclusive) {
+
+	private void addMenu(BundleContext context, InhibitionTaskFactory InhibitionShapeTask, String menus, String gravity,
+			boolean exclusive) {
 		String baseMenu = "Apps.Aarya.Inhibition";
 		Properties props = new Properties();
 		if (menus != null) {
@@ -75,9 +73,10 @@ public class CyActivator extends AbstractCyActivator {
 		}
 		registerService(context, InhibitionShapeTask, EdgeViewTaskFactory.class, props);
 	}
-	private void aMenu(BundleContext context, createcolumntaskfactory createcolumn, String menus2,
-			String gravity, boolean exclusive) {
-		String baseMenu = "Apps.Aarya.Inhibitioning";
+
+	private void aMenu(BundleContext context, ActivationEdgeFactory createcolumn, String menus2, String gravity,
+			boolean exclusive) {
+		String baseMenu = "Apps.Aarya";
 		Properties props = new Properties();
 		if (menus2 != null) {
 			props.setProperty("preferredMenu", baseMenu + "." + menus2);
@@ -93,27 +92,7 @@ public class CyActivator extends AbstractCyActivator {
 			}
 
 		}
-		registerService(context, createcolumn, TaskFactory.class, props);	
+		registerService(context, createcolumn, TaskFactory.class, props);
 
-
+	}
 }
-	private void bMenu(BundleContext context, TutorialFactory crcolumn, String menus3,
-			String gravity, boolean exclusive) {
-		String baseMenu = "Apps.Aarya.Inhibitis";
-		Properties props = new Properties();
-		if (menus3 != null) {
-			props.setProperty("preferredMenu", baseMenu + "." + menus3);
-			props.setProperty("inMenuBar", "true");
-			props.setProperty("menuGravity", gravity);
-		}
-		if (exclusive) {
-			props = new Properties();
-			if (menus3 != null) {
-				props.setProperty("inMenuBar", "true");
-				props.setProperty("menuGravity", gravity);
-				props.setProperty("preferredMenu", baseMenu);
-			}
-
-		}
-		registerService(context, crcolumn, TaskFactory.class, props);
-}}
