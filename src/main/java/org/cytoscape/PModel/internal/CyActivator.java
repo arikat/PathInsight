@@ -6,6 +6,8 @@ import org.cytoscape.task.EdgeViewTaskFactory;
 import org.cytoscape.task.NetworkTaskFactory;
 import org.cytoscape.task.NetworkViewTaskFactory;
 import org.cytoscape.task.NodeViewTaskFactory;
+import org.cytoscape.view.model.VisualLexicon;
+import org.cytoscape.view.presentation.RenderingEngineManager;
 import org.cytoscape.work.AbstractTaskFactory;
 import org.cytoscape.work.TaskFactory;
 import org.cytoscape.application.swing.CyNodeViewContextMenuFactory;
@@ -18,7 +20,8 @@ public class CyActivator extends AbstractCyActivator {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-
+		//change CyActivator for neighborFinderFactory
+		VisualLexicon currentLexicon = getService(context, RenderingEngineManager.class).getDefaultVisualLexicon();
 		CyApplicationManager cyApplicationManagerService = getService(context, CyApplicationManager.class);
 		// Add right click menu item to the edge view
 		ArrowShapeBypassTaskFactory ArrowShapeBypass = new ArrowShapeBypassTaskFactory();
@@ -30,6 +33,12 @@ public class CyActivator extends AbstractCyActivator {
 		ActivationEdgeFactory createcolumn = new ActivationEdgeFactory(cyApplicationManagerService);
 		String menus2 = "Activation";
 		aMenu(context, createcolumn, menus2, "8.3", true);
+		//NeighborFinderFactory neighbor = new NeighborFinderFactory(cyApplicationManagerService);
+		//String menus3 = "Activation";
+		//aMensu(context, neighbor, menus3, "8.3", true);
+		
+		neighborFinder neighbor = new neighborFinder(cyApplicationManagerService, currentLexicon);
+		registerService(context, neighbor, CyAction.class, new Properties());
 	}
 
 	private void addMenus(BundleContext context, ArrowShapeBypassTaskFactory arrowShapeBypass, String menu,
@@ -95,4 +104,25 @@ public class CyActivator extends AbstractCyActivator {
 		registerService(context, createcolumn, TaskFactory.class, props);
 
 	}
+	/*private void aMensu(BundleContext context, NeighborFinderFactory neighbor, String menus3, String gravity,
+			boolean exclusive) {
+		String baseMenu = "Apps.Aarya";
+		Properties props = new Properties();
+		if (menus3 != null) {
+			props.setProperty("preferredMenu", baseMenu);
+			props.setProperty("inMenuBar", "true");
+			props.setProperty("menuGravity", gravity);
+		}
+		if (exclusive) {
+			props = new Properties();
+			if (menus3 != null) {
+				props.setProperty("inMenuBar", "true");
+				props.setProperty("menuGravity", gravity);
+				props.setProperty("preferredMenu", baseMenu);
+			}
+
+		}
+		registerService(context, neighbor, TaskFactory.class, props);
+
+	}*/
 }
