@@ -40,17 +40,44 @@ public class CyActivator extends AbstractCyActivator {
 		String menus2 = "Activation";
 		aMenu(context, createcolumn, menus2, "8.3", true);
 		
+		CustomGraphicsFactory cg = new CustomGraphicsFactory(cyApplicationManagerService);
+		String menus3 = "Draw Arrows";
+		menus3(context, cg, menus3, "8.5", true);
+		
+		
+		
 		//NeighborFinderFactory neighbor = new NeighborFinderFactory();
 		//String menus3 = "Draw Arrows";
 		//aMensu(context, neighbor, menus3, "8.4", true);
-		neighborFinder neighbor = new neighborFinder(cyApp, null); // replace null with network view
+		//neighborFinder neighbor = new neighborFinder(cyApp, null); // replace null with network view
 		//Properties propsy = new Properties();
 		//propsy.setProperty("preferredMenu", "Apps.Aarya.DrawArrow");
 		//propsy.setProperty("title", "Draw Arrows");
 		//propsy.setProperty("inMenuBar", "true");
-		registerService(context, neighbor, CyAction.class, new Properties());
+		//registerService(context, neighbor, CyAction.class, new Properties());
 		
 
+		
+	}
+
+	private void menus3(BundleContext context, CustomGraphicsFactory cg, String menus3, String gravity, boolean exclusive) {
+		String baseMenu = "Apps.Aarya.Draw";
+		Properties props = new Properties();
+		if (menus3 != null) {
+			props.setProperty("preferredMenu", baseMenu);
+			props.setProperty("inMenuBar", "true");
+			props.setProperty("menuGravity", gravity);
+		}
+		if (exclusive) {
+			props = new Properties();
+			if (menus3 != null) {
+				props.setProperty("inMenuBar", "true");
+				props.setProperty("menuGravity", gravity);
+				props.setProperty("preferredMenu", baseMenu);
+			}
+
+		}
+		registerService(context, cg, TaskFactory.class, props);
 		
 	}
 

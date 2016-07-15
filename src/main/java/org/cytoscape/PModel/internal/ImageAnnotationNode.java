@@ -5,6 +5,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -27,13 +28,13 @@ import org.cytoscape.view.presentation.customgraphics.ImageCustomGraphicLayer;
 import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskMonitor;
 
-public class ImageAnnotationNode extends AbstractTask implements ImageCustomGraphicLayer {
+public class ImageAnnotationNode implements ImageCustomGraphicLayer {
 	
 	private static final String ImageFile = "/Green_Arrow_small.png";
 	protected static BufferedImage Image;
 	private static final String TAG = "bitmap image";
 	private static final float FIT_RATIO = 1.0f;
-
+	
 	private View<CyNode> nodeView;
 	private CyNetworkView netView;
 	private CyApplicationManager applicationManager;
@@ -72,56 +73,6 @@ public class ImageAnnotationNode extends AbstractTask implements ImageCustomGrap
 	public TexturePaint getPaint(Rectangle2D bounds) {
 		
 		return null;
-	}
-
-	public void run(TaskMonitor arg0) throws Exception {
-		CyNetwork network = applicationManager.getCurrentNetwork();
-		CyNetworkView networkView = applicationManager.getCurrentNetworkView(); //NOTE CALL THE NETWORK VIEW
-
-		if (network == null) {
-			System.out.println("There is no network.");
-			return;
-		}
-		
-		CyTable edgeTable = network.getDefaultEdgeTable();
-		CyTable nodeTable = network.getDefaultNodeTable();
-
-		if (edgeTable.getColumn(columnName) == null) {
-			System.out.println("There is no column bool");
-			
-		} else if (edgeTable.getColumn(columnName) != null) {
-			
-			List<CyNode> Nodes = CyTableUtil.getNodesInState(network, "selected", true); // change to all
-			
-			CyEdge.Type Incoming = null;
-			for (CyNode node : Nodes) {
-				List<CyEdge> Edges = network.getAdjacentEdgeList(node, Incoming);
-				for (CyEdge edge : Edges) {
-					if (network.getRow(edge).get(columnName, int.class) == 1) {
-						createImage(url);
-						buildCustomGraphics(originalImage);
-						
-							}
-						//});
-					
-					}
-				}
-			}
-		public buildCustomGraphics(BufferedImage targetImg) {
-			layers.clear();
-
-			Rectangle2D bound = null;
-			width = targetImg.getWidth();
-			height = targetImg.getHeight();
-
-			bound = new Rectangle2D.Double(-width / 2, -height / 2, width, height);
-			final TexturePaintFactory paintFactory = new TexturePaintFactory(targetImg);
-
-			ImageAnnotationNode cg = new ImageAnnotationNode(bound, paintFactory);
-			
-			layers.add(cg);
-		}
-		
 	}
 
 }

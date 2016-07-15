@@ -4,15 +4,20 @@ import java.net.URL;
 
 import org.cytoscape.view.presentation.customgraphics.CyCustomGraphics;
 import org.cytoscape.view.presentation.customgraphics.CyCustomGraphicsFactory;
+import org.cytoscape.work.AbstractTaskFactory;
+import org.cytoscape.work.TaskIterator;
+import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.view.presentation.customgraphics.CustomGraphicLayer;
 
-public class CustomGraphicsFactory implements CyCustomGraphicsFactory {
+public class CustomGraphicsFactory extends AbstractTaskFactory implements CyCustomGraphicsFactory {
 
 	private static final Class<? extends CyCustomGraphics> TARGET_CLASS = CustomGraphics.class;
 	//"/Green_Arrow_small.png"
 	String uparrow = "/Green_Arrow_small.png";
+	private CyApplicationManager appMgr;
 	
-	public CustomGraphicsFactory() {
+	public CustomGraphicsFactory(CyApplicationManager appMgr){
+		this.appMgr = appMgr;
 	}
 	
 	@Override
@@ -62,6 +67,11 @@ public class CustomGraphicsFactory implements CyCustomGraphicsFactory {
 		if (mimeType.equals("image/vnd.wap.wbmp"))
 			return true;
 		return false;
+	}
+
+	@Override
+	public TaskIterator createTaskIterator() {
+		return new TaskIterator(new CustomGraphics(this.appMgr.getCurrentNetwork()));
 	}
 
 }
