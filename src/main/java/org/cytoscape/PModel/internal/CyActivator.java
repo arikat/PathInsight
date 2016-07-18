@@ -29,8 +29,58 @@ public class CyActivator extends AbstractCyActivator {
 		CyApplicationManager cyApplicationManagerService = getService(context, CyApplicationManager.class);
 		CyNetworkView cyNetworkView = getService(context, CyNetworkView.class);
 		CySwingApplication cyApp = getService(context, CySwingApplication.class);
-		// Add right click menu item to the edge view
+		
+		//shape change
 		ArrowShapeBypassTaskFactory ArrowShapeBypass = new ArrowShapeBypassTaskFactory();
+		Properties arrowprops = new Properties();
+		arrowprops.setProperty("preferredMenu", "Apps.Aarya.Activation");
+		arrowprops.setProperty("inMenuBar", "true");
+		arrowprops.setProperty("menuGravity", "8.1");
+		registerService(context, ArrowShapeBypass, EdgeViewTaskFactory.class, arrowprops);
+		
+		//shape change
+		InhibitionTaskFactory InhibitionShapeTask = new InhibitionTaskFactory();
+		Properties cprops = new Properties();
+		cprops.setProperty("preferredMenu", "Apps.Aarya.Inhibition");
+		cprops.setProperty("inMenuBar", "true");
+		cprops.setProperty("menuGravity", "8.2");
+		registerService(context, InhibitionShapeTask, EdgeViewTaskFactory.class, cprops);
+		
+		//create column activation
+		ActivationEdgeFactory createcolumn = new ActivationEdgeFactory(cyApplicationManagerService);
+		Properties aprops = new Properties();
+		aprops.setProperty("preferredMenu", "Apps.Aarya.Create");
+		aprops.setProperty("inMenuBar", "true");
+		aprops.setProperty("menuGravity", "8.3");
+		registerService(context, createcolumn, TaskFactory.class, aprops);
+
+		//annotate with image -- does not work currently?
+		CustomGraphicsFactory cg = new CustomGraphicsFactory(cyApplicationManagerService);
+		Properties gprops = new Properties();
+		gprops.setProperty("preferredMenu", "Apps.Aarya.Draw");
+		gprops.setProperty("inMenuBar", "true");
+		gprops.setProperty("menuGravity", "8.4");
+		registerService(context, cg, TaskFactory.class, gprops);
+		
+		
+		
+	}
+	
+}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		// Add right click menu item to the edge view
+		/*ArrowShapeBypassTaskFactory ArrowShapeBypass = new ArrowShapeBypassTaskFactory();
 		String menu = "Activation";
 		addMenus(context, ArrowShapeBypass, menu, "8.1", true); //take out all menus, put in taskfactory task
 		InhibitionTaskFactory InhibitionShapeTask = new InhibitionTaskFactory();
@@ -164,4 +214,3 @@ public class CyActivator extends AbstractCyActivator {
 		registerService(context, neighbor, NodeViewTaskFactory.class, props);
 
 	}*/
-}
