@@ -114,13 +114,10 @@ public class trialattempt extends AbstractTask {
 
 		if (edgeTable.getColumn(columnName) != null) {
 			for (CyNode node : nodes) {
-				List<CyEdge> Edges = network.getAdjacentEdgeList(node, CyEdge.Type.INCOMING); // calling
-																								// the
-																								// network,
-																								// incorrect
-																								// type
+				List<CyEdge> Edges = network.getAdjacentEdgeList(node, CyEdge.Type.INCOMING);
+																							
 				for (CyEdge edge : Edges) {
-					if (edgeTable.getRow(edge).get(columnName, int.class) == 1) {
+					if (edgeTable.getRow(edge).get(columnName, int.class) == 1) { // THIS IS THE ISSUE? HOW DO I CHANGE THIS TO MAKE IT WORK?
 
 						// attempt adding edgeview
 
