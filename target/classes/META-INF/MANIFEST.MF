@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1468824330797
+Bnd-LastModified: 1470088934923
 Build-Jdk: 1.8.0_92
 Built-By: ravan
 Bundle-Activator: org.cytoscape.PModel.internal.CyActivator
@@ -9,13 +9,15 @@ Bundle-Name: org.cytoscape.PModel.PathwayModelling [org.cytoscape.PModel
 Bundle-SymbolicName: org.cytoscape.PModel.PathwayModelling
 Bundle-Version: 0.0.3.SNAPSHOT
 Created-By: Apache Maven Bundle Plugin
-Import-Package: javax.imageio,javax.swing,org.cytoscape.application;vers
- ion="[3.3,4)",org.cytoscape.application.swing;version="[3.3,4)",org.cyt
- oscape.model;version="[3.3,4)",org.cytoscape.service.util;version="[3.3
- ,4)",org.cytoscape.task;version="[3.3,4)",org.cytoscape.view.model;vers
- ion="[3.3,4)",org.cytoscape.view.presentation;version="[3.3,4)",org.cyt
- oscape.view.presentation.customgraphics;version="[3.3,4)",org.cytoscape
- .view.presentation.property;version="[3.3,4)",org.cytoscape.view.presen
- tation.property.values;version="[3.3,4)",org.cytoscape.work;version="[3
- .3,4)",org.osgi.framework;version="[1.5,2)"
+Import-Package: javax.swing,org.cytoscape.application;version="[3.3,4)",
+ org.cytoscape.application.swing;version="[3.3,4)",org.cytoscape.event;v
+ ersion="[3.3,4)",org.cytoscape.model;version="[3.3,4)",org.cytoscape.mo
+ del.events;version="[3.3,4)",org.cytoscape.service.util;version="[3.3,4
+ )",org.cytoscape.task;version="[3.3,4)",org.cytoscape.view.model;versio
+ n="[3.3,4)",org.cytoscape.view.presentation;version="[3.3,4)",org.cytos
+ cape.view.presentation.customgraphics;version="[3.3,4)",org.cytoscape.v
+ iew.presentation.property;version="[3.3,4)",org.cytoscape.view.presenta
+ tion.property.values;version="[3.3,4)",org.cytoscape.view.vizmap;versio
+ n="[3.3,4)",org.cytoscape.view.vizmap.mappings;version="[3.3,4)",org.cy
+ toscape.work;version="[3.3,4)",org.osgi.framework;version="[1.5,2)"
 Tool: Bnd-1.50.0
