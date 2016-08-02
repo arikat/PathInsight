@@ -61,8 +61,8 @@ public class trialattempt extends AbstractTask {
 		}
 
 		// getRow(cyNode).set(IMAGE_COLUMN, imageString)
-		CyTable edgeTable = netView.getModel().getDefaultEdgeTable(); // netView.getModel()
-		CyTable nodeTable = netView.getModel().getDefaultNodeTable();
+		CyTable edgeTable = network.getDefaultEdgeTable(); // netView.getModel()
+		CyTable nodeTable = network.getDefaultNodeTable();
 		if (nodeTable.getColumn(IMAGE_COLUMN) == null) {
 			nodeTable.createColumn(IMAGE_COLUMN, String.class, false);
 		}
@@ -71,7 +71,7 @@ public class trialattempt extends AbstractTask {
 		// applicationManager.getCurrentNetwork().getRow(cyNode).get(imageString,
 		// String.class);
 
-		nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); // prev
+	/*	nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); // prev
 																						// imageString
 																						// nodeView.getModel().getSUID()
 
@@ -101,35 +101,68 @@ public class trialattempt extends AbstractTask {
 
 		String columnName = "bool";
 
-		List<CyNode> nodes = CyTableUtil.getNodesInState(netView.getModel(), "selected", true); // netView.getModel()
+		List<CyNode> nodes = CyTableUtil.getNodesInState(network, "selected", true); // netView.getModel() */
 
 		// CyEdge.Type Incoming = null;
 
 		// for (CyNode node : nodes) {
-		// List<CyEdge> Edges = netView.getModel().getAdjacentEdgeList(node,
-		// CyEdge.Type.INCOMING); //not calling the network, what do I do?
+		// List<CyEdge> Edges = netView.getModel().getAdjacentEdgeList(node, CyEdge.Type.INCOMING); //not calling the network, what do I do?
 		// List<CyEdge> Edges = network.getAdjacentEdgeList(node, Incoming);
 		// for (CyEdge edge : Edges) {
 		// if (edgeTable.getRow(edge).get(columnName, int.class) == 1) {
 
 		if (edgeTable.getColumn(columnName) != null) {
+			
+			VisualMappingManager vmm = registrar.getService(VisualMappingManager.class);
+
+			Set<VisualLexicon> lexSet = vmm.getAllVisualLexicon();
+			VisualProperty<?> cgProp = null;
+			for (VisualLexicon vl : lexSet) {
+				cgProp = vl.lookup(CyNode.class, "NODE_CUSTOMGRAPHICS_1");
+				if (cgProp != null)
+					break;
+			}
+			if (cgProp == null) {
+				System.out.println("Can't find the CUSTOMGRAPHICS visual property!!!!");
+				return;
+			}
+
+			VisualStyle style = vmm.getVisualStyle(netView);
+
+			String columnName = "bool";
+
+			List<CyNode> nodes = CyTableUtil.getNodesInState(network, "selected", true);
+			
 			for (CyNode node : nodes) {
 				List<CyEdge> Edges = network.getAdjacentEdgeList(node, CyEdge.Type.INCOMING);
-																							
+				//List<CyEdge> Edges = netView.getModel().getAdjacentEdgeList(node, CyEdge.Type.INCOMING);
+				
+				
+				///WRITE CODE HERE LOOKING AT NEIGHBOR NODES - THEN GET THOSE ADJACENT EDGE LISTS - THEN REPEAT ONCE MORE FOR TERTIARY INTERACTIONS?
+					
+				
 				for (CyEdge edge : Edges) {
-					if (edgeTable.getRow(edge).get(columnName, int.class) == 1) { // THIS IS THE ISSUE? HOW DO I CHANGE THIS TO MAKE IT WORK?
-
-						// attempt adding edgeview
-
+					//if (edgeTable.getRow(edge.getSUID()).get(columnName, Integer.class) == 1) { 
+					if (network.getRow(edge).get(columnName, Integer.class) == 1) { //change to integer if necessary
+						// Create a passthrough mapping to that column
+						//nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); //easy fix - overwriting arrows, make i++
+						network.getRow(node).set(IMAGE_COLUMN, imageString); //fixed original issue with only one writing - now fix overwriting arrows
+						
+						
+						VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
+								"(mapping.type=passthrough)");
+						PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
+								cgProp);
+						
 						style.addVisualMappingFunction(map);
 						style.apply(netView);
-						// nodeView.setLockedValue(BasicVisualLexicon.NODE_FILL_COLOR,
-						// Color.RED);
-						// netView.updateView();
+						
+						//consider writing " for 'nodes': passthrough mapping
+						//} else if (network.getRow(edge).get(columnName, Integer.class) != 1) {
+							//nodeView.setLockedValue(BasicVisualLexicon.NODE_FILL_COLOR, Color.RED);
+							//netView.updateView();
 					}
-				} // if
-					// (edgeTable.getRow(edgeView.getModel().getSUID()).get(columnName,
-					// int.class) == 1) {
+				}
 			}
 		}
 	}
