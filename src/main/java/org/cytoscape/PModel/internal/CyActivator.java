@@ -42,17 +42,10 @@ public class CyActivator extends AbstractCyActivator {
 		//CustomGraphicsManagerImpl customGraphicsManagerImpl = getService(context, CustomGraphicsManagerImpl.class);
 		
 		//shape change
-		ArrowShapeBypassTaskFactory ArrowShapeBypass = new ArrowShapeBypassTaskFactory();
-		Properties arrowprops = new Properties();
-		arrowprops.setProperty("preferredMenu", "Apps.Pathway Model.Activation");
-		arrowprops.setProperty("inMenuBar", "true");
-		arrowprops.setProperty("menuGravity", "8.1");
-		registerService(context, ArrowShapeBypass, EdgeViewTaskFactory.class, arrowprops);
-		
-		//shape change
-		InhibitionTaskFactory InhibitionShapeTask = new InhibitionTaskFactory();
+		InhibitionTaskFactory InhibitionShapeTask = new InhibitionTaskFactory(cyApplicationManagerService);
 		Properties cprops = new Properties();
-		cprops.setProperty("preferredMenu", "Apps.Pathway Model.Inhibition");
+		cprops.setProperty("preferredMenu", "Apps.Pathway Model");
+		cprops.setProperty("title", "Auto Edge Distinction");
 		cprops.setProperty("inMenuBar", "true");
 		cprops.setProperty("menuGravity", "8.2");
 		registerService(context, InhibitionShapeTask, EdgeViewTaskFactory.class, cprops);
@@ -60,7 +53,7 @@ public class CyActivator extends AbstractCyActivator {
 		//create column activation
 		ActivationEdgeFactory createcolumn = new ActivationEdgeFactory(cyApplicationManagerService);
 		Properties aprops = new Properties();
-		aprops.setProperty("preferredMenu", "Apps.Pathway Model.EdgeLabel");
+		aprops.setProperty("preferredMenu", "Apps.Pathway Model.Edge Label");
 		aprops.setProperty("title", "Activation");
 		aprops.setProperty("inMenuBar", "true");
 		aprops.setProperty("menuGravity", "8.3");

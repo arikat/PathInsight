@@ -60,8 +60,8 @@ public class trialattempt extends AbstractTask {
 			return;
 		}
 
-		// getRow(cyNode).set(IMAGE_COLUMN, imageString)
-		CyTable edgeTable = network.getDefaultEdgeTable(); // netView.getModel()
+		// getRow(cyNode).set(IMAGE_COLUMN, imageString)  // netView.getModel()
+		CyTable edgeTable = network.getDefaultEdgeTable();
 		CyTable nodeTable = network.getDefaultNodeTable();
 		if (nodeTable.getColumn(IMAGE_COLUMN) == null) {
 			nodeTable.createColumn(IMAGE_COLUMN, String.class, false);
