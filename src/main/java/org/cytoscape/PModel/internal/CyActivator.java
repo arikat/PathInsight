@@ -58,6 +58,15 @@ public class CyActivator extends AbstractCyActivator {
 		aprops.setProperty("inMenuBar", "true");
 		aprops.setProperty("menuGravity", "8.3");
 		registerService(context, createcolumn, TaskFactory.class, aprops);
+		
+		//Node Output algorithm attempt
+		NodeOutputFactory creety = new NodeOutputFactory(cyApplicationManagerService);
+		Properties cops = new Properties();
+		cops.setProperty("preferredMenu", "Apps.Pathway Model");
+		cops.setProperty("title", "Node Analysis");
+		cops.setProperty("inMenuBar", "true");
+		cops.setProperty("menuGravity", "8.8");
+		registerService(context, creety, TaskFactory.class, cops);
 
 		
 		//annotate with image - maybe works
