@@ -43,11 +43,13 @@ public class InhibitionShapeTask extends AbstractEdgeViewTask {
 		for (CyEdge edge : edges) {
 			if (network.getRow(edge).get(columnName, Integer.class) == -1) {
 				edgeView.setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.T);
-			} else if (network.getRow(edge).get(columnName, Integer.class) == 1) {
+			} 
+			
+			if (network.getRow(edge).get(columnName, Integer.class) == 1) {
 				edgeView.setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE,  ArrowShapeVisualProperty.CIRCLE);
-			} else if (network.getRow(edge).get(columnName, Integer.class) == null) {
-				continue; //think on this if remove necessary
-			}
+			} //else if (network.getRow(edge).get(columnName, Integer.class) == null) {
+				//continue; //think on this if remove necessary
+		//	}
 		}
 	}
 	

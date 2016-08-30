@@ -13,7 +13,7 @@ public class NodeOutputFactory extends AbstractTaskFactory {
 	}
 	
 	public TaskIterator createTaskIterator(){
-		return new TaskIterator(new InhibitionEdge(this.appMgr.getCurrentNetwork()));
+		return new TaskIterator(new NodeOutput(this.appMgr.getCurrentNetwork()));
 	}
 
 }

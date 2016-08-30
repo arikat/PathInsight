@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.model.CyEdge;
+import org.cytoscape.model.CyEdge.Type;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyTable;
@@ -56,8 +57,8 @@ public class NodeOutput extends AbstractTask {
 			//insert continue or something here to get it to go to the next if statements		
 		}
 		//is colly or fincol even necessary???
-		if (nodeTable.getColumn(colly) == null) {
-			nodeTable.createColumn(colly, Integer.class, true);
+	/*	if (nodeTable.getColumn(colly) == null) {
+			nodeTable.createColumn(colly, Integer.class, false);
 			//insert continue or something here to get it to go to the next if statements
 			
 		}
@@ -67,11 +68,11 @@ public class NodeOutput extends AbstractTask {
 			//insert continue or something here to get it to go to the next if statements
 			
 		}
-		
+		*/
 		
 		for (CyNode node : nodes) {
 			List<CyEdge> Edges = network.getAdjacentEdgeList(node, CyEdge.Type.OUTGOING);
-			List<CyNode> neighbors = network.getNeighborList(node, CyEdge.Type.INCOMING); //figure out how to call neighborlist
+			List<CyNode> neighbors = network.getNeighborList(node, Type.ANY); //SOMETHING SCREWY IS GOING ON HERE?
 			for (CyEdge edge : Edges) {
 				for (CyNode nodely : neighbors) {
 					List<CyEdge> Edges2 = network.getAdjacentEdgeList(nodely, CyEdge.Type.OUTGOING);
@@ -86,56 +87,56 @@ public class NodeOutput extends AbstractTask {
 				
 				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(node).get(columnName, Integer.class) >= 0)) {
 					//set nodely to 1, okay?
-					network.getRow(nodely).set(colly, Integer.valueOf(1));
+					nodeTable.getRow(nodely.getSUID()).set(columnName, Integer.valueOf(1));
 				}
 				
 				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(node).get(columnName, Integer.class) >= 0)) {
 					//set nodely to -1, okay?
-					network.getRow(nodely).set(colly, Integer.valueOf(-1));
-				}
+					nodeTable.getRow(nodely.getSUID()).set(columnName, Integer.valueOf(-1));	
+					}
 				
 				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(node).get(columnName, Integer.class) <= 0)) {
 					//set nodely to -1, okay?
-					network.getRow(nodely).set(colly, Integer.valueOf(-1));
+					nodeTable.getRow(nodely.getSUID()).set(columnName, Integer.valueOf(-1));
 				}
 				
 				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(node).get(columnName, Integer.class) <= 0)) {
 					//set nodely to 1, okay?
-					network.getRow(nodely).set(colly, Integer.valueOf(1));
+					nodeTable.getRow(nodely.getSUID()).set(columnName, Integer.valueOf(1));
 				}
 				
 				if (network.getRow(node).get(columnName, Integer.class) == 0) {
 					//set nodely to 0, okay?
-					network.getRow(nodely).set(colly, Integer.valueOf(0));
+					nodeTable.getRow(nodely.getSUID()).set(columnName, Integer.valueOf(0));
 				}
 				
-				List<CyNode> nodes3 = network.getNeighborList(nodely, CyEdge.Type.INCOMING);
+				List<CyNode> nodes3 = network.getNeighborList(nodely, Type.ANY);
 					for (CyEdge edgy : Edges2) {
 						for (CyNode noddie : nodes3) {
 							//Insert all network get row nodes, etc
 							if ((network.getRow(edgy).get(columnName, Integer.class) == 1) && (network.getRow(nodely).get(columnName, Integer.class) >= 0)) {
 								//set nodely to 1, okay?
-								network.getRow(noddie).set(fincol, Integer.valueOf(1));
+								nodeTable.getRow(noddie.getSUID()).set(columnName, Integer.valueOf(1));
 							}
 							
 							if ((network.getRow(edgy).get(columnName, Integer.class) == -1) && (network.getRow(nodely).get(columnName, Integer.class) >= 0)) {
 								//set nodely to -1, okay?
-								network.getRow(noddie).set(fincol, Integer.valueOf(-1));
+								nodeTable.getRow(noddie.getSUID()).set(columnName, Integer.valueOf(-1));
 							}
 							
 							if ((network.getRow(edgy).get(columnName, Integer.class) == 1) && (network.getRow(nodely).get(columnName, Integer.class) <= 0)) {
 								//set nodely to -1, okay?
-								network.getRow(noddie).set(fincol, Integer.valueOf(-1));
+								nodeTable.getRow(noddie.getSUID()).set(columnName, Integer.valueOf(-1));
 							}
 							
 							if ((network.getRow(edgy).get(columnName, Integer.class) == -1) && (network.getRow(nodely).get(columnName, Integer.class) <= 0)) {
 								//set nodely to 1, okay?
-								network.getRow(noddie).set(fincol, Integer.valueOf(1));
+								nodeTable.getRow(noddie.getSUID()).set(columnName, Integer.valueOf(1));
 							}
 							
 							if (network.getRow(nodely).get(columnName, Integer.class) == 0) {
 								//set nodely to 0, okay?
-								network.getRow(noddie).set(fincol, Integer.valueOf(0));
+								nodeTable.getRow(noddie.getSUID()).set(columnName, Integer.valueOf(0));
 							}
 							
 							

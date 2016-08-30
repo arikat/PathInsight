@@ -90,16 +90,6 @@ public class CyActivator extends AbstractCyActivator {
 		registerService(context, stringLookFactory, CyCustomGraphicsFactory.class, stringProps);
 		
 		
-		//annotate with image -- does not work currently?
-		/*CustomGraphicsFactory cg = new CustomGraphicsFactory();
-		Properties gprops = new Properties();
-		gprops.setProperty("preferredMenu", "Apps.Aarya.Drowsy");
-		gprops.setProperty("inMenuBar", "true");
-		gprops.setProperty("menuGravity", "8.4");
-		registerService(context, cg, CyCustomGraphicsFactory.class, gprops);*/
-		
-		
-		
 		TaskFactory paintStructure = new trialattemptfactory(registrar, cyApplicationManagerService);
 		Properties paintStructureProps = new Properties();
 		paintStructureProps.setProperty("preferredMenu", "Apps.Pathway Model");
@@ -117,7 +107,6 @@ public class CyActivator extends AbstractCyActivator {
 		VisualMappingFunctionFactory vmfFactoryC = getService(context,VisualMappingFunctionFactory.class, "(mapping.type=continuous)");
 		VisualMappingFunctionFactory vmfFactoryD = getService(context,VisualMappingFunctionFactory.class, "(mapping.type=discrete)");
 		VisualMappingFunctionFactory vmfFactoryP = getService(context,VisualMappingFunctionFactory.class, "(mapping.type=passthrough)");
-
 		CreateVisualStyleAction createVisualStyleAction = new CreateVisualStyleAction(cyApplicationManagerService, vmmServiceRef, visualStyleFactoryServiceRef, 
 				vmfFactoryC, vmfFactoryD, vmfFactoryP);
 		
@@ -128,150 +117,3 @@ public class CyActivator extends AbstractCyActivator {
 	}
 	
 }
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		// Add right click menu item to the edge view
-		/*ArrowShapeBypassTaskFactory ArrowShapeBypass = new ArrowShapeBypassTaskFactory();
-		String menu = "Activation";
-		addMenus(context, ArrowShapeBypass, menu, "8.1", true); //take out all menus, put in taskfactory task
-		InhibitionTaskFactory InhibitionShapeTask = new InhibitionTaskFactory();
-		String menus = "Inhibition";
-		addMenu(context, InhibitionShapeTask, menus, "8.2", true);
-		ActivationEdgeFactory createcolumn = new ActivationEdgeFactory(cyApplicationManagerService);
-		String menus2 = "Activation";
-		aMenu(context, createcolumn, menus2, "8.3", true);
-		
-		CustomGraphicsFactory cg = new CustomGraphicsFactory(cyApplicationManagerService);
-		String menus3 = "Draw Arrows";
-		menus3(context, cg, menus3, "8.5", true);
-		
-		
-		
-		//NeighborFinderFactory neighbor = new NeighborFinderFactory();
-		//String menus3 = "Draw Arrows";
-		//aMensu(context, neighbor, menus3, "8.4", true);
-		//neighborFinder neighbor = new neighborFinder(cyApp, null); // replace null with network view
-		//Properties propsy = new Properties();
-		//propsy.setProperty("preferredMenu", "Apps.Aarya.DrawArrow");
-		//propsy.setProperty("title", "Draw Arrows");
-		//propsy.setProperty("inMenuBar", "true");
-		//registerService(context, neighbor, CyAction.class, new Properties());
-		
-
-		
-	}
-
-	private void menus3(BundleContext context, CustomGraphicsFactory cg, String menus3, String gravity, boolean exclusive) {
-		String baseMenu = "Apps.Aarya.Draw";
-		Properties props = new Properties();
-		if (menus3 != null) {
-			props.setProperty("preferredMenu", baseMenu);
-			props.setProperty("inMenuBar", "true");
-			props.setProperty("menuGravity", gravity);
-		}
-		if (exclusive) {
-			props = new Properties();
-			if (menus3 != null) {
-				props.setProperty("inMenuBar", "true");
-				props.setProperty("menuGravity", gravity);
-				props.setProperty("preferredMenu", baseMenu);
-			}
-
-		}
-		registerService(context, cg, TaskFactory.class, props);
-		
-	}
-
-	private void addMenus(BundleContext context, ArrowShapeBypassTaskFactory arrowShapeBypass, String menu,
-			String gravity, boolean exclusive) {
-		String baseMenu = "Apps.Aarya.Activation";
-		Properties props = new Properties();
-		if (menu != null) {
-			props.setProperty("preferredMenu", baseMenu + "." + menu);
-			props.setProperty("inMenuBar", "true");
-			props.setProperty("menuGravity", gravity);
-		}
-		if (exclusive) {
-			props = new Properties();
-			if (menu != null) {
-				props.setProperty("inMenuBar", "true");
-				props.setProperty("menuGravity", gravity);
-				props.setProperty("preferredMenu", baseMenu);
-			}
-
-		}
-		registerService(context, arrowShapeBypass, EdgeViewTaskFactory.class, props);
-	}
-
-	private void addMenu(BundleContext context, InhibitionTaskFactory InhibitionShapeTask, String menus, String gravity,
-			boolean exclusive) {
-		String baseMenu = "Apps.Aarya.Inhibition";
-		Properties props = new Properties();
-		if (menus != null) {
-			props.setProperty("preferredMenu", baseMenu + "." + menus);
-			props.setProperty("inMenuBar", "true");
-			props.setProperty("menuGravity", gravity);
-		}
-		if (exclusive) {
-			props = new Properties();
-			if (menus != null) {
-				props.setProperty("inMenuBar", "true");
-				props.setProperty("menuGravity", gravity);
-				props.setProperty("preferredMenu", baseMenu);
-			}
-
-		}
-		registerService(context, InhibitionShapeTask, EdgeViewTaskFactory.class, props);
-	}
-
-	private void aMenu(BundleContext context, ActivationEdgeFactory createcolumn, String menus2, String gravity,
-			boolean exclusive) {
-		String baseMenu = "Apps.Aarya.Activation";
-		Properties props = new Properties();
-		if (menus2 != null) {
-			props.setProperty("preferredMenu", baseMenu);
-			props.setProperty("inMenuBar", "true");
-			props.setProperty("menuGravity", gravity);
-		}
-		if (exclusive) {
-			props = new Properties();
-			if (menus2 != null) {
-				props.setProperty("inMenuBar", "true");
-				props.setProperty("menuGravity", gravity);
-				props.setProperty("preferredMenu", baseMenu);
-			}
-
-		}
-		registerService(context, createcolumn, TaskFactory.class, props);
-
-	}
-	/*private void aMensu(BundleContext context, NeighborFinderFactory neighbor, String menus3, String gravity,
-			boolean exclusive) {
-		String baseMenu = "Apps.Aarya.Draw";
-		Properties props = new Properties();
-		if (menus3 != null) {
-			props.setProperty("preferredMenu", baseMenu);
-			props.setProperty("inMenuBar", "true");
-			props.setProperty("menuGravity", gravity);
-		}
-		if (exclusive) {
-			props = new Properties();
-			if (menus3 != null) {
-				props.setProperty("inMenuBar", "true");
-				props.setProperty("menuGravity", gravity);
-				props.setProperty("preferredMenu", baseMenu);
-			}
-		}
-		registerService(context, neighbor, NodeViewTaskFactory.class, props);
-
-	}*/
