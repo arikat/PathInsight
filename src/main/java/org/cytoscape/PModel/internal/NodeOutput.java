@@ -25,8 +25,6 @@ public class NodeOutput extends AbstractTask {
 	private CyNode cyNode;
 	private CyNetwork network;
 	String columnName = "bool";
-	String colly = "bool2";
-	String fincol = "bool3";
 	
 	public NodeOutput(CyNetwork network) { //View<CyNode> nodeView, CyNetworkView netView, 
 		//this.netView = netView;
@@ -56,40 +54,38 @@ public class NodeOutput extends AbstractTask {
 			nodeTable.createColumn(columnName, Integer.class, true);
 			//insert continue or something here to get it to go to the next if statements		
 		}
-		//is colly or fincol even necessary???
-	/*	if (nodeTable.getColumn(colly) == null) {
-			nodeTable.createColumn(colly, Integer.class, false);
-			//insert continue or something here to get it to go to the next if statements
-			
-		}
-		
-		if (nodeTable.getColumn(fincol) == null) {
-			nodeTable.createColumn(fincol, Integer.class, true);
-			//insert continue or something here to get it to go to the next if statements
-			
-		}
-		*/
 		
 		for (CyNode node : nodes) {
 			List<CyEdge> Edges = network.getAdjacentEdgeList(node, CyEdge.Type.OUTGOING);
 			List<CyNode> neighbors = network.getNeighborList(node, Type.ANY); //SOMETHING SCREWY IS GOING ON HERE?
-			for (CyEdge edge : Edges) {
+			for (CyEdge edge : Edges) { //consider switching order of edges -- look up for loop without for loop!!!!
 				for (CyNode nodely : neighbors) {
 					List<CyEdge> Edges2 = network.getAdjacentEdgeList(nodely, CyEdge.Type.OUTGOING);
 				//this is where I identify CYEDGE and write the algorithm
 				// if node >= edge and node > 0 = 1
 				// if edge <= node and node < 0 = -1
 				// if node = 0 = -1
-				//note to self there is no columnName bool for node, you must create it.
-				//note to self; create a column for colly and fincol 
 				//make sure to create a system that allows you to click each time and perturb the system from there
-				//finally make sure to create a counter for each node using each edge
-				
+				//finally make sure to create a counter for each node using each edge	
+					
 				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(node).get(columnName, Integer.class) >= 0)) {
 					//set nodely to 1, okay?
-					nodeTable.getRow(nodely.getSUID()).set(columnName, Integer.valueOf(1));
+					
+					if (nodeTable.getRow(nodely.getSUID()).get(columnName, Integer.class) != null) {
+						int attempt = nodeTable.getRow(nodely.getSUID()).get(columnName, Integer.class);
+						nodeTable.getRow(nodely.getSUID()).set(columnName, (attempt+1)); //instead of 2, a = 4
+						break; //attempt break statement, lets see what happens? -- HALLELUJAH IT WORKED!!
+					}
+					
+					else { //if (nodeTable.getRow(nodely.getSUID()).get(columnName, Integer.class) == null) {  //put != null before == null to prevent recursive loop
+						nodeTable.getRow(nodely.getSUID()).set(columnName, Integer.valueOf(1));
+						break;
+					}
+					
 				}
 				
+				
+				/*
 				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(node).get(columnName, Integer.class) >= 0)) {
 					//set nodely to -1, okay?
 					nodeTable.getRow(nodely.getSUID()).set(columnName, Integer.valueOf(-1));	
@@ -141,7 +137,7 @@ public class NodeOutput extends AbstractTask {
 							
 							
 						}
-					}
+					}*/
 					}
 				}
 				}
