@@ -90,10 +90,10 @@ public class CyActivator extends AbstractCyActivator {
 		registerService(context, stringLookFactory, CyCustomGraphicsFactory.class, stringProps);
 		
 		
-		TaskFactory paintStructure = new trialattemptfactory(registrar, cyApplicationManagerService);
+		TaskFactory paintStructure = new PaintFactory(registrar, cyApplicationManagerService);
 		Properties paintStructureProps = new Properties();
 		paintStructureProps.setProperty("preferredMenu", "Apps.Pathway Model");
-		paintStructureProps.setProperty("title", "Painty");
+		paintStructureProps.setProperty("title", "Paint Nodes");
 		//paintStructureProps.setProperty(ENABLE_FOR, "networkAndView");
 		paintStructureProps.setProperty("inMenuBar", "true");
 		paintStructureProps.setProperty("menuGravity", "8.6");
