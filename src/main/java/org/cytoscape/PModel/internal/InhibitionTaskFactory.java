@@ -11,7 +11,7 @@ import org.cytoscape.work.AbstractTaskFactory;
 import org.cytoscape.work.Task;
 import org.cytoscape.work.TaskIterator;
 
-//Class creates a task factory for the task ArrowShapeBypass to change an edge within a context menu.
+
 public class InhibitionTaskFactory extends AbstractEdgeViewTaskFactory {
 	
 	private CyApplicationManager manny;
@@ -25,4 +25,40 @@ public class InhibitionTaskFactory extends AbstractEdgeViewTaskFactory {
 		return new TaskIterator(new Task[] { new InhibitionShapeTask(edgeView, netView, manny.getCurrentNetwork()) });
 	}
 
-} //Build Task Factory for Finboolcol next
+}
+
+
+
+
+
+
+
+
+//Class creates a task factory for the task ArrowShapeBypass to change an edge within a context menu.
+/*public class InhibitionTaskFactory extends AbstractTaskFactory { //implements EdgeViewTaskFactory {
+	
+	private CyApplicationManager manny;
+	
+	public InhibitionTaskFactory(final CyApplicationManager manny) {
+		this.manny = manny;
+	}
+	
+	@Override
+	public TaskIterator createTaskIterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	//@Override
+	//public boolean isReady(View<CyEdge> edgeView, CyNetworkView netView) {
+		// TODO Auto-generated method stub
+		//return true;
+	//}	
+	
+	public TaskIterator createTaskIterator(CyNetworkView netView) { //View<CyEdge> edgeView
+		// TODO Auto-generated method stub
+		return new TaskIterator(new Task[] { new InhibitionShapeTask(netView, manny.getCurrentNetwork()) }); //edgeView
+	}
+
+
+} //Build Task Factory for Finboolcol next*/

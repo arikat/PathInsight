@@ -22,16 +22,25 @@ public class ActivationEdge extends AbstractTask {
 	}
 
 	public void run(TaskMonitor monitor) {
-		if (network == null) {
+	
+		/*if (network == null) {
 			System.out.println("There is no network.");
 			return;
-		}
+		}*/
 
 		CyTable edgeTable = network.getDefaultEdgeTable();
 
 		if (edgeTable.getColumn(columnName) == null) {
 			edgeTable.createColumn(columnName, Integer.class, true);
-		} else if (edgeTable.getColumn(columnName) != null) {
+			
+			List<CyEdge> Edges = CyTableUtil.getEdgesInState(network, "selected", true);
+
+			for (CyEdge edge : Edges) {
+				edgeTable.getRow(edge.getSUID()).set(columnName, Integer.valueOf(1));
+			}
+		} 
+		
+		if (edgeTable.getColumn(columnName) != null) {
 			List<CyEdge> Edges = CyTableUtil.getEdgesInState(network, "selected", true);
 
 			for (CyEdge edge : Edges) {

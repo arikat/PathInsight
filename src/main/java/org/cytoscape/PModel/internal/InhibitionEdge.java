@@ -32,8 +32,15 @@ public class InhibitionEdge extends AbstractTask {
 		if (edgeTable.getColumn(columnName) == null) {
 			edgeTable.createColumn(columnName, Integer.class, true);
 			//insert continue or something here to get it to go to the next if statements
+			List<CyEdge> Edges = CyTableUtil.getEdgesInState(network, "selected", true);
+
+			for (CyEdge edge : Edges) {
+				edgeTable.getRow(edge.getSUID()).set(columnName, Integer.valueOf(-1));
+			}
 			
-		} else if (edgeTable.getColumn(columnName) != null) {
+		}
+		
+		if (edgeTable.getColumn(columnName) != null) {
 			List<CyEdge> Edges = CyTableUtil.getEdgesInState(network, "selected", true);
 
 			for (CyEdge edge : Edges) {

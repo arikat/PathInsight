@@ -59,6 +59,15 @@ public class CyActivator extends AbstractCyActivator {
 		aprops.setProperty("menuGravity", "8.3");
 		registerService(context, createcolumn, TaskFactory.class, aprops);
 		
+		//label edge inhibition
+		InhibitionEdgeFactory inhibit = new InhibitionEdgeFactory(cyApplicationManagerService);
+		Properties iprops = new Properties();
+		iprops.setProperty("preferredMenu", "Apps.Pathway Model.Edge Label");
+		iprops.setProperty("title", "Inhibition");
+		iprops.setProperty("inMenuBar", "true");
+		iprops.setProperty("menuGravity", "8.4");
+		registerService(context, inhibit, TaskFactory.class, iprops);
+		
 		//Node Output algorithm attempt
 		NodeOutputFactory creety = new NodeOutputFactory(cyApplicationManagerService);
 		Properties cops = new Properties();
@@ -70,19 +79,20 @@ public class CyActivator extends AbstractCyActivator {
 
 		
 		//annotate with image - maybe works
-		NeighborFinderFactory cg = new NeighborFinderFactory();
+		/*NeighborFinderFactory cg = new NeighborFinderFactory();
 		Properties gprops = new Properties();
 		gprops.setProperty("preferredMenu", "Apps.Pathway Model.Draw");
 		gprops.setProperty("title", "Drowsy");
 		gprops.setProperty("inMenuBar", "true");
 		gprops.setProperty("menuGravity", "8.4");
-		registerService(context, cg, NodeViewTaskFactory.class, gprops);
+		registerService(context, cg, NodeViewTaskFactory.class, gprops);*/
 		
 		//ImageAnnotationNode ian = new ImageAnnotationNode(cyApplicationManagerService, currentLexicon);
 		//registerService(context, ian, CyAction.class, new Properties());
 		
 		//ImageAnnoViz vizan = new ImageAnnoViz(cyApplicationManagerService, mappy, fact, currentLexicon);
 		//registerService(context, vizan, CyAction.class, new Properties());
+		
 		
 		CustomGraphicsManager manager = new CustomGraphicsManager(registrar);
 		CyCustomGraphicsFactory<ImageAnno> stringLookFactory = new CustomGraphicsFactory(manager);

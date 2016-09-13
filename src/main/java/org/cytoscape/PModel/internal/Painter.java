@@ -49,11 +49,13 @@ public class Painter extends AbstractTask {
 		taskMonitor.setTitle("Painting Image");
 		taskMonitor.setStatusMessage("Painting image ...");
 		
-		String two = "http://i.imgur.com/Cj7NDV3.png";
-		String one = "http://i.imgur.com/dwt0BWf.png";
-		String zero = "http://i.imgur.com/ScITBMD.png";
-		String negone = "http://i.imgur.com/d24OeFc.jpg";
-		String negtwo = "http://i.imgur.com/6xAePTG.jpg";
+		String two = "http://i.imgur.com/sq4WXnR.png";
+		String one = "http://i.imgur.com/nMKj77P.png";
+		String zero = "http://i.imgur.com/kh1IMGe.png";
+		String negone = "http://i.imgur.com/F0FdgSx.png";
+		String negtwo = "http://i.imgur.com/sHkP8rX.png";
+		String plusplus = "http://i.imgur.com/qk64sKc.png";
+		String negneg = "http://i.imgur.com/o2gB6mm.png";
 
 		// getRow(cyNode).set(IMAGE_COLUMN, imageString)  // netView.getModel()
 		CyTable edgeTable = network.getDefaultEdgeTable();
@@ -82,12 +84,29 @@ public class Painter extends AbstractTask {
 
 			String columnName = "bool";
 
-			List<CyNode> nodes = CyTableUtil.getNodesInState(network, "selected", true);
+			//List<CyNode> nodes = CyTableUtil.getNodesInState(network, "selected", true);
+			List<CyNode> nodes = network.getNodeList();
 			
 			for (CyNode node : nodes) {				
 				
 				///WRITE CODE HERE LOOKING AT NEIGHBOR NODES - THEN GET THOSE ADJACENT EDGE LISTS - THEN REPEAT ONCE MORE FOR TERTIARY INTERACTIONS?
 					 
+				if (nodeTable.getRow(node.getSUID()).get(columnName, Integer.class) == null) {
+					//print something or do something so this doesn't end in an error
+					taskMonitor.setStatusMessage("Warning: null node - setting to zero to prevent errors");
+					network.getRow(node).set(IMAGE_COLUMN, zero); //fixed original issue with only one writing - now fix overwriting arrows
+					
+					VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
+							"(mapping.type=passthrough)");
+					PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
+							cgProp);
+					
+					style.addVisualMappingFunction(map);
+					style.apply(netView);
+					//nvm paint null on this node so no issues occur
+				}
+				
+				
 					if (network.getRow(node).get(columnName, Integer.class) == 1) { //change to integer if necessary
 						// Create a passthrough mapping to that column
 						//nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); //easy fix - overwriting arrows, make i++
@@ -103,7 +122,39 @@ public class Painter extends AbstractTask {
 						style.apply(netView);
 					}
 						
-						if (network.getRow(node).get(columnName, Integer.class) >= 2) { //change to integer if necessary
+					if (network.getRow(node).get(columnName, Integer.class) > 2) { //change to integer if necessary
+						// Create a passthrough mapping to that column
+						//nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); //easy fix - overwriting arrows, make i++
+						network.getRow(node).set(IMAGE_COLUMN, plusplus); //fixed original issue with only one writing - now fix overwriting arrows
+						
+						
+						VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
+								"(mapping.type=passthrough)");
+						PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
+								cgProp);
+						
+						style.addVisualMappingFunction(map);
+						style.apply(netView);
+					}
+					
+					if (network.getRow(node).get(columnName, Integer.class) < -2) { //change to integer if necessary
+						// Create a passthrough mapping to that column
+						//nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); //easy fix - overwriting arrows, make i++
+						network.getRow(node).set(IMAGE_COLUMN, negneg); //fixed original issue with only one writing - now fix overwriting arrows
+						
+						
+						VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
+								"(mapping.type=passthrough)");
+						PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
+								cgProp);
+						
+						style.addVisualMappingFunction(map);
+						style.apply(netView);
+					}
+					
+					
+					
+						if (network.getRow(node).get(columnName, Integer.class) == 2) { //change to integer if necessary
 							// Create a passthrough mapping to that column
 							//nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); //easy fix - overwriting arrows, make i++
 							network.getRow(node).set(IMAGE_COLUMN, two); //fixed original issue with only one writing - now fix overwriting arrows
@@ -148,7 +199,7 @@ public class Painter extends AbstractTask {
 								style.apply(netView);
 							}
 							
-							if (network.getRow(node).get(columnName, Integer.class) <= -2) { //change to integer if necessary
+							if (network.getRow(node).get(columnName, Integer.class) == -2) { //change to integer if necessary
 								// Create a passthrough mapping to that column
 								//nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); //easy fix - overwriting arrows, make i++
 								network.getRow(node).set(IMAGE_COLUMN, negtwo); //fixed original issue with only one writing - now fix overwriting arrows
@@ -163,20 +214,6 @@ public class Painter extends AbstractTask {
 								style.apply(netView);
 							}
 							
-							if (nodeTable.getRow(node.getSUID()).get(columnName, Integer.class) == null) {
-								//print something or do something so this doesn't end in an error
-								System.out.println("null node");
-								network.getRow(node).set(IMAGE_COLUMN, zero); //fixed original issue with only one writing - now fix overwriting arrows
-								
-								VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-										"(mapping.type=passthrough)");
-								PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-										cgProp);
-								
-								style.addVisualMappingFunction(map);
-								style.apply(netView);
-								//nvm paint null on this node so no issues occur
-							}
 			}
 		}
 	}
