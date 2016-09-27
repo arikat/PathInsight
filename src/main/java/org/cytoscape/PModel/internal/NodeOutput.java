@@ -67,6 +67,7 @@ public class NodeOutput extends AbstractTask {
 		}
 		
 		for (CyNode node : nodes) {
+			taskMonitor.setStatusMessage("Number of nodes: " + nodes);
 			//List<CyEdge> Edges = network.getAdjacentEdgeList(node, CyEdge.Type.OUTGOING);
 			//Edges.addAll(network.getAdjacentEdgeList(node, CyEdge.Type.OUTGOING));
 			//neighbors.addAll(network.getNeighborList(node, Type.OUTGOING));
@@ -79,7 +80,7 @@ public class NodeOutput extends AbstractTask {
 					taskMonitor.setStatusMessage("Number of neighbors: " + neighbors);
 				}
 			}
-			
+		} //This cuts off the for loop to node and nodes - you can eliminate this if it doesn't work.
 			//^ may be the issue - iterating twice based on number of edges - need to fix with an array perhaps? Write hash map - read up on deleting duplicate values
 			
 			for (CyNode nodely : neighbors) {
@@ -162,7 +163,7 @@ public class NodeOutput extends AbstractTask {
 					}*/
 				}
 				
-				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(node).get(columnName, Integer.class) <= -1)) {
+				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) <= -1)) {
 					//set nodely to -1, okay?
 				//	if (nodeTable.getRow(target.getSUID()).get(columnName, Integer.class) != null) {
 						//int attempt = nodeTable.getRow(target.getSUID()).get(columnName, Integer.class);
@@ -176,7 +177,7 @@ public class NodeOutput extends AbstractTask {
 					}*/
 				
 				
-				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(node).get(columnName, Integer.class) <= -1)) {
+				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) <= -1)) {
 					//set nodely to 1, okay?
 					//if (nodeTable.getRow(target.getSUID()).get(columnName, Integer.class) != null) {
 						//int attempt = nodeTable.getRow(target.getSUID()).get(columnName, Integer.class);
@@ -190,7 +191,7 @@ public class NodeOutput extends AbstractTask {
 					}
 				}*/
 				
-				if (network.getRow(node).get(columnName, Integer.class) == 0) {
+				if (network.getRow(source).get(columnName, Integer.class) == 0) {
 					//set nodely to 0, okay?
 					nodeTable.getRow(target.getSUID()).set(columnName, Integer.valueOf(0));
 					//break;
@@ -260,7 +261,7 @@ public class NodeOutput extends AbstractTask {
 								//set nodely to 0, okay?
 								nodeTable.getRow(target2.getSUID()).set(columnName, Integer.valueOf(0));
 							}
-				} //} eliminated one bracket separating nodely and noddie - remember this
+				//} //} eliminated one bracket separating nodely and noddie - remember this
 			}
 		}
 	}	

@@ -94,7 +94,8 @@ public class Painter extends AbstractTask {
 				if (nodeTable.getRow(node.getSUID()).get(columnName, Integer.class) == null) {
 					//print something or do something so this doesn't end in an error
 					taskMonitor.setStatusMessage("Warning: null node - setting to zero to prevent errors");
-					network.getRow(node).set(IMAGE_COLUMN, zero); //fixed original issue with only one writing - now fix overwriting arrows
+					network.getRow(node).set(columnName, Integer.valueOf(0));
+					/*network.getRow(node).set(IMAGE_COLUMN, zero); //fixed original issue with only one writing - now fix overwriting arrows
 					
 					VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
 							"(mapping.type=passthrough)");
@@ -102,7 +103,7 @@ public class Painter extends AbstractTask {
 							cgProp);
 					
 					style.addVisualMappingFunction(map);
-					style.apply(netView);
+					style.apply(netView);*/
 					//nvm paint null on this node so no issues occur
 				}
 				

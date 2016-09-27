@@ -35,6 +35,15 @@ public class InhibitionShapeTask extends AbstractEdgeViewTask {
 		
 		
 		for (CyEdge edge : edges) {
+			if (network.getRow(edge).get(columnName, Integer.class) == null) {
+				network.getRow(edge).set(columnName, Integer.valueOf(0));
+				taskbp.setStatusMessage("Warning: null edges - setting to zero to prevent errors");
+			}
+			
+			if (network.getRow(edge).get(columnName, Integer.class) == 0) {
+				netView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.DIAMOND);
+			}
+			
 			if (network.getRow(edge).get(columnName, Integer.class) == -1) {
 				//edgeView.setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.T);
 				netView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.T);
