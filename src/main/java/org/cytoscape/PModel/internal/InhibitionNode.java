@@ -13,11 +13,11 @@ import org.cytoscape.model.CyTable;
 import org.cytoscape.model.CyTableUtil;
 import org.cytoscape.application.CyApplicationManager;
 
-public class ActivationEdge extends AbstractTask {
+public class InhibitionNode extends AbstractTask {
 	public String columnName = "bool";
 	private CyNetwork network;
 
-	public ActivationEdge(CyNetwork network) {
+	public InhibitionNode(CyNetwork network) {
 		this.network = network;
 	}
 
@@ -28,33 +28,29 @@ public class ActivationEdge extends AbstractTask {
 			return;
 		}*/
 		
-		monitor.setTitle("Adding activation edge values");
+		monitor.setTitle("Adding Inhibition Node values");
 
-		CyTable edgeTable = network.getDefaultEdgeTable();
+		CyTable nodeTable = network.getDefaultNodeTable();
 
-		if (edgeTable.getColumn(columnName) == null) {
-			edgeTable.createColumn(columnName, Integer.class, true);
+		if (nodeTable.getColumn(columnName) == null) {
+			nodeTable.createColumn(columnName, Integer.class, true);
 			
-			List<CyEdge> Edges = CyTableUtil.getEdgesInState(network, "selected", true);
+			List<CyNode> Nodes = CyTableUtil.getNodesInState(network, "selected", true);
 			monitor.setStatusMessage("Warning: null column - creating column and setting values");
 
-			for (CyEdge edge : Edges) {
-				edgeTable.getRow(edge.getSUID()).set(columnName, Integer.valueOf(1));
+			for (CyNode node : Nodes) {
+				nodeTable.getRow(node.getSUID()).set(columnName, Integer.valueOf(-1));
 			}
 		} 
 		
-		if (edgeTable.getColumn(columnName) != null) {
-			List<CyEdge> Edges = CyTableUtil.getEdgesInState(network, "selected", true);
+		if (nodeTable.getColumn(columnName) != null) {
+			List<CyNode> Nodes = CyTableUtil.getNodesInState(network, "selected", true);
 			monitor.setStatusMessage("Setting values");
 
-			for (CyEdge edge : Edges) {
-				edgeTable.getRow(edge.getSUID()).set(columnName, Integer.valueOf(1));
+			for (CyNode node : Nodes) {
+				nodeTable.getRow(node.getSUID()).set(columnName, Integer.valueOf(-1));
 			}
 
 		}
-	}
-
-	public void cancel() {
-		cancelled = true;
 	}
 }

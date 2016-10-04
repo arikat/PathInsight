@@ -58,13 +58,13 @@ public class Painter extends AbstractTask {
 		String negneg = "http://i.imgur.com/o2gB6mm.png";
 
 		// getRow(cyNode).set(IMAGE_COLUMN, imageString)  // netView.getModel()
-		CyTable edgeTable = network.getDefaultEdgeTable();
+		//CyTable edgeTable = network.getDefaultEdgeTable();
 		CyTable nodeTable = network.getDefaultNodeTable();
 		if (nodeTable.getColumn(IMAGE_COLUMN) == null) {
 			nodeTable.createColumn(IMAGE_COLUMN, String.class, false);
 		}
 
-		if (edgeTable.getColumn(columnName) != null) {
+		if (nodeTable.getColumn(columnName) != null) {
 			
 			VisualMappingManager vmm = registrar.getService(VisualMappingManager.class);
 
@@ -84,8 +84,8 @@ public class Painter extends AbstractTask {
 
 			String columnName = "bool";
 
-			//List<CyNode> nodes = CyTableUtil.getNodesInState(network, "selected", true);
-			List<CyNode> nodes = network.getNodeList();
+			List<CyNode> nodes = CyTableUtil.getNodesInState(network, "selected", true);
+			//List<CyNode> nodes = network.getNodeList();
 			
 			for (CyNode node : nodes) {				
 				
@@ -93,7 +93,8 @@ public class Painter extends AbstractTask {
 					 
 				if (nodeTable.getRow(node.getSUID()).get(columnName, Integer.class) == null) {
 					//print something or do something so this doesn't end in an error
-					taskMonitor.setStatusMessage("Warning: null node - setting to zero to prevent errors");
+					taskMonitor.setStatusMessage("Warning: null node - breaking loop");
+					//break;
 					network.getRow(node).set(columnName, Integer.valueOf(0));
 					/*network.getRow(node).set(IMAGE_COLUMN, zero); //fixed original issue with only one writing - now fix overwriting arrows
 					
@@ -120,7 +121,7 @@ public class Painter extends AbstractTask {
 								cgProp);
 						
 						style.addVisualMappingFunction(map);
-						style.apply(netView);
+						//style.apply(netView);
 					}
 						
 					if (network.getRow(node).get(columnName, Integer.class) > 2) { //change to integer if necessary
@@ -135,7 +136,7 @@ public class Painter extends AbstractTask {
 								cgProp);
 						
 						style.addVisualMappingFunction(map);
-						style.apply(netView);
+						//style.apply(netView);
 					}
 					
 					if (network.getRow(node).get(columnName, Integer.class) < -2) { //change to integer if necessary
@@ -150,7 +151,7 @@ public class Painter extends AbstractTask {
 								cgProp);
 						
 						style.addVisualMappingFunction(map);
-						style.apply(netView);
+						//style.apply(netView);
 					}
 					
 					
@@ -167,7 +168,7 @@ public class Painter extends AbstractTask {
 									cgProp);
 							
 							style.addVisualMappingFunction(map);
-							style.apply(netView);
+							//style.apply(netView);
 						}
 							
 							if (network.getRow(node).get(columnName, Integer.class) == 0) { //change to integer if necessary
@@ -182,7 +183,7 @@ public class Painter extends AbstractTask {
 										cgProp);
 								
 								style.addVisualMappingFunction(map);
-								style.apply(netView);
+								//style.apply(netView);
 							}
 							
 							if (network.getRow(node).get(columnName, Integer.class) == -1) { //change to integer if necessary
@@ -197,7 +198,7 @@ public class Painter extends AbstractTask {
 										cgProp);
 								
 								style.addVisualMappingFunction(mapsy);
-								style.apply(netView);
+								//style.apply(netView);
 							}
 							
 							if (network.getRow(node).get(columnName, Integer.class) == -2) { //change to integer if necessary
@@ -212,10 +213,12 @@ public class Painter extends AbstractTask {
 										cgProp);
 								
 								style.addVisualMappingFunction(map);
-								style.apply(netView);
+								//style.apply(netView);
 							}
-							
+							//style.apply(netView);
 			}
+			style.apply(netView);
 		}
+		
 	}
 }

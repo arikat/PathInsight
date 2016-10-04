@@ -26,6 +26,7 @@ public class InhibitionEdge extends AbstractTask {
 			System.out.println("There is no network.");
 			return;
 		}
+		monitor.setTitle("Adding inhibition edge values");
 
 		CyTable edgeTable = network.getDefaultEdgeTable();
 
@@ -33,6 +34,7 @@ public class InhibitionEdge extends AbstractTask {
 			edgeTable.createColumn(columnName, Integer.class, true);
 			//insert continue or something here to get it to go to the next if statements
 			List<CyEdge> Edges = CyTableUtil.getEdgesInState(network, "selected", true);
+			monitor.setStatusMessage("Warning: null column - creating column and setting values");
 
 			for (CyEdge edge : Edges) {
 				edgeTable.getRow(edge.getSUID()).set(columnName, Integer.valueOf(-1));
@@ -42,6 +44,7 @@ public class InhibitionEdge extends AbstractTask {
 		
 		if (edgeTable.getColumn(columnName) != null) {
 			List<CyEdge> Edges = CyTableUtil.getEdgesInState(network, "selected", true);
+			monitor.setStatusMessage("Setting values");
 
 			for (CyEdge edge : Edges) {
 				edgeTable.getRow(edge.getSUID()).set(columnName, Integer.valueOf(-1));
