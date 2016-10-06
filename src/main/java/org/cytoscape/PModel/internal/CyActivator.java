@@ -38,17 +38,15 @@ public class CyActivator extends AbstractCyActivator {
 		CyNetworkView cyNetworkView = getService(context, CyNetworkView.class);
 		CySwingApplication cyApp = getService(context, CySwingApplication.class);
 		VisualMappingFunctionFactory fact = getService(context,VisualMappingFunctionFactory.class, "(mapping.type=passthrough)");
-		//CustomGraphicsManager customGraphicsManager = getService(context, CustomGraphicsManager.class);
-		//CustomGraphicsManagerImpl customGraphicsManagerImpl = getService(context, CustomGraphicsManagerImpl.class);
 		
 		//shape change
-		InhibitionTaskFactory InhibitionShapeTask = new InhibitionTaskFactory(cyApplicationManagerService);
+		InhibitionTaskFactory InhibitionShapeTask = new InhibitionTaskFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties cprops = new Properties();
 		cprops.setProperty("preferredMenu", "Apps.Pathway Model");
 		cprops.setProperty("title", "Auto Edge Distinction");
 		cprops.setProperty("inMenuBar", "true");
 		cprops.setProperty("menuGravity", "8.2");
-		registerService(context, InhibitionShapeTask, EdgeViewTaskFactory.class, cprops);
+		registerService(context, InhibitionShapeTask, TaskFactory.class, cprops);
 		
 		//Label edge activation
 		ActivationEdgeFactory createcolumn = new ActivationEdgeFactory(cyApplicationManagerService);
@@ -60,7 +58,7 @@ public class CyActivator extends AbstractCyActivator {
 		registerService(context, createcolumn, TaskFactory.class, aprops);
 		
 		//Activate Node label
-		ActivationNodeFactory activateNode = new ActivationNodeFactory(cyApplicationManagerService);
+		ActivationNodeFactory activateNode = new ActivationNodeFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties anprops = new Properties();
 		anprops.setProperty("preferredMenu", "Apps.Pathway Model.Compound Label");
 		anprops.setProperty("title", "Activation");
@@ -69,7 +67,7 @@ public class CyActivator extends AbstractCyActivator {
 		registerService(context, activateNode, TaskFactory.class, anprops);
 		
 		//Inhibit Node label
-		InhibitionNodeFactory inhibitNode = new InhibitionNodeFactory(cyApplicationManagerService);
+		InhibitionNodeFactory inhibitNode = new InhibitionNodeFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties inprops = new Properties();
 		inprops.setProperty("preferredMenu", "Apps.Pathway Model.Compound Label");
 		inprops.setProperty("title", "Inhibition");
@@ -96,7 +94,7 @@ public class CyActivator extends AbstractCyActivator {
 		registerService(context, clears, TaskFactory.class, ppropsy);
 		
 		//Clear boolean values of all nodes
-		ClearNodeBoolTaskFactory cleary = new ClearNodeBoolTaskFactory(cyApplicationManagerService);
+		ClearNodeBoolTaskFactory cleary = new ClearNodeBoolTaskFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties pprops = new Properties();
 		pprops.setProperty("preferredMenu", "Apps.Pathway Model.Reset Values");
 		pprops.setProperty("title", "Clear Nodes");
@@ -105,7 +103,7 @@ public class CyActivator extends AbstractCyActivator {
 		registerService(context, cleary, TaskFactory.class, pprops);
 		
 		//Node Output Stage I algorithm
-		NodeOutputStageITaskFactory stageI = new NodeOutputStageITaskFactory(cyApplicationManagerService);
+		NodeOutputStageITaskFactory stageI = new NodeOutputStageITaskFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties corpse = new Properties();
 		corpse.setProperty("preferredMenu", "Apps.Pathway Model.Node Analysis");
 		corpse.setProperty("title", "One Step");
@@ -114,7 +112,7 @@ public class CyActivator extends AbstractCyActivator {
 		registerService(context, stageI, TaskFactory.class, corpse);
 		
 		//Node Output Stage II algorithm
-		NodeOutputFactory creety = new NodeOutputFactory(cyApplicationManagerService);
+		NodeOutputFactory creety = new NodeOutputFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties cops = new Properties();
 		cops.setProperty("preferredMenu", "Apps.Pathway Model.Node Analysis");
 		cops.setProperty("title", "Two Steps");
@@ -122,45 +120,23 @@ public class CyActivator extends AbstractCyActivator {
 		cops.setProperty("menuGravity", "8.8");
 		registerService(context, creety, TaskFactory.class, cops);
 
+		//Trial Attempt Factory 
+		TaskFactory trial = new trialattemptfactory(cyNetworkView, registrar, cyApplicationManagerService);
+		Properties tProps = new Properties();
+		tProps.setProperty("preferredMenu", "Apps.Pathway Model");
+		tProps.setProperty("title", "trial");
+		tProps.setProperty("inMenuBar", "true");
+		tProps.setProperty("menuGravity", "8.9");
+		registerService(context, trial, TaskFactory.class, tProps);
 		
-		//annotate with image - maybe works
-		/*NeighborFinderFactory cg = new NeighborFinderFactory();
-		Properties gprops = new Properties();
-		gprops.setProperty("preferredMenu", "Apps.Pathway Model.Draw");
-		gprops.setProperty("title", "Drowsy");
-		gprops.setProperty("inMenuBar", "true");
-		gprops.setProperty("menuGravity", "8.4");
-		registerService(context, cg, NodeViewTaskFactory.class, gprops);*/
-		
-		//ImageAnnotationNode ian = new ImageAnnotationNode(cyApplicationManagerService, currentLexicon);
-		//registerService(context, ian, CyAction.class, new Properties());
-		
-		//ImageAnnoViz vizan = new ImageAnnoViz(cyApplicationManagerService, mappy, fact, currentLexicon);
-		//registerService(context, vizan, CyAction.class, new Properties());
-		
-		
-		TaskFactory paintStructure = new PaintFactory(registrar, cyApplicationManagerService);
+		//Paint All Nodes
+		TaskFactory paintStructure = new PaintFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties paintStructureProps = new Properties();
 		paintStructureProps.setProperty("preferredMenu", "Apps.Pathway Model");
 		paintStructureProps.setProperty("title", "Paint Nodes");
-		//paintStructureProps.setProperty(ENABLE_FOR, "networkAndView");
 		paintStructureProps.setProperty("inMenuBar", "true");
 		paintStructureProps.setProperty("menuGravity", "8.6");
-		registerService(context, paintStructure, NodeViewTaskFactory.class, paintStructureProps); //NodeViewTaskFactory.class
-		
-	/*	VisualMappingManager vmmServiceRef = getService(context,VisualMappingManager.class);
-		
-		VisualStyleFactory visualStyleFactoryServiceRef = getService(context,VisualStyleFactory.class);
-		
-		VisualMappingFunctionFactory vmfFactoryC = getService(context,VisualMappingFunctionFactory.class, "(mapping.type=continuous)");
-		VisualMappingFunctionFactory vmfFactoryD = getService(context,VisualMappingFunctionFactory.class, "(mapping.type=discrete)");
-		VisualMappingFunctionFactory vmfFactoryP = getService(context,VisualMappingFunctionFactory.class, "(mapping.type=passthrough)");
-		CreateVisualStyleAction createVisualStyleAction = new CreateVisualStyleAction(cyApplicationManagerService, vmmServiceRef, visualStyleFactoryServiceRef, 
-				vmfFactoryC, vmfFactoryD, vmfFactoryP);
-		
-		registerService(context,createVisualStyleAction,CyAction.class, new Properties());
-		*/
-		
+		registerService(context, paintStructure, TaskFactory.class, paintStructureProps);
 		
 	}
 	

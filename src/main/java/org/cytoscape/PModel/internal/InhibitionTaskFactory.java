@@ -2,6 +2,7 @@ package org.cytoscape.PModel.internal;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNode;
+import org.cytoscape.service.util.CyServiceRegistrar;
 import org.cytoscape.task.AbstractEdgeViewTaskFactory;
 import org.cytoscape.task.EdgeViewTaskFactory;
 import org.cytoscape.view.model.CyNetworkView;
@@ -12,17 +13,22 @@ import org.cytoscape.work.Task;
 import org.cytoscape.work.TaskIterator;
 
 
-public class InhibitionTaskFactory extends AbstractEdgeViewTaskFactory {
+public class InhibitionTaskFactory extends AbstractTaskFactory {
 	
-	private CyApplicationManager manny;
+	private CyApplicationManager appMgr;
+	private CyNetworkView netView;
+	private CyServiceRegistrar registrar;
 	
-	public InhibitionTaskFactory(final CyApplicationManager manny) {
-		this.manny = manny;
+	public InhibitionTaskFactory(CyNetworkView netView, CyServiceRegistrar registrar, CyApplicationManager appMgr){
+		this.appMgr = appMgr;
+		this.netView = netView;
+		this.registrar = registrar;
 	}
 	
-	public TaskIterator createTaskIterator(View<CyEdge> edgeView, CyNetworkView netView) {
+	
+	public TaskIterator createTaskIterator() {
 		// TODO Auto-generated method stub
-		return new TaskIterator(new Task[] { new InhibitionShapeTask(edgeView, netView, manny.getCurrentNetwork()) });
+		return new TaskIterator(new Task[] { new InhibitionShapeTask(netView, registrar, this.appMgr.getCurrentNetwork()) });
 	}
 
 }

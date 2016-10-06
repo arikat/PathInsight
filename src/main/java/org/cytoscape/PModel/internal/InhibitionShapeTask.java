@@ -6,6 +6,7 @@ import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyTable;
 import org.cytoscape.model.CyTableUtil;
+import org.cytoscape.service.util.CyServiceRegistrar;
 
 import java.util.List;
 import org.cytoscape.task.AbstractEdgeViewTask;
@@ -17,13 +18,17 @@ import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.Task;
 import org.cytoscape.work.TaskMonitor;
 
-public class InhibitionShapeTask extends AbstractEdgeViewTask {
+public class InhibitionShapeTask extends AbstractTask { // AbstractEdgeViewTask {
 	String columnName = "bool";
 	private CyNetwork network;
+	private CyNetworkView netView;
+	private CyServiceRegistrar registrar;
 
-	public InhibitionShapeTask(View<CyEdge> edgeView, CyNetworkView netView, CyNetwork network) {
-		super(edgeView, netView);
+	public InhibitionShapeTask(CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) {
+		//super(edgeView, netView);
 		this.network = network;
+		this.netView = netView;
+		this.registrar = registrar;
 	}
 	
 	@Override
@@ -32,6 +37,7 @@ public class InhibitionShapeTask extends AbstractEdgeViewTask {
 		List<CyEdge> edges = network.getEdgeList();
 		//List<CyEdge> edges = CyTableUtil.getEdgesInState(network, "selected", true);
 		CyTable edgeTable = network.getDefaultEdgeTable();
+		taskbp.setStatusMessage("getting Edge Table.");
 		
 		
 		for (CyEdge edge : edges) {
@@ -41,17 +47,21 @@ public class InhibitionShapeTask extends AbstractEdgeViewTask {
 			}
 			
 			if (network.getRow(edge).get(columnName, Integer.class) == 0) {
-				netView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.DIAMOND);
+				//netView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.DIAMOND);
+				netView.setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.DIAMOND);
+				//how do I get the edgeview without causing null error?
+			
 			}
 			
 			if (network.getRow(edge).get(columnName, Integer.class) == -1) {
-				//edgeView.setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.T);
-				netView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.T);
+				netView.setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.DIAMOND);
+				//netView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.T);
 			} 
 			
 			if (network.getRow(edge).get(columnName, Integer.class) == 1) {
 				//edgeView.setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE,  ArrowShapeVisualProperty.CIRCLE);
-				netView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.CIRCLE);
+				netView.setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.DIAMOND);
+				//netView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.CIRCLE);
 			}
 		}
 	}

@@ -27,19 +27,18 @@ import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskMonitor;
 
 public class Painter extends AbstractTask {
-	private View<CyNode> nodeView;
-	private View<CyEdge> edgeView;
+//	private View<CyNode> nodeView;
 	private CyNetworkView netView;
 	private CyApplicationManager applicationManager;
 	private CyServiceRegistrar registrar;
-	public static final String IMAGE_COLUMN = "Image URLs";
+	public static final String IMAGE_COLUMN = "Image URL";
 	private CyNode cyNode;
 	private CyNetwork network;
 	String columnName = "bool";
 
-	public Painter(View<CyNode> nodeView, CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) {
+	public Painter(CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) {
 		this.netView = netView;
-		this.nodeView = nodeView;
+		//this.nodeView = nodeView;
 		this.registrar = registrar;
 		this.network = network;
 		// this.edgeView = edgeView;
@@ -84,8 +83,8 @@ public class Painter extends AbstractTask {
 
 			String columnName = "bool";
 
-			List<CyNode> nodes = CyTableUtil.getNodesInState(network, "selected", true);
-			//List<CyNode> nodes = network.getNodeList();
+			//List<CyNode> nodes = CyTableUtil.getNodesInState(network, "selected", true);
+			List<CyNode> nodes = network.getNodeList();
 			
 			for (CyNode node : nodes) {				
 				

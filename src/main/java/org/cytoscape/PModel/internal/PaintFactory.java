@@ -18,21 +18,19 @@ import org.cytoscape.view.model.View;
 import org.cytoscape.work.AbstractTaskFactory;
 import org.cytoscape.work.TaskIterator;
 
-public class PaintFactory extends AbstractTaskFactory implements NodeViewTaskFactory {
+public class PaintFactory extends AbstractTaskFactory {// implements NodeViewTaskFactory {
 
 	private CyServiceRegistrar registrar;
 	private CyApplicationManager manny;
+	private CyNetworkView netView;
 
-	public PaintFactory(CyServiceRegistrar registrar, final CyApplicationManager manny) {
+	public PaintFactory(CyNetworkView netView, CyServiceRegistrar registrar, final CyApplicationManager manny) {
 		this.registrar = registrar;
 		this.manny = manny;
+		this.netView = netView;
 	}
 
-	public TaskIterator createTaskIterator() {
-		return null;
-	}
-
-	public boolean isReady(View<CyNode> nodeView, CyNetworkView netView) {
+	/* boolean isReady(View<CyNode> nodeView, CyNetworkView netView) {
 		// This only applies to the target node, so we just use the context
 		
 		//List<CyIdentifiable> selectedList = new ArrayList<CyIdentifiable>();
@@ -43,9 +41,9 @@ public class PaintFactory extends AbstractTaskFactory implements NodeViewTaskFac
 		//if (stMap != null && stMap.containsKey(nodeView.getModel()))
 			return true;
 		//return false;
-	}
+	}*/
 
-	public TaskIterator createTaskIterator(View<CyNode> nodeView, CyNetworkView netView) {
-		return new TaskIterator(new Painter(nodeView, netView, registrar, manny.getCurrentNetwork())); //add manny in a bit
+	public TaskIterator createTaskIterator() { //View<CyNode> nodeView, CyNetworkView netView
+		return new TaskIterator(new Painter(netView, registrar, manny.getCurrentNetwork())); //add manny in a bit
 	}
 }
