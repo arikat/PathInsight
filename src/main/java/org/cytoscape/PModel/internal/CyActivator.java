@@ -1,6 +1,17 @@
 package org.cytoscape.PModel.internal;
 
 import java.util.Properties;
+
+import org.cytoscape.PModel.internal.TaskFactories.ActivationEdgeFactory;
+import org.cytoscape.PModel.internal.TaskFactories.ActivationNodeFactory;
+import org.cytoscape.PModel.internal.TaskFactories.ClearEdgeBoolTaskFactory;
+import org.cytoscape.PModel.internal.TaskFactories.ClearNodeBoolTaskFactory;
+import org.cytoscape.PModel.internal.TaskFactories.EdgeShapeTaskFactory;
+import org.cytoscape.PModel.internal.TaskFactories.InhibitionEdgeFactory;
+import org.cytoscape.PModel.internal.TaskFactories.InhibitionNodeFactory;
+import org.cytoscape.PModel.internal.TaskFactories.NodeOutputFactory;
+import org.cytoscape.PModel.internal.TaskFactories.NodeOutputStageITaskFactory;
+import org.cytoscape.PModel.internal.TaskFactories.PaintFactory;
 import org.cytoscape.app.swing.AbstractCySwingApp;
 import org.cytoscape.app.swing.CySwingAppAdapter;
 import org.cytoscape.service.util.AbstractCyActivator;
@@ -20,6 +31,7 @@ import org.cytoscape.work.AbstractTaskFactory;
 import org.cytoscape.work.TaskFactory;
 import org.cytoscape.application.swing.CyNodeViewContextMenuFactory;
 import org.cytoscape.application.swing.CySwingApplication;
+import org.cytoscape.event.CyEventHelper;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.application.swing.CyAction;
 import org.cytoscape.application.swing.CyEdgeViewContextMenuFactory;
@@ -38,15 +50,16 @@ public class CyActivator extends AbstractCyActivator {
 		CyNetworkView cyNetworkView = getService(context, CyNetworkView.class);
 		CySwingApplication cyApp = getService(context, CySwingApplication.class);
 		VisualMappingFunctionFactory fact = getService(context,VisualMappingFunctionFactory.class, "(mapping.type=passthrough)");
+		CyEventHelper eventHelp = getService(context, CyEventHelper.class);
 		
 		//shape change
-		InhibitionTaskFactory InhibitionShapeTask = new InhibitionTaskFactory(cyNetworkView, registrar, cyApplicationManagerService);
+		EdgeShapeTaskFactory EdgeShapeTask = new EdgeShapeTaskFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties cprops = new Properties();
 		cprops.setProperty("preferredMenu", "Apps.Pathway Model");
 		cprops.setProperty("title", "Auto Edge Distinction");
 		cprops.setProperty("inMenuBar", "true");
 		cprops.setProperty("menuGravity", "8.2");
-		registerService(context, InhibitionShapeTask, TaskFactory.class, cprops);
+		registerService(context, EdgeShapeTask, TaskFactory.class, cprops);
 		
 		//Label edge activation
 		ActivationEdgeFactory createcolumn = new ActivationEdgeFactory(cyApplicationManagerService);
@@ -119,21 +132,12 @@ public class CyActivator extends AbstractCyActivator {
 		cops.setProperty("inMenuBar", "true");
 		cops.setProperty("menuGravity", "8.8");
 		registerService(context, creety, TaskFactory.class, cops);
-
-		//Trial Attempt Factory 
-		TaskFactory trial = new trialattemptfactory(cyNetworkView, registrar, cyApplicationManagerService);
-		Properties tProps = new Properties();
-		tProps.setProperty("preferredMenu", "Apps.Pathway Model");
-		tProps.setProperty("title", "trial");
-		tProps.setProperty("inMenuBar", "true");
-		tProps.setProperty("menuGravity", "8.9");
-		registerService(context, trial, TaskFactory.class, tProps);
 		
 		//Paint All Nodes
 		TaskFactory paintStructure = new PaintFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties paintStructureProps = new Properties();
 		paintStructureProps.setProperty("preferredMenu", "Apps.Pathway Model");
-		paintStructureProps.setProperty("title", "Paint Nodes");
+		paintStructureProps.setProperty("title", "Paint All Nodes");
 		paintStructureProps.setProperty("inMenuBar", "true");
 		paintStructureProps.setProperty("menuGravity", "8.6");
 		registerService(context, paintStructure, TaskFactory.class, paintStructureProps);
