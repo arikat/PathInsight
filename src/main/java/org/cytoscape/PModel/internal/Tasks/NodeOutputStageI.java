@@ -1,5 +1,6 @@
 package org.cytoscape.PModel.internal.Tasks;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.View;
 import org.cytoscape.view.model.VisualLexicon;
 import org.cytoscape.view.model.VisualProperty;
+import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyle;
@@ -32,14 +34,17 @@ public class NodeOutputStageI extends AbstractTask {
 	private CyNode cyNode;
 	private CyNetwork network;
 	String columnName = "bool";
+	String question = "qMark";
 	
-	public NodeOutputStageI(CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) { 
+	public NodeOutputStageI(CyApplicationManager applicationManager, CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) { 
 		this.network = network;
 		this.registrar = registrar;
 		this.netView = netView;
+		this.applicationManager = applicationManager;
 		
 	}
 	
+	//CyNetworkView netoView = applicationManager.getCurrentNetworkView();
 
 	@Override
 	public void run(TaskMonitor taskMonitor) throws Exception {
@@ -49,16 +54,18 @@ public class NodeOutputStageI extends AbstractTask {
 			return;
 		}
 		
+		CyNetworkView netoView = applicationManager.getCurrentNetworkView();
+		
 		taskMonitor.setTitle("Calculating Output");
 		taskMonitor.setStatusMessage("Measuring each node...");
 		
-		String two = "http://i.imgur.com/sq4WXnR.png";
-		String one = "http://i.imgur.com/nMKj77P.png";
-		String zero = "http://i.imgur.com/kh1IMGe.png";
-		String negone = "http://i.imgur.com/F0FdgSx.png";
-		String negtwo = "http://i.imgur.com/sHkP8rX.png";
-		String plusplus = "http://i.imgur.com/qk64sKc.png";
-		String negneg = "http://i.imgur.com/o2gB6mm.png";
+		String two = "http://i.imgur.com/feUmtME.png";
+		String one = "http://i.imgur.com/J6EDr3b.png";
+		String zero = "http://i.imgur.com/9nOANtj.png";
+		String negone = "http://i.imgur.com/1zmn5F8.png";
+		String negtwo = "http://i.imgur.com/l4LC7Y0.png";
+		String plusplus = "http://i.imgur.com/gMLOrbx.png";
+		String negneg = "http://i.imgur.com/B41iKek.png";
 		
 		CyTable edgeTable = network.getDefaultEdgeTable();
 		CyTable nodeTable = network.getDefaultNodeTable();
@@ -87,8 +94,14 @@ public class NodeOutputStageI extends AbstractTask {
 		//create HASHSET
 		HashSet<CyNode> neighbors = new HashSet<CyNode>();
 		
+		HashSet<CyEdge> Edges = new HashSet<CyEdge>();
+		
 		if (nodeTable.getColumn(columnName) == null) {
 			nodeTable.createColumn(columnName, Integer.class, true);
+		}
+		
+		if (nodeTable.getColumn(question) == null) {
+			nodeTable.createColumn(question, String.class, true);
 		}
 		
 		if (nodeTable.getColumn(IMAGE_COLUMN) == null) {
@@ -104,8 +117,10 @@ public class NodeOutputStageI extends AbstractTask {
 				if (!neighbors.contains(nebs)) {
 					neighbors.add(nebs);
 					taskMonitor.setStatusMessage("Number of neighbors: " + neighbors);
+					Edges.addAll(network.getAdjacentEdgeList(nebs, CyEdge.Type.INCOMING)); //test if this works?
 				}
 			}
+		
 		} //This cuts off the for loop to node and nodes - you can eliminate this if it doesn't work.
 			
 			for (CyNode nodely : neighbors) {
@@ -115,7 +130,7 @@ public class NodeOutputStageI extends AbstractTask {
 					network.getRow(nodely).set(columnName, Integer.valueOf(0));
 				}
 				
-				List<CyEdge> Edges = network.getAdjacentEdgeList(nodely, CyEdge.Type.INCOMING); //change back to nodely, incoming if not working
+				//List<CyEdge> Edges = network.getAdjacentEdgeList(nodely, CyEdge.Type.INCOMING); //change back to nodely, incoming if not working
 				for (CyEdge edge : Edges) { //consider switching order of edges -- look up for loop without for loop!!!!
 				
 					CyNode source = edge.getSource();
@@ -157,6 +172,29 @@ public class NodeOutputStageI extends AbstractTask {
 					
 				int attempt = nodeTable.getRow(target.getSUID()).get(columnName, Integer.class);
 				
+				
+				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) == null)) {
+					break;
+					//nodeTable.getRow(target.getSUID()).set(columnName, (attempt));
+				}
+				
+				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) == null)) {
+					break;
+					//nodeTable.getRow(target.getSUID()).set(columnName, (attempt));
+				}
+				
+				if ((network.getRow(edge).get(columnName, Integer.class) == null) || (network.getRow(edge).get(columnName, Integer.class) == 0)) { //or zero...
+					//nodeTable.getRow(target.getSUID()).set(columnName, (attempt));
+					nodeTable.getRow(source.getSUID()).set(question, ("?"));
+					netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_PAINT, Color.blue);
+				}
+				
+			/*	try {
+				if ((network.getRow(edge).get(columnName, Integer.class) == null) && (network.getRow(source).get(columnName, Integer.class) == null)) {
+				} } catch (final Exception e) {
+					throw new IllegalArgumentException("Warning: Null node and Edge detected, please change this.");
+				}*/
+				
 				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) >= 1)) {
 					//set nodely to 1, okay?
 					nodeTable.getRow(target.getSUID()).set(columnName, (++attempt));
@@ -166,81 +204,34 @@ public class NodeOutputStageI extends AbstractTask {
 						network.getRow(target).set(columnName, Integer.valueOf(0));
 					}
 					
-						if (network.getRow(target).get(columnName, Integer.class) == 1) { //change to integer if necessary
+						if (network.getRow(target).get(columnName, Integer.class) == 1) {
 							network.getRow(target).set(IMAGE_COLUMN, one); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 						}
 							
-						if (network.getRow(target).get(columnName, Integer.class) > 2) { //change to integer if necessary
+						if (network.getRow(target).get(columnName, Integer.class) > 2) {
 							network.getRow(target).set(IMAGE_COLUMN, plusplus); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 						}
 						
 						if (network.getRow(target).get(columnName, Integer.class) < -2) { 
 							network.getRow(target).set(IMAGE_COLUMN, negneg); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 						}
 						
 							if (network.getRow(target).get(columnName, Integer.class) == 2) { 
 								
 								network.getRow(target).set(IMAGE_COLUMN, two);
-								
-								VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-										"(mapping.type=passthrough)");
-								PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-										cgProp);
-								
-								style.addVisualMappingFunction(map);
 							}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == 0) {
 									network.getRow(target).set(IMAGE_COLUMN, zero); 
-									VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(map);
 								}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == -1) { 
 									
 									network.getRow(target).set(IMAGE_COLUMN, negone);
-									
-									VisualMappingFunctionFactory facto = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping mapsy = (PassthroughMapping) facto.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(mapsy);
 								}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == -2) {
 									network.getRow(target).set(IMAGE_COLUMN, negtwo);
-									VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(map);
 								}
 				}
 				
@@ -255,79 +246,32 @@ public class NodeOutputStageI extends AbstractTask {
 					
 						if (network.getRow(target).get(columnName, Integer.class) == 1) { //change to integer if necessary
 							network.getRow(target).set(IMAGE_COLUMN, one); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 						}
 							
 						if (network.getRow(target).get(columnName, Integer.class) > 2) { //change to integer if necessary
 							network.getRow(target).set(IMAGE_COLUMN, plusplus); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 						}
 						
 						if (network.getRow(target).get(columnName, Integer.class) < -2) { 
 							network.getRow(target).set(IMAGE_COLUMN, negneg); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 						}
 						
 							if (network.getRow(target).get(columnName, Integer.class) == 2) { 
 								
 								network.getRow(target).set(IMAGE_COLUMN, two);
-								
-								VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-										"(mapping.type=passthrough)");
-								PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-										cgProp);
-								
-								style.addVisualMappingFunction(map);
 							}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == 0) {
 									network.getRow(target).set(IMAGE_COLUMN, zero); 
-									VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(map);
 								}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == -1) { 
 									
 									network.getRow(target).set(IMAGE_COLUMN, negone);
-									
-									VisualMappingFunctionFactory facto = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping mapsy = (PassthroughMapping) facto.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(mapsy);
 								}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == -2) {
 									network.getRow(target).set(IMAGE_COLUMN, negtwo);
-									VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(map);
 								}
 				}
 				
@@ -342,79 +286,32 @@ public class NodeOutputStageI extends AbstractTask {
 					
 						if (network.getRow(target).get(columnName, Integer.class) == 1) { //change to integer if necessary
 							network.getRow(target).set(IMAGE_COLUMN, one); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 						}
 							
 						if (network.getRow(target).get(columnName, Integer.class) > 2) { //change to integer if necessary
 							network.getRow(target).set(IMAGE_COLUMN, plusplus); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 						}
 						
 						if (network.getRow(target).get(columnName, Integer.class) < -2) { 
 							network.getRow(target).set(IMAGE_COLUMN, negneg); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 						}
 						
 							if (network.getRow(target).get(columnName, Integer.class) == 2) { 
 								
 								network.getRow(target).set(IMAGE_COLUMN, two);
-								
-								VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-										"(mapping.type=passthrough)");
-								PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-										cgProp);
-								
-								style.addVisualMappingFunction(map);
 							}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == 0) {
 									network.getRow(target).set(IMAGE_COLUMN, zero); 
-									VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(map);
 								}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == -1) { 
 									
 									network.getRow(target).set(IMAGE_COLUMN, negone);
-									
-									VisualMappingFunctionFactory facto = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping mapsy = (PassthroughMapping) facto.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(mapsy);
 								}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == -2) {
 									network.getRow(target).set(IMAGE_COLUMN, negtwo);
-									VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(map);
 								}
 				}
 				
@@ -429,85 +326,38 @@ public class NodeOutputStageI extends AbstractTask {
 					
 						if (network.getRow(target).get(columnName, Integer.class) == 1) { //change to integer if necessary
 							network.getRow(target).set(IMAGE_COLUMN, one); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 						}
 							
 						if (network.getRow(target).get(columnName, Integer.class) > 2) { //change to integer if necessary
 							network.getRow(target).set(IMAGE_COLUMN, plusplus); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 						}
 						
 						if (network.getRow(target).get(columnName, Integer.class) < -2) { 
 							network.getRow(target).set(IMAGE_COLUMN, negneg); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 						}
 						
 							if (network.getRow(target).get(columnName, Integer.class) == 2) { 
 								
 								network.getRow(target).set(IMAGE_COLUMN, two);
-								
-								VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-										"(mapping.type=passthrough)");
-								PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-										cgProp);
-								
-								style.addVisualMappingFunction(map);
 							}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == 0) {
 									network.getRow(target).set(IMAGE_COLUMN, zero); 
-									VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(map);
 								}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == -1) { 
 									
 									network.getRow(target).set(IMAGE_COLUMN, negone);
-									
-									VisualMappingFunctionFactory facto = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping mapsy = (PassthroughMapping) facto.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(mapsy);
 								}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == -2) {
 									network.getRow(target).set(IMAGE_COLUMN, negtwo);
-									VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(map);
 								}
 				}
 					
 				if (network.getRow(source).get(columnName, Integer.class) == 0) {
 					//set nodely to 0, okay?
-					nodeTable.getRow(target.getSUID()).set(columnName, Integer.valueOf(0));
+					nodeTable.getRow(target.getSUID()).set(columnName, attempt);
 					
 					if (nodeTable.getRow(target.getSUID()).get(columnName, Integer.class) == null) {
 						taskMonitor.setStatusMessage("Warning: null node - breaking loop");
@@ -516,82 +366,45 @@ public class NodeOutputStageI extends AbstractTask {
 					
 						if (network.getRow(target).get(columnName, Integer.class) == 1) { //change to integer if necessary
 							network.getRow(target).set(IMAGE_COLUMN, one); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 						}
 							
 						if (network.getRow(target).get(columnName, Integer.class) > 2) { //change to integer if necessary
-							network.getRow(target).set(IMAGE_COLUMN, plusplus); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
+							network.getRow(target).set(IMAGE_COLUMN, plusplus);
 						}
 						
 						if (network.getRow(target).get(columnName, Integer.class) < -2) { 
 							network.getRow(target).set(IMAGE_COLUMN, negneg); 
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 						}
 						
 							if (network.getRow(target).get(columnName, Integer.class) == 2) { 
-								
 								network.getRow(target).set(IMAGE_COLUMN, two);
-								
-								VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-										"(mapping.type=passthrough)");
-								PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-										cgProp);
-								
-								style.addVisualMappingFunction(map);
 							}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == 0) {
 									network.getRow(target).set(IMAGE_COLUMN, zero); 
-									VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(map);
 								}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == -1) { 
 									
 									network.getRow(target).set(IMAGE_COLUMN, negone);
-									
-									VisualMappingFunctionFactory facto = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping mapsy = (PassthroughMapping) facto.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(mapsy);
 								}
 								
 								if (network.getRow(target).get(columnName, Integer.class) == -2) {
 									network.getRow(target).set(IMAGE_COLUMN, negtwo);
-									VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-											"(mapping.type=passthrough)");
-									PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-											cgProp);
-									
-									style.addVisualMappingFunction(map);
 								}
 				}	
 			}
-		} style.apply(netView);
+		} 
+			
+
+			
+			VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
+					"(mapping.type=passthrough)");
+			PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
+					cgProp);
+			
+			style.addVisualMappingFunction(map);
+			style.apply(netView);
+			
 	}	
 }

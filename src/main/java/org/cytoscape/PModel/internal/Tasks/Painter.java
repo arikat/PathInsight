@@ -22,6 +22,7 @@ import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyle;
+import org.cytoscape.view.vizmap.mappings.DiscreteMapping;
 import org.cytoscape.view.vizmap.mappings.PassthroughMapping;
 import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskMonitor;
@@ -50,13 +51,13 @@ public class Painter extends AbstractTask {
 		taskMonitor.setTitle("Painting Image");
 		taskMonitor.setStatusMessage("Painting image ...");
 		
-		String two = "http://i.imgur.com/sq4WXnR.png";
-		String one = "http://i.imgur.com/nMKj77P.png";
-		String zero = "http://i.imgur.com/kh1IMGe.png";
-		String negone = "http://i.imgur.com/F0FdgSx.png";
-		String negtwo = "http://i.imgur.com/sHkP8rX.png";
-		String plusplus = "http://i.imgur.com/qk64sKc.png";
-		String negneg = "http://i.imgur.com/o2gB6mm.png";
+		String two = "http://i.imgur.com/feUmtME.png";
+		String one = "http://i.imgur.com/J6EDr3b.png";
+		String zero = "http://i.imgur.com/9nOANtj.png";
+		String negone = "http://i.imgur.com/1zmn5F8.png";
+		String negtwo = "http://i.imgur.com/l4LC7Y0.png";
+		String plusplus = "http://i.imgur.com/gMLOrbx.png";
+		String negneg = "http://i.imgur.com/B41iKek.png";
 
 		// getRow(cyNode).set(IMAGE_COLUMN, imageString)  // netView.getModel()
 		//CyTable edgeTable = network.getDefaultEdgeTable();
@@ -123,14 +124,7 @@ public class Painter extends AbstractTask {
 						// Create a passthrough mapping to that column
 						//nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); //easy fix - overwriting arrows, make i++
 						network.getRow(node).set(IMAGE_COLUMN, one); //fixed original issue with only one writing - now fix overwriting arrows
-						
-						
-						VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-								"(mapping.type=passthrough)");
-						PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-								cgProp);
-						
-						style.addVisualMappingFunction(map);
+
 						//style.apply(netView);
 					}
 						
@@ -138,31 +132,16 @@ public class Painter extends AbstractTask {
 						// Create a passthrough mapping to that column
 						//nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); //easy fix - overwriting arrows, make i++
 						network.getRow(node).set(IMAGE_COLUMN, plusplus); //fixed original issue with only one writing - now fix overwriting arrows
-						
-						
-						VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-								"(mapping.type=passthrough)");
-						PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-								cgProp);
-						
-						style.addVisualMappingFunction(map);
+
 						//style.apply(netView);
 					}
 					
-					if (network.getRow(node).get(columnName, Integer.class) < -2) { //change to integer if necessary
-						// Create a passthrough mapping to that column
-						//nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); //easy fix - overwriting arrows, make i++
-						network.getRow(node).set(IMAGE_COLUMN, negneg); //fixed original issue with only one writing - now fix overwriting arrows
-						
-						
-						VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-								"(mapping.type=passthrough)");
-						PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-								cgProp);
-						
-						style.addVisualMappingFunction(map);
-						//style.apply(netView);
-					}
+						if (network.getRow(node).get(columnName, Integer.class) < -2) { //change to integer if necessary
+							// Create a passthrough mapping to that column
+							//nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); //easy fix - overwriting arrows, make i++
+							network.getRow(node).set(IMAGE_COLUMN, negneg); //fixed original issue with only one writing - now fix overwriting arrows
+
+						}
 					
 					
 					
@@ -170,14 +149,6 @@ public class Painter extends AbstractTask {
 							// Create a passthrough mapping to that column
 							//nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); //easy fix - overwriting arrows, make i++
 							network.getRow(node).set(IMAGE_COLUMN, two); //fixed original issue with only one writing - now fix overwriting arrows
-							
-							
-							VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-									"(mapping.type=passthrough)");
-							PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-									cgProp);
-							
-							style.addVisualMappingFunction(map);
 							//style.apply(netView);
 						}
 							
@@ -185,14 +156,6 @@ public class Painter extends AbstractTask {
 								// Create a passthrough mapping to that column
 								//nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); //easy fix - overwriting arrows, make i++
 								network.getRow(node).set(IMAGE_COLUMN, zero); //fixed original issue with only one writing - now fix overwriting arrows
-								
-								
-								VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-										"(mapping.type=passthrough)");
-								PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-										cgProp);
-								
-								style.addVisualMappingFunction(map);
 								//style.apply(netView);
 							}
 							
@@ -200,14 +163,6 @@ public class Painter extends AbstractTask {
 								// Create a passthrough mapping to that column
 								//nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); //easy fix - overwriting arrows, make i++
 								network.getRow(node).set(IMAGE_COLUMN, negone); //fixed original issue with only one writing - now fix overwriting arrows
-								
-								
-								VisualMappingFunctionFactory facto = registrar.getService(VisualMappingFunctionFactory.class,
-										"(mapping.type=passthrough)");
-								PassthroughMapping mapsy = (PassthroughMapping) facto.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-										cgProp);
-								
-								style.addVisualMappingFunction(mapsy);
 								//style.apply(netView);
 							}
 							
@@ -215,18 +170,16 @@ public class Painter extends AbstractTask {
 								// Create a passthrough mapping to that column
 								//nodeTable.getRow(nodeView.getModel().getSUID()).set(IMAGE_COLUMN, imageString); //easy fix - overwriting arrows, make i++
 								network.getRow(node).set(IMAGE_COLUMN, negtwo); //fixed original issue with only one writing - now fix overwriting arrows
-								
-								
-								VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-										"(mapping.type=passthrough)");
-								PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-										cgProp);
-								
-								style.addVisualMappingFunction(map);
-								//style.apply(netView);
 							}
 							//style.apply(netView);
 			}
+			
+			VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
+					"(mapping.type=passthrough)");
+			PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
+					cgProp);
+			
+			style.addVisualMappingFunction(map);
 			style.apply(netView);
 			netView.updateView();
 		}

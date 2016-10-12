@@ -20,6 +20,6 @@ public class NodeOutputStageITaskFactory extends AbstractTaskFactory {
 	}
 	
 	public TaskIterator createTaskIterator(){
-		return new TaskIterator(new NodeOutputStageI(netView, registrar, this.appMgr.getCurrentNetwork()));
+		return new TaskIterator(new NodeOutputStageI(appMgr, netView, registrar, this.appMgr.getCurrentNetwork()));
 	}
 }

@@ -37,7 +37,13 @@ public class ActivationNode extends AbstractTask {
 		
 	}
 	
-	String one = "http://i.imgur.com/nMKj77P.png";
+	String two = "http://i.imgur.com/feUmtME.png";
+	String one = "http://i.imgur.com/J6EDr3b.png";
+	String zero = "http://i.imgur.com/9nOANtj.png";
+	String negone = "http://i.imgur.com/1zmn5F8.png";
+	String negtwo = "http://i.imgur.com/l4LC7Y0.png";
+	String plusplus = "http://i.imgur.com/gMLOrbx.png";
+	String negneg = "http://i.imgur.com/B41iKek.png";
 	
 	public void run(TaskMonitor monitor) {
 		

@@ -5,6 +5,7 @@ import java.util.Properties;
 import org.cytoscape.PModel.internal.TaskFactories.ActivationEdgeFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ActivationNodeFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ClearEdgeBoolTaskFactory;
+import org.cytoscape.PModel.internal.TaskFactories.ClearImagesTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ClearNodeBoolTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.EdgeShapeTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.InhibitionEdgeFactory;
@@ -58,14 +59,14 @@ public class CyActivator extends AbstractCyActivator {
 		cprops.setProperty("preferredMenu", "Apps.Pathway Model");
 		cprops.setProperty("title", "Auto Edge Distinction");
 		cprops.setProperty("inMenuBar", "true");
-		cprops.setProperty("menuGravity", "8.2");
+		cprops.setProperty("menuGravity", "8.0");
 		registerService(context, EdgeShapeTask, TaskFactory.class, cprops);
 		
 		//Label edge activation
 		ActivationEdgeFactory createcolumn = new ActivationEdgeFactory(cyApplicationManagerService);
 		Properties aprops = new Properties();
 		aprops.setProperty("preferredMenu", "Apps.Pathway Model.Edge Label");
-		aprops.setProperty("title", "Activation");
+		aprops.setProperty("title", "Activating");
 		aprops.setProperty("inMenuBar", "true");
 		aprops.setProperty("menuGravity", "8.3");
 		registerService(context, createcolumn, TaskFactory.class, aprops);
@@ -74,7 +75,7 @@ public class CyActivator extends AbstractCyActivator {
 		ActivationNodeFactory activateNode = new ActivationNodeFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties anprops = new Properties();
 		anprops.setProperty("preferredMenu", "Apps.Pathway Model.Compound Label");
-		anprops.setProperty("title", "Activation");
+		anprops.setProperty("title", "Activated");
 		anprops.setProperty("inMenuBar", "true");
 		anprops.setProperty("menuGravity", "8.3");
 		registerService(context, activateNode, TaskFactory.class, anprops);
@@ -83,7 +84,7 @@ public class CyActivator extends AbstractCyActivator {
 		InhibitionNodeFactory inhibitNode = new InhibitionNodeFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties inprops = new Properties();
 		inprops.setProperty("preferredMenu", "Apps.Pathway Model.Compound Label");
-		inprops.setProperty("title", "Inhibition");
+		inprops.setProperty("title", "Inhibited");
 		inprops.setProperty("inMenuBar", "true");
 		inprops.setProperty("menuGravity", "8.4");
 		registerService(context, inhibitNode, TaskFactory.class, inprops);
@@ -92,7 +93,7 @@ public class CyActivator extends AbstractCyActivator {
 		InhibitionEdgeFactory inhibit = new InhibitionEdgeFactory(cyApplicationManagerService);
 		Properties iprops = new Properties();
 		iprops.setProperty("preferredMenu", "Apps.Pathway Model.Edge Label");
-		iprops.setProperty("title", "Inhibition");
+		iprops.setProperty("title", "Inhibiting");
 		iprops.setProperty("inMenuBar", "true");
 		iprops.setProperty("menuGravity", "8.4");
 		registerService(context, inhibit, TaskFactory.class, iprops);
@@ -114,6 +115,15 @@ public class CyActivator extends AbstractCyActivator {
 		pprops.setProperty("inMenuBar", "true");
 		pprops.setProperty("menuGravity", "8.5");
 		registerService(context, cleary, TaskFactory.class, pprops);
+		
+		//Clear values of Images
+		ClearImagesTaskFactory clearys = new ClearImagesTaskFactory(cyApplicationManagerService);
+		Properties pcprops = new Properties();
+		pcprops.setProperty("preferredMenu", "Apps.Pathway Model.Reset Values");
+		pcprops.setProperty("title", "Clear Images");
+		pcprops.setProperty("inMenuBar", "true");
+		pcprops.setProperty("menuGravity", "8.6");
+		registerService(context, clearys, TaskFactory.class, pcprops);
 		
 		//Node Output Stage I algorithm
 		NodeOutputStageITaskFactory stageI = new NodeOutputStageITaskFactory(cyNetworkView, registrar, cyApplicationManagerService);

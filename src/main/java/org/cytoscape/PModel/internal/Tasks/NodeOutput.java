@@ -1,5 +1,6 @@
 package org.cytoscape.PModel.internal.Tasks;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.View;
 import org.cytoscape.view.model.VisualLexicon;
 import org.cytoscape.view.model.VisualProperty;
+import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyle;
@@ -34,20 +36,22 @@ public class NodeOutput extends AbstractTask {
 	private CyNode cyNode;
 	private CyNetwork network;
 	String columnName = "bool";
+	String question = "qMark";
 	
-	public NodeOutput(CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) { 
+	public NodeOutput(CyApplicationManager applicationManager, CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) { 
 		this.netView = netView;
 		this.registrar = registrar;
 		this.network = network;
+		this.applicationManager = applicationManager;
 	}
 	
-	String two = "http://i.imgur.com/sq4WXnR.png";
-	String one = "http://i.imgur.com/nMKj77P.png";
-	String zero = "http://i.imgur.com/kh1IMGe.png";
-	String negone = "http://i.imgur.com/F0FdgSx.png";
-	String negtwo = "http://i.imgur.com/sHkP8rX.png";
-	String plusplus = "http://i.imgur.com/qk64sKc.png";
-	String negneg = "http://i.imgur.com/o2gB6mm.png";
+	String two = "http://i.imgur.com/feUmtME.png";
+	String one = "http://i.imgur.com/J6EDr3b.png";
+	String zero = "http://i.imgur.com/9nOANtj.png";
+	String negone = "http://i.imgur.com/1zmn5F8.png";
+	String negtwo = "http://i.imgur.com/l4LC7Y0.png";
+	String plusplus = "http://i.imgur.com/gMLOrbx.png";
+	String negneg = "http://i.imgur.com/B41iKek.png";
 	
 	@Override
 	public void run(TaskMonitor taskMonitor) throws Exception {
@@ -56,6 +60,8 @@ public class NodeOutput extends AbstractTask {
 			taskMonitor.setTitle("There is no network.");
 			return;
 		}
+		
+		CyNetworkView netoView = applicationManager.getCurrentNetworkView();
 		
 		taskMonitor.setTitle("Calculating Output");
 		taskMonitor.setStatusMessage("Measuring each node...");
@@ -91,6 +97,10 @@ public class NodeOutput extends AbstractTask {
 		if (nodeTable.getColumn(columnName) == null) {
 			nodeTable.createColumn(columnName, Integer.class, true);
 			//insert continue or something here to get it to go to the next if statements		
+		}
+		
+		if (nodeTable.getColumn(question) == null) {
+			nodeTable.createColumn(question, String.class, true);
 		}
 		
 		if (nodeTable.getColumn(IMAGE_COLUMN) == null) {
@@ -161,6 +171,20 @@ public class NodeOutput extends AbstractTask {
 					}	
 					
 				int attempt = nodeTable.getRow(target.getSUID()).get(columnName, Integer.class);
+				
+				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) == null)) {
+					nodeTable.getRow(target.getSUID()).set(columnName, (attempt));
+				}
+				
+				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) == null)) {
+					nodeTable.getRow(target.getSUID()).set(columnName, (attempt));
+				}
+				
+				if ((network.getRow(edge).get(columnName, Integer.class) == null) || (network.getRow(edge).get(columnName, Integer.class) == 0)) { //or zero...
+					nodeTable.getRow(target.getSUID()).set(columnName, (attempt));
+					nodeTable.getRow(source.getSUID()).set(question, ("?"));
+					netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_PAINT, Color.blue); //maybe call appmgr
+				}
 				
 				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) >= 1)) {
 					//set nodely to 1, okay?
@@ -298,7 +322,7 @@ public class NodeOutput extends AbstractTask {
 				
 				if (network.getRow(source).get(columnName, Integer.class) == 0) {
 					//set nodely to 0, okay?
-					nodeTable.getRow(target.getSUID()).set(columnName, Integer.valueOf(0)); //may need to insert attempt + 0, instead of just inserting zero - remember to test this.
+					nodeTable.getRow(target.getSUID()).set(columnName, attempt); //may need to insert attempt + 0, instead of just inserting zero - remember to test this.
 					
 					if (network.getRow(target).get(columnName, Integer.class) == 1) {
 						network.getRow(target).set(IMAGE_COLUMN, one);
@@ -370,7 +394,22 @@ public class NodeOutput extends AbstractTask {
 						int adjattempt = nodeTable.getRow(target2.getSUID()).get(columnName, Integer.class);
 						
 							//Insert all network get row nodes, etc
-							if ((network.getRow(edgy).get(columnName, Integer.class) == 1) && (network.getRow(source2).get(columnName, Integer.class) >= 0)) {
+							
+						if ((network.getRow(edgy).get(columnName, Integer.class) == 1) && (network.getRow(source2).get(columnName, Integer.class) == null)) {
+							nodeTable.getRow(target2.getSUID()).set(columnName, (adjattempt));
+						}
+						
+						if ((network.getRow(edgy).get(columnName, Integer.class) == -1) && (network.getRow(source2).get(columnName, Integer.class) == null)) {
+							nodeTable.getRow(target2.getSUID()).set(columnName, (adjattempt));
+						}
+						
+						if ((network.getRow(edgy).get(columnName, Integer.class) == null) || (network.getRow(edgy).get(columnName, Integer.class) == 0)) { //or zero...
+							nodeTable.getRow(target2.getSUID()).set(columnName, (adjattempt));
+							nodeTable.getRow(source2.getSUID()).set(question, ("?"));
+							netoView.getEdgeView(edgy).setLockedValue(BasicVisualLexicon.EDGE_PAINT, Color.blue); //maybe call appmgr
+						}
+						
+						if ((network.getRow(edgy).get(columnName, Integer.class) == 1) && (network.getRow(source2).get(columnName, Integer.class) >= 0)) {
 								//set noddie to 1, okay?
 									nodeTable.getRow(target2.getSUID()).set(columnName, (++adjattempt));
 									if (network.getRow(target2).get(columnName, Integer.class) == 1) {
@@ -500,7 +539,7 @@ public class NodeOutput extends AbstractTask {
 								
 							if (network.getRow(source2).get(columnName, Integer.class) == 0) {
 								//set nodely to 0, okay?
-								nodeTable.getRow(target2.getSUID()).set(columnName, Integer.valueOf(0)); //perhaps change this to adjattempt + 0
+								nodeTable.getRow(target2.getSUID()).set(columnName, adjattempt); //perhaps change this to adjattempt + 0
 								if (network.getRow(target2).get(columnName, Integer.class) == 1) {
 									network.getRow(target2).set(IMAGE_COLUMN, one);
 								}
