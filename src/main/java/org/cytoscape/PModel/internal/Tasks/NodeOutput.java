@@ -45,13 +45,13 @@ public class NodeOutput extends AbstractTask {
 		this.applicationManager = applicationManager;
 	}
 	
-	String two = "http://i.imgur.com/feUmtME.png";
-	String one = "http://i.imgur.com/J6EDr3b.png";
-	String zero = "http://i.imgur.com/9nOANtj.png";
-	String negone = "http://i.imgur.com/1zmn5F8.png";
-	String negtwo = "http://i.imgur.com/l4LC7Y0.png";
-	String plusplus = "http://i.imgur.com/gMLOrbx.png";
-	String negneg = "http://i.imgur.com/B41iKek.png";
+	String two = "http://i.imgur.com/gBkmqwX.png";
+	String one = "http://i.imgur.com/y1VbITV.png";
+	String zero = "http://i.imgur.com/UfTJo4N.png";
+	String negone = "http://i.imgur.com/fsEggSs.png";
+	String negtwo = "http://i.imgur.com/qQ5JvTy.png";
+	String plusplus = "http://i.imgur.com/mWmyPNl.png";
+	String negneg = "http://i.imgur.com/MXvZ8rG.png";
 	
 	@Override
 	public void run(TaskMonitor taskMonitor) throws Exception {
@@ -172,15 +172,17 @@ public class NodeOutput extends AbstractTask {
 					
 				int attempt = nodeTable.getRow(target.getSUID()).get(columnName, Integer.class);
 				
-				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) == null)) {
+		/*		if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) == null)) {
 					nodeTable.getRow(target.getSUID()).set(columnName, (attempt));
 				}
 				
 				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) == null)) {
 					nodeTable.getRow(target.getSUID()).set(columnName, (attempt));
-				}
+				}*/
 				
-				if ((network.getRow(edge).get(columnName, Integer.class) == null) || (network.getRow(edge).get(columnName, Integer.class) == 0)) { //or zero...
+				//DEL null values if they don't work
+				
+				if (network.getRow(edge).get(columnName, Integer.class) == 0) { //(network.getRow(edge).get(columnName, Integer.class) == null) ||
 					nodeTable.getRow(target.getSUID()).set(columnName, (attempt));
 					nodeTable.getRow(source.getSUID()).set(question, ("?"));
 					netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_PAINT, Color.blue); //maybe call appmgr
@@ -326,30 +328,37 @@ public class NodeOutput extends AbstractTask {
 					
 					if (network.getRow(target).get(columnName, Integer.class) == 1) {
 						network.getRow(target).set(IMAGE_COLUMN, one);
+						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
 					}
 				
 					if (network.getRow(target).get(columnName, Integer.class) > 2) {
 						network.getRow(target).set(IMAGE_COLUMN, plusplus);
+						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
 					}
 			
 					if (network.getRow(target).get(columnName, Integer.class) < -2) { 
 						network.getRow(target).set(IMAGE_COLUMN, negneg);
+						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
 					}
 			
 					if (network.getRow(target).get(columnName, Integer.class) == 2) {
 						network.getRow(target).set(IMAGE_COLUMN, two);
+						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
 					}
 					
 					if (network.getRow(target).get(columnName, Integer.class) == 0) {
 						network.getRow(target).set(IMAGE_COLUMN, zero); 
+						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
 					}
 					
 					if (network.getRow(target).get(columnName, Integer.class) == -1) { 
 						network.getRow(target).set(IMAGE_COLUMN, negone);
+						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
 					}
 					
 					if (network.getRow(target).get(columnName, Integer.class) == -2) {
 						network.getRow(target).set(IMAGE_COLUMN, negtwo);
+						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
 					}
 
 				}
@@ -395,13 +404,13 @@ public class NodeOutput extends AbstractTask {
 						
 							//Insert all network get row nodes, etc
 							
-						if ((network.getRow(edgy).get(columnName, Integer.class) == 1) && (network.getRow(source2).get(columnName, Integer.class) == null)) {
+					/*	if ((network.getRow(edgy).get(columnName, Integer.class) == 1) && (network.getRow(source2).get(columnName, Integer.class) == null)) {
 							nodeTable.getRow(target2.getSUID()).set(columnName, (adjattempt));
 						}
 						
 						if ((network.getRow(edgy).get(columnName, Integer.class) == -1) && (network.getRow(source2).get(columnName, Integer.class) == null)) {
 							nodeTable.getRow(target2.getSUID()).set(columnName, (adjattempt));
-						}
+						}*/
 						
 						if ((network.getRow(edgy).get(columnName, Integer.class) == null) || (network.getRow(edgy).get(columnName, Integer.class) == 0)) { //or zero...
 							nodeTable.getRow(target2.getSUID()).set(columnName, (adjattempt));
@@ -542,30 +551,37 @@ public class NodeOutput extends AbstractTask {
 								nodeTable.getRow(target2.getSUID()).set(columnName, adjattempt); //perhaps change this to adjattempt + 0
 								if (network.getRow(target2).get(columnName, Integer.class) == 1) {
 									network.getRow(target2).set(IMAGE_COLUMN, one);
+									netoView.getEdgeView(edgy).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
 								}
 							
 								if (network.getRow(target2).get(columnName, Integer.class) > 2) {
 									network.getRow(target2).set(IMAGE_COLUMN, plusplus);
+									netoView.getEdgeView(edgy).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
 								}
 						
 								if (network.getRow(target2).get(columnName, Integer.class) < -2) { 
 									network.getRow(target2).set(IMAGE_COLUMN, negneg);
+									netoView.getEdgeView(edgy).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
 								}
 						
 								if (network.getRow(target2).get(columnName, Integer.class) == 2) {
 									network.getRow(target2).set(IMAGE_COLUMN, two);
+									netoView.getEdgeView(edgy).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
 								}
 								
 								if (network.getRow(target2).get(columnName, Integer.class) == 0) {
 									network.getRow(target2).set(IMAGE_COLUMN, zero); 
+									netoView.getEdgeView(edgy).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
 								}
 								
 								if (network.getRow(target2).get(columnName, Integer.class) == -1) { 
 									network.getRow(target2).set(IMAGE_COLUMN, negone);
+									netoView.getEdgeView(edgy).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
 								}
 								
 								if (network.getRow(target2).get(columnName, Integer.class) == -2) {
 									network.getRow(target2).set(IMAGE_COLUMN, negtwo);
+									netoView.getEdgeView(edgy).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
 								}
 							}
 			} 

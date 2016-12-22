@@ -11,14 +11,24 @@ import org.cytoscape.work.TaskMonitor;
 import org.cytoscape.work.Tunable;
 import org.cytoscape.model.CyTable;
 import org.cytoscape.model.CyTableUtil;
+import org.cytoscape.service.util.CyServiceRegistrar;
+import org.cytoscape.view.model.CyNetworkView;
+import org.cytoscape.view.presentation.property.ArrowShapeVisualProperty;
+import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.application.CyApplicationManager;
 
 public class InhibitionEdge extends AbstractTask {
 	public String columnName = "bool";
 	private CyNetwork network;
+	private CyApplicationManager appMgr;
+	private CyNetworkView netView;
+	private CyServiceRegistrar registrar;
 
-	public InhibitionEdge(CyNetwork network) {
+	public InhibitionEdge(CyApplicationManager appMgr, CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) {
 		this.network = network;
+		this.netView = netView;
+		this.registrar = registrar;
+		this.appMgr = appMgr;
 	}
 
 	public void run(TaskMonitor monitor) {
@@ -29,6 +39,8 @@ public class InhibitionEdge extends AbstractTask {
 		monitor.setTitle("Adding inhibition edge values");
 
 		CyTable edgeTable = network.getDefaultEdgeTable();
+		
+		CyNetworkView netoView = appMgr.getCurrentNetworkView();
 
 		if (edgeTable.getColumn(columnName) == null) {
 			edgeTable.createColumn(columnName, Integer.class, true);
@@ -38,6 +50,7 @@ public class InhibitionEdge extends AbstractTask {
 
 			for (CyEdge edge : Edges) {
 				edgeTable.getRow(edge.getSUID()).set(columnName, Integer.valueOf(-1));
+				netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.T);
 			}
 			
 		}
@@ -48,6 +61,7 @@ public class InhibitionEdge extends AbstractTask {
 
 			for (CyEdge edge : Edges) {
 				edgeTable.getRow(edge.getSUID()).set(columnName, Integer.valueOf(-1));
+				netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.T);
 			}
 
 		}

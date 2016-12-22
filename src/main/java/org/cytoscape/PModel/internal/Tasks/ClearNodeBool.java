@@ -27,13 +27,13 @@ public class ClearNodeBool extends AbstractTask {
 	private CyNetworkView netView;
 	private CyServiceRegistrar registrar;
 	
-	String two = "http://i.imgur.com/feUmtME.png";
-	String one = "http://i.imgur.com/J6EDr3b.png";
-	String zero = "http://i.imgur.com/9nOANtj.png";
-	String negone = "http://i.imgur.com/1zmn5F8.png";
-	String negtwo = "http://i.imgur.com/l4LC7Y0.png";
-	String plusplus = "http://i.imgur.com/gMLOrbx.png";
-	String negneg = "http://i.imgur.com/B41iKek.png";
+	String two = "http://i.imgur.com/gBkmqwX.png";
+	String one = "http://i.imgur.com/y1VbITV.png";
+	String zero = "http://i.imgur.com/UfTJo4N.png";
+	String negone = "http://i.imgur.com/fsEggSs.png";
+	String negtwo = "http://i.imgur.com/qQ5JvTy.png";
+	String plusplus = "http://i.imgur.com/mWmyPNl.png";
+	String negneg = "http://i.imgur.com/MXvZ8rG.png";
 
 	public ClearNodeBool(CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) {
 		this.network = network;

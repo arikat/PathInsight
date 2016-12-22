@@ -19,54 +19,17 @@ public class EdgeShapeTaskFactory extends AbstractTaskFactory {
 	private CyApplicationManager appMgr;
 	private CyNetworkView netView;
 	private CyServiceRegistrar registrar;
-	private View<CyEdge> edgeView;
+	//private View<CyEdge> edgeView;
 	
-	public EdgeShapeTaskFactory(CyNetworkView netView, CyServiceRegistrar registrar, CyApplicationManager appMgr){
+	public EdgeShapeTaskFactory(CyNetworkView netView, CyServiceRegistrar registrar, final CyApplicationManager appMgr){
 		this.appMgr = appMgr;
 		this.netView = netView;
 		this.registrar = registrar;
 	}
 	
-	
 	public TaskIterator createTaskIterator() {
 		// TODO Auto-generated method stub
-		return new TaskIterator(new Task[] { new EdgeShapeTask(appMgr, netView, registrar, this.appMgr.getCurrentNetwork()) });
+		return new TaskIterator(new Task[] { new EdgeShapeTask(appMgr, netView, registrar, appMgr.getCurrentNetwork()) });
 	}
 
 }
-
-
-
-
-
-
-
-
-//Class creates a task factory for the task ArrowShapeBypass to change an edge within a context menu.
-/*public class InhibitionTaskFactory extends AbstractTaskFactory { //implements EdgeViewTaskFactory {
-	
-	private CyApplicationManager manny;
-	
-	public InhibitionTaskFactory(final CyApplicationManager manny) {
-		this.manny = manny;
-	}
-	
-	@Override
-	public TaskIterator createTaskIterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	//@Override
-	//public boolean isReady(View<CyEdge> edgeView, CyNetworkView netView) {
-		// TODO Auto-generated method stub
-		//return true;
-	//}	
-	
-	public TaskIterator createTaskIterator(CyNetworkView netView) { //View<CyEdge> edgeView
-		// TODO Auto-generated method stub
-		return new TaskIterator(new Task[] { new InhibitionShapeTask(netView, manny.getCurrentNetwork()) }); //edgeView
-	}
-
-
-} //Build Task Factory for Finboolcol next*/

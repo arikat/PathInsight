@@ -5,7 +5,6 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.Set;
-
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
@@ -18,7 +17,9 @@ import org.cytoscape.view.model.View;
 import org.cytoscape.view.model.VisualLexicon;
 import org.cytoscape.view.model.VisualProperty;
 import org.cytoscape.view.presentation.customgraphics.CyCustomGraphics;
+import org.cytoscape.view.presentation.property.ArrowShapeVisualProperty;
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
+import org.cytoscape.view.presentation.property.NodeShapeVisualProperty;
 import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyle;
@@ -38,12 +39,21 @@ public class Painter extends AbstractTask {
 	private CyNode cyNode;
 	private CyNetwork network;
 	String columnName = "bool";
+	private VisualMappingManager vmm;
+	
+	//private StyleTemp sbuild; //let's see if this works?
+	private VisualStyle stylo = null;
+	
+	//note to self -- introduce stylo before style, see if the thing recognizes style and implements on top of that.
 
-	public Painter(CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) {
+	public Painter(CyApplicationManager appMgr, CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network, VisualMappingManager vmm) {
+		this.applicationManager = appMgr;
 		this.netView = netView;
 		//this.nodeView = nodeView;
 		this.registrar = registrar;
 		this.network = network;
+		this.vmm = vmm;
+		//this.sbuild = sbuild;
 		// this.edgeView = edgeView;
 	}
 
@@ -51,23 +61,33 @@ public class Painter extends AbstractTask {
 		taskMonitor.setTitle("Painting Image");
 		taskMonitor.setStatusMessage("Painting image ...");
 		
-		String two = "http://i.imgur.com/feUmtME.png";
-		String one = "http://i.imgur.com/J6EDr3b.png";
-		String zero = "http://i.imgur.com/9nOANtj.png";
-		String negone = "http://i.imgur.com/1zmn5F8.png";
-		String negtwo = "http://i.imgur.com/l4LC7Y0.png";
-		String plusplus = "http://i.imgur.com/gMLOrbx.png";
-		String negneg = "http://i.imgur.com/B41iKek.png";
+		CyNetworkView netoView = applicationManager.getCurrentNetworkView();
+		
+		String two = "http://i.imgur.com/gBkmqwX.png";
+		String one = "http://i.imgur.com/y1VbITV.png";
+		String zero = "http://i.imgur.com/UfTJo4N.png";
+		String negone = "http://i.imgur.com/fsEggSs.png";
+		String negtwo = "http://i.imgur.com/qQ5JvTy.png";
+		String plusplus = "http://i.imgur.com/mWmyPNl.png";
+		String negneg = "http://i.imgur.com/MXvZ8rG.png";
 
 		// getRow(cyNode).set(IMAGE_COLUMN, imageString)  // netView.getModel()
 		//CyTable edgeTable = network.getDefaultEdgeTable();
 		CyTable nodeTable = network.getDefaultNodeTable();
 		if (nodeTable.getColumn(IMAGE_COLUMN) == null) {
 			nodeTable.createColumn(IMAGE_COLUMN, String.class, true);
+			taskMonitor.setStatusMessage("Image URL column created...");
 		}
 		
 		if (nodeTable.getColumn(columnName) == null) {
 			nodeTable.createColumn(columnName, Integer.class, true);
+			taskMonitor.setStatusMessage("bool column created...");
+		}
+		
+		if (nodeTable.getColumn(label) == null) {
+			nodeTable.createColumn(label, Integer.class, true);
+			taskMonitor.setStatusMessage("label column created...");
+			
 		}
 
 		if (nodeTable.getColumn(columnName) != null) {
@@ -86,7 +106,7 @@ public class Painter extends AbstractTask {
 				return;
 			}
 
-			VisualStyle style = vmm.getVisualStyle(netView);
+			VisualStyle style = vmm.getVisualStyle(netView); //make this null temporarily and fix painting or create new private VisualStyle stylo = null 
 
 			String columnName = "bool";
 
@@ -94,6 +114,26 @@ public class Painter extends AbstractTask {
 			List<CyNode> nodes = network.getNodeList();
 			
 			for (CyNode node : nodes) {		
+				
+				
+				if (stylo == null) {
+					
+					taskMonitor.setStatusMessage("visual style added...");
+					
+					netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL_FONT_SIZE, 10);
+					netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL_WIDTH, 110.0);
+					netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 1.0);
+					netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_TRANSPARENCY, 240);
+					netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_TRANSPARENCY, 225);
+					netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, 25.0);
+					netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_WIDTH, 60.0);
+					netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_SHAPE, NodeShapeVisualProperty.RECTANGLE);
+					netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_FILL_COLOR, new Color(0xDDEAF6, false));
+					
+					//remember to make stylo != null
+			
+				}
+				
 				
 				if (nodeTable.getColumn(label) != null) {
 					String john = network.getRow(node).get(label, String.class);
@@ -182,6 +222,8 @@ public class Painter extends AbstractTask {
 			style.addVisualMappingFunction(map);
 			style.apply(netView);
 			netView.updateView();
+			
+			//remember to add mini function to bypass passthrough mapping with my own -- currently it's created, but it won't replace existing mapping
 		}
 		
 	}
