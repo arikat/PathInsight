@@ -61,6 +61,8 @@ public class NodeOutputStageI extends AbstractTask {
 			return;
 		}
 		
+		//check if visible
+		
 		CyNetworkView netoView = applicationManager.getCurrentNetworkView();
 		
 		taskMonitor.setTitle("Calculating Output");
@@ -105,6 +107,7 @@ public class NodeOutputStageI extends AbstractTask {
 			nodeTable.createColumn(IMAGE_COLUMN, String.class, true);
 		}
 		
+		
 		for (CyNode node : nodes) {
 			taskMonitor.setStatusMessage("Number of nodes: " + nodes);
 			//List<CyEdge> Edges = network.getAdjacentEdgeList(node, CyEdge.Type.OUTGOING);
@@ -140,6 +143,9 @@ public class NodeOutputStageI extends AbstractTask {
 				// if edge <= node and node < 0 = -1
 				// if node = 0 = -1	
 					
+					if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
+						//note del this if it doesn't work
+						
 					if (network.getRow(source).get(columnName, Integer.class) == 1) {
 						network.getRow(source).set(IMAGE_COLUMN, one);
 					}
@@ -168,12 +174,15 @@ public class NodeOutputStageI extends AbstractTask {
 						network.getRow(source).set(IMAGE_COLUMN, negtwo);
 					}	
 					
+					}
+					
 				int attempt = nodeTable.getRow(target.getSUID()).get(columnName, Integer.class);
 				
 				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) >= 1)) {
 					//set nodely to 1, okay?
 						nodeTable.getRow(target.getSUID()).set(columnName, (++attempt)); //instead of 2, a = 4
 						
+						if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
 								if (network.getRow(target).get(columnName, Integer.class) == 1) {
 									network.getRow(target).set(IMAGE_COLUMN, one);
 								}
@@ -201,12 +210,18 @@ public class NodeOutputStageI extends AbstractTask {
 								if (network.getRow(target).get(columnName, Integer.class) == -2) {
 									network.getRow(target).set(IMAGE_COLUMN, negtwo);
 								}
+								
+						}
 					
 				}
 				
 				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) >= 1)) {
 					//set nodely to -1, okaay
 						nodeTable.getRow(target.getSUID()).set(columnName, (--attempt));
+						
+						
+						if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
+							
 						
 						if (network.getRow(target).get(columnName, Integer.class) == 1) {
 							network.getRow(target).set(IMAGE_COLUMN, one);
@@ -234,6 +249,8 @@ public class NodeOutputStageI extends AbstractTask {
 						
 						if (network.getRow(target).get(columnName, Integer.class) == -2) {
 							network.getRow(target).set(IMAGE_COLUMN, negtwo);
+						}
+						
 						}
 
 				}
@@ -242,6 +259,8 @@ public class NodeOutputStageI extends AbstractTask {
 					//set nodely to -1, okay?
 						nodeTable.getRow(target.getSUID()).set(columnName, (--attempt));
 						
+						if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
+						
 						if (network.getRow(target).get(columnName, Integer.class) == 1) {
 							network.getRow(target).set(IMAGE_COLUMN, one);
 						}
@@ -268,6 +287,8 @@ public class NodeOutputStageI extends AbstractTask {
 						
 						if (network.getRow(target).get(columnName, Integer.class) == -2) {
 							network.getRow(target).set(IMAGE_COLUMN, negtwo);
+						}
+						
 						}
 					}
 				
@@ -275,6 +296,8 @@ public class NodeOutputStageI extends AbstractTask {
 					//set nodely to 1, okay?
 						nodeTable.getRow(target.getSUID()).set(columnName, (++attempt));
 						
+						if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
+						
 						if (network.getRow(target).get(columnName, Integer.class) == 1) {
 							network.getRow(target).set(IMAGE_COLUMN, one);
 						}
@@ -302,11 +325,15 @@ public class NodeOutputStageI extends AbstractTask {
 						if (network.getRow(target).get(columnName, Integer.class) == -2) {
 							network.getRow(target).set(IMAGE_COLUMN, negtwo);
 						}
+						
+						}
 					}
 				
 				if (network.getRow(source).get(columnName, Integer.class) == 0) {
 					//set nodely to 0, okay?
 					nodeTable.getRow(target.getSUID()).set(columnName, attempt); //may need to insert attempt + 0, instead of just inserting zero - remember to test this.
+					
+					if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
 					
 					if (network.getRow(target).get(columnName, Integer.class) == 1) {
 						network.getRow(target).set(IMAGE_COLUMN, one);
@@ -342,6 +369,8 @@ public class NodeOutputStageI extends AbstractTask {
 						network.getRow(target).set(IMAGE_COLUMN, negtwo);
 						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?"); //note may need to remove and check
 					} 
+					
+					}
 
 				}
 				

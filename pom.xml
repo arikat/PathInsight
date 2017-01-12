@@ -6,13 +6,13 @@
 	<properties>
 		<bundle.symbolicName>org.cytoscape.PModel.PathwayModelling</bundle.symbolicName>
 		<bundle.namespace>org.cytoscape.PModel</bundle.namespace>
-		<bundle.name>PathwayModeller</bundle.name>
+		<bundle.name>Modeler</bundle.name>
 	</properties>
 
 	<modelVersion>4.0.0</modelVersion>
     <groupId>org.cytoscape.PModel</groupId>
-    <artifactId>PathwayModelling</artifactId>
-	<version>1.0.0</version>
+    <artifactId>PathwayModeling</artifactId>
+	<version>1.0.1</version>
 
 	<name>${bundle.name} [${bundle.namespace}]</name>
 

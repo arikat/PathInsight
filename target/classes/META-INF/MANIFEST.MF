@@ -1,12 +1,12 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1482435468324
+Bnd-LastModified: 1484170510907
 Build-Jdk: 1.8.0_92
 Built-By: ravan
 Bundle-Activator: org.cytoscape.PModel.internal.CyActivator
 Bundle-ManifestVersion: 2
-Bundle-Name: PathwayModeller [org.cytoscape.PModel]
+Bundle-Name: Modeler [org.cytoscape.PModel]
 Bundle-SymbolicName: org.cytoscape.PModel.PathwayModelling
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.1
 Created-By: Apache Maven Bundle Plugin
 Import-Package: org.cytoscape.application;version="[3.3,4)",org.cytoscap
  e.application.swing;version="[3.3,4)",org.cytoscape.event;version="[3.3
