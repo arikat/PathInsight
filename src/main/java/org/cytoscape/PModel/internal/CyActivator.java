@@ -7,6 +7,7 @@ import org.cytoscape.PModel.internal.TaskFactories.ActivationNodeFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ClearEdgeBoolTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ClearImagesTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ClearNodeBoolTaskFactory;
+import org.cytoscape.PModel.internal.TaskFactories.DePhosTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.DrawProcessNodeTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.DrawSbgnChemNodeTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.DrawSbgnMacromoleculeTaskFactory;
@@ -17,6 +18,7 @@ import org.cytoscape.PModel.internal.TaskFactories.NodeOutputFactory;
 import org.cytoscape.PModel.internal.TaskFactories.NodeOutputStageITaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.NucleicAcidNodeTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.PaintFactory;
+import org.cytoscape.PModel.internal.TaskFactories.PhosTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ResetEdgeFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ResetNodeFactory;
 import org.cytoscape.app.swing.AbstractCySwingApp;
@@ -77,6 +79,24 @@ public class CyActivator extends AbstractCyActivator {
 		aprops.setProperty("inMenuBar", "true");
 		aprops.setProperty("menuGravity", "8.3");
 		registerService(context, createcolumn, TaskFactory.class, aprops);
+		
+		//Phosphorylating Edge
+		PhosTaskFactory phosPos = new PhosTaskFactory(cyNetworkView, registrar, cyApplicationManagerService);
+		Properties ppprops = new Properties();
+		ppprops.setProperty("preferredMenu", "Apps.Modeler.Phosphorylation");
+		ppprops.setProperty("title", "Phosphorylating");
+		ppprops.setProperty("inMenuBar", "true");
+		ppprops.setProperty("menuGravity", "8.3");
+		registerService(context, phosPos, TaskFactory.class, ppprops);
+		
+		//Dephosphorylating Edge
+		DePhosTaskFactory phosNeg = new DePhosTaskFactory(cyNetworkView, registrar, cyApplicationManagerService);
+		Properties pnprops = new Properties();
+		pnprops.setProperty("preferredMenu", "Apps.Modeler.Phosphorylation");
+		pnprops.setProperty("title", "Dephosphorylating");
+		pnprops.setProperty("inMenuBar", "true");
+		pnprops.setProperty("menuGravity", "8.5");
+		registerService(context, phosNeg, TaskFactory.class, pnprops);
 		
 		//Activate Node label
 		ActivationNodeFactory activateNode = new ActivationNodeFactory(cyNetworkView, registrar, cyApplicationManagerService);

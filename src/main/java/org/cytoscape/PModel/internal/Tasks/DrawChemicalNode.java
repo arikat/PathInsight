@@ -74,7 +74,7 @@ public class DrawChemicalNode extends AbstractTask {
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL_WIDTH, 110.0);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 1.0);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_TRANSPARENCY, 120);
-			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_TRANSPARENCY, 120);
+			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_TRANSPARENCY, 240);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, 30.0);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_WIDTH, 30.0);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_SHAPE, NodeShapeVisualProperty.ELLIPSE);

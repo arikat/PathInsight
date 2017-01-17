@@ -37,6 +37,7 @@ public class NodeOutputStageI extends AbstractTask {
 	private CyNetwork network;
 	String columnName = "bool";
 	String question = "qMark";
+	String shape = "Shape";
 	
 	public NodeOutputStageI(CyApplicationManager applicationManager, CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) { 
 		this.netView = netView;
@@ -126,6 +127,11 @@ public class NodeOutputStageI extends AbstractTask {
 			//^ may be the issue - iterating twice based on number of edges - need to fix with an array perhaps? Write hash map - read up on deleting duplicate values
 			
 			for (CyNode nodely : neighbors) {
+			
+			CharSequence hip = "process";	
+			String lab = network.getRow(nodely).get(shape, String.class);
+			
+			if (lab.contains(hip) == false) {	
 				
 			if (network.getRow(nodely).get(columnName, Integer.class) == null) {
 					//set nodely to 0, okay?
@@ -143,7 +149,7 @@ public class NodeOutputStageI extends AbstractTask {
 				// if edge <= node and node < 0 = -1
 				// if node = 0 = -1	
 					
-					if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
+					//if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
 						//note del this if it doesn't work
 						
 					if (network.getRow(source).get(columnName, Integer.class) == 1) {
@@ -174,7 +180,6 @@ public class NodeOutputStageI extends AbstractTask {
 						network.getRow(source).set(IMAGE_COLUMN, negtwo);
 					}	
 					
-					}
 					
 				int attempt = nodeTable.getRow(target.getSUID()).get(columnName, Integer.class);
 				
@@ -372,6 +377,60 @@ public class NodeOutputStageI extends AbstractTask {
 					
 					}
 
+				}
+				
+				}
+				
+			}
+			
+			
+			if (lab.contains(hip) == true) {	
+				
+			if (network.getRow(nodely).get(columnName, Integer.class) == null) {
+					//set nodely to 0, okay?
+					network.getRow(nodely).set(columnName, Integer.valueOf(0));
+				}
+				
+				List<CyEdge> Edges = network.getAdjacentEdgeList(nodely, CyEdge.Type.INCOMING); //change back to nodely, incoming if not working
+				for (CyEdge edge : Edges) { //consider switching order of edges -- look up for loop without for loop!!!!
+				
+					CyNode source = edge.getSource();
+					CyNode target = edge.getTarget(); //prev nodely		
+					
+					
+				int attempt = nodeTable.getRow(target.getSUID()).get(columnName, Integer.class);
+				
+				if ((network.getRow(source).get(columnName, Integer.class) >= 1)) {
+					//set nodely to 1, okay?
+						nodeTable.getRow(target.getSUID()).set(columnName, (++attempt)); //instead of 2, a = 4
+						
+				}
+				
+				if ((network.getRow(source).get(columnName, Integer.class) >= 1)) {
+					//set nodely to -1, okaay
+						nodeTable.getRow(target.getSUID()).set(columnName, (++attempt));
+
+				}
+				
+				if ((network.getRow(source).get(columnName, Integer.class) <= -1)) {
+					//set nodely to -1, okay?
+						nodeTable.getRow(target.getSUID()).set(columnName, (--attempt));
+						
+					}
+				
+				if ((network.getRow(source).get(columnName, Integer.class) <= -1)) {
+					//set nodely to 1, okay?
+						nodeTable.getRow(target.getSUID()).set(columnName, (--attempt));
+						
+					}
+				
+				if (network.getRow(source).get(columnName, Integer.class) == 0) {
+					//set nodely to 0, okay?
+					nodeTable.getRow(target.getSUID()).set(columnName, attempt);
+					
+
+				}
+				
 				}
 				
 			}

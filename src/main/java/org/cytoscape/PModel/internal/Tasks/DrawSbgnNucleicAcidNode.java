@@ -75,7 +75,7 @@ public class DrawSbgnNucleicAcidNode extends AbstractTask {
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL_WIDTH, 110.0);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 1.0);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_TRANSPARENCY, 120);
-			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_TRANSPARENCY, 120);
+			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_TRANSPARENCY, 240);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, 25.0);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_WIDTH, 60.0); //change
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_SHAPE, NodeShapeVisualProperty.RECTANGLE);
