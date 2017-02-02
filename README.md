@@ -5,7 +5,7 @@ Modeler is an open-source Cytoscape application created to aid in modeling the u
 	Modeler is developed and maintained by Aarya Venkat (aarya@ucsd.edu) of the Gilson Lab (gilson.ucsd.edu) at UCSD.
 
 # Installation
-	1.	Download the latest JAR file from https://github.com/HelloAarya/cytoscape-pathways
+	1.	Download the latest JAR file from https://github.com/HelloAarya/Modeler
 	2.	Open Cytoscape. Click on Apps > App Manager > Install from File
 	
 	Alternatively, install Modeler from the Cytoscape App Store (link to be provided soon).
