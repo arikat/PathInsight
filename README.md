@@ -16,7 +16,7 @@ Modeler is an open-source Cytoscape application created to aid in modeling the u
 -	Modeler functions are located in Cytoscape under Apps > Pathway Modeler
 	- Node Analysis: An algorithmic analysis that models how a selected activated or inactivated node (or nodes) will affect their nearest neighbors. May be performed in one step (nearest neighbors) or two steps (nearest neighbors + neighbors of nearest neighbors) or N-steps (recursive algorithm that operates the number of times a user specifies).
 
--	Compound Label: 
+- Node Label: 
 	- Activated – Gives selected nodes a value of one.
 	- Inhibited – Gives selected nodes a value of negative one.
 	- Reset – Gives selected nodes a value of zero.
