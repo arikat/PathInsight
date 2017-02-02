@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.cytoscape.PModel.internal.TaskFactories.ActivationEdgeFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ActivationNodeFactory;
+import org.cytoscape.PModel.internal.TaskFactories.AndTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ClearEdgeBoolTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ClearImagesTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ClearNodeBoolTaskFactory;
@@ -11,12 +12,13 @@ import org.cytoscape.PModel.internal.TaskFactories.DePhosTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.DrawProcessNodeTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.DrawSbgnChemNodeTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.DrawSbgnMacromoleculeTaskFactory;
-import org.cytoscape.PModel.internal.TaskFactories.EdgeShapeTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.InhibitionEdgeFactory;
 import org.cytoscape.PModel.internal.TaskFactories.InhibitionNodeFactory;
 import org.cytoscape.PModel.internal.TaskFactories.NodeOutputFactory;
 import org.cytoscape.PModel.internal.TaskFactories.NodeOutputStageITaskFactory;
+import org.cytoscape.PModel.internal.TaskFactories.NodeOutputStageNTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.NucleicAcidNodeTaskFactory;
+import org.cytoscape.PModel.internal.TaskFactories.OrTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.PaintFactory;
 import org.cytoscape.PModel.internal.TaskFactories.PhosTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ResetEdgeFactory;
@@ -61,15 +63,6 @@ public class CyActivator extends AbstractCyActivator {
 		VisualMappingFunctionFactory fact = getService(context,VisualMappingFunctionFactory.class, "(mapping.type=passthrough)");
 		VisualMappingFunctionFactory facty = getService(context,VisualMappingFunctionFactory.class, "(mapping.type=discrete)");
 		CyEventHelper eventHelp = getService(context, CyEventHelper.class);
-				
-		//shape change
-		EdgeShapeTaskFactory EdgeShapeTask = new EdgeShapeTaskFactory(cyNetworkView, registrar, cyApplicationManagerService);
-		Properties cprops = new Properties();
-		cprops.setProperty("preferredMenu", "Apps.Modeler");
-		cprops.setProperty("title", "Auto Edge Distinction");
-		cprops.setProperty("inMenuBar", "true");
-		cprops.setProperty("menuGravity", "8.0");
-		registerService(context, EdgeShapeTask, TaskFactory.class, cprops);
 		
 		//Label edge activation
 		ActivationEdgeFactory createcolumn = new ActivationEdgeFactory(cyNetworkView, registrar, cyApplicationManagerService);
@@ -101,7 +94,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Activate Node label
 		ActivationNodeFactory activateNode = new ActivationNodeFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties anprops = new Properties();
-		anprops.setProperty("preferredMenu", "Apps.Modeler.Compound Label");
+		anprops.setProperty("preferredMenu", "Apps.Modeler.Node Label");
 		anprops.setProperty("title", "Activated");
 		anprops.setProperty("inMenuBar", "true");
 		anprops.setProperty("menuGravity", "8.3");
@@ -188,6 +181,15 @@ public class CyActivator extends AbstractCyActivator {
 		cops.setProperty("menuGravity", "8.8");
 		registerService(context, creety, TaskFactory.class, cops);
 		
+		//Node Output Stage N algorithm
+		NodeOutputStageNTaskFactory crepety = new NodeOutputStageNTaskFactory(cyNetworkView, registrar, cyApplicationManagerService);
+		Properties scops = new Properties();
+		scops.setProperty("preferredMenu", "Apps.Modeler.Node Analysis");
+		scops.setProperty("title", "N Steps");
+		scops.setProperty("inMenuBar", "true");
+		scops.setProperty("menuGravity", "8.9");
+		registerService(context, crepety, TaskFactory.class, scops);
+		
 		//Paint All Nodes
 		TaskFactory paintStructure = new PaintFactory(cyNetworkView, registrar, cyApplicationManagerService, mappy); //figure out how implement sbuild into this
 		Properties paintStructureProps = new Properties();
@@ -234,6 +236,24 @@ public class CyActivator extends AbstractCyActivator {
 		procprops.setProperty("inMenuBar", "true");
 		procprops.setProperty("menuGravity", "8.7");
 		registerService(context, procNode, TaskFactory.class, procprops);
+		
+		//Draw AND Node
+		AndTaskFactory andNode = new AndTaskFactory(cyNetworkView, registrar, cyApplicationManagerService, mappy);
+		Properties andprops = new Properties();
+		andprops.setProperty("preferredMenu", "Apps.Modeler.SBGN");
+		andprops.setProperty("title", "Draw AND Gate");
+		andprops.setProperty("inMenuBar", "true");
+		andprops.setProperty("menuGravity", "8.8");
+		registerService(context, andNode, TaskFactory.class, andprops);
+		
+		//Draw OR Node
+		OrTaskFactory orNode = new OrTaskFactory(cyNetworkView, registrar, cyApplicationManagerService, mappy);
+		Properties orprops = new Properties();
+		orprops.setProperty("preferredMenu", "Apps.Modeler.SBGN");
+		orprops.setProperty("title", "Draw OR Gate");
+		orprops.setProperty("inMenuBar", "true");
+		orprops.setProperty("menuGravity", "8.9");
+		registerService(context, orNode, TaskFactory.class, orprops);
 		
 		
 	}

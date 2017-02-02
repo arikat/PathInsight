@@ -25,8 +25,9 @@ import org.cytoscape.view.vizmap.VisualStyle;
 import org.cytoscape.view.vizmap.mappings.PassthroughMapping;
 import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskMonitor;
+import org.cytoscape.work.Tunable;
 
-public class NodeOutputStageI extends AbstractTask {
+public class NodeOutputStageN extends AbstractTask {
 	private View<CyNode> nodeView;
 	private View<CyEdge> edgeView;
 	private CyNetworkView netView;
@@ -38,8 +39,10 @@ public class NodeOutputStageI extends AbstractTask {
 	String columnName = "bool";
 	String question = "qMark";
 	String shape = "Shape";
+	Integer n = 0;
+	Integer x = 0;
 	
-	public NodeOutputStageI(CyApplicationManager applicationManager, CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) { 
+	public NodeOutputStageN(CyApplicationManager applicationManager, CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) { 
 		this.netView = netView;
 		this.registrar = registrar;
 		this.network = network;
@@ -54,6 +57,15 @@ public class NodeOutputStageI extends AbstractTask {
 	String plusplus = "http://i.imgur.com/mWmyPNl.png";
 	String negneg = "http://i.imgur.com/MXvZ8rG.png";
 	
+	@Tunable(description="Enter number of Steps", groups=("Steps"), params="displayState=collapsed")
+	public Integer getSteps() {
+		return x;
+	}
+	
+	public void setSteps(Integer newSteps) {
+		x = newSteps;
+	}
+	
 	@Override
 	public void run(TaskMonitor taskMonitor) throws Exception {
 		if (network == null) {
@@ -62,8 +74,9 @@ public class NodeOutputStageI extends AbstractTask {
 			return;
 		}
 		
-		//check if visible
 		
+		taskMonitor.setStatusMessage("Number of Steps set to " + x);
+				
 		CyNetworkView netoView = applicationManager.getCurrentNetworkView();
 		
 		taskMonitor.setTitle("Calculating Output");
@@ -78,6 +91,8 @@ public class NodeOutputStageI extends AbstractTask {
 		//final Set<CyEdge> Edges = new HashSet<CyEdge>();
 		//final Set<CyNode> neighbors = new HashSet<CyNode>();
 		HashSet<CyNode> neighbors = new HashSet<CyNode>();
+		HashSet<CyNode> selective = new HashSet<CyNode>();
+		selective.addAll(nodes);
 		
 		VisualMappingManager vmm = registrar.getService(VisualMappingManager.class);
 
@@ -112,7 +127,13 @@ public class NodeOutputStageI extends AbstractTask {
 			nodeTable.createColumn(shape, String.class, true);
 		}
 		
-		for (CyNode node : nodes) {
+		
+		
+		//Introduce the while loop here, if n!=x, may need to introduce above the for loop?
+		while (n != x) { //replaced while loop with if -- maybe this works better
+			taskMonitor.setStatusMessage("loop begins");
+		
+		for (CyNode node : selective) { //let's see if this changes anything
 			taskMonitor.setStatusMessage("Number of nodes: " + nodes);
 			//List<CyEdge> Edges = network.getAdjacentEdgeList(node, CyEdge.Type.OUTGOING);
 			//Edges.addAll(network.getAdjacentEdgeList(node, CyEdge.Type.OUTGOING));
@@ -126,17 +147,18 @@ public class NodeOutputStageI extends AbstractTask {
 					taskMonitor.setStatusMessage("Number of neighbors: " + neighbors);
 				}
 			}
-		} //This cuts off the for loop to node and nodes - you can eliminate this if it doesn't work.
-			//^ may be the issue - iterating twice based on number of edges - need to fix with an array perhaps? Write hash map - read up on deleting duplicate values
-			
+		} //This cuts off the for loop to node and nodes - you can eliminate this if it doesn't work.		
+		
 			for (CyNode nodely : neighbors) {
+				
+			selective.clear(); //introduce this here, by clearing it, you can add to it again at the end. 
 			
 			CharSequence hip = "process";	
 			CharSequence and = "AND";
 			CharSequence or = "OR";
 			String lab = network.getRow(nodely).get(shape, String.class);
 			
-			if ((lab.contains(hip) || lab.contains(or) || lab.contains(and)) == false) {	//check if this works
+			//if ((lab.contains(hip) || lab.contains(or) || lab.contains(and)) == false) {	//check if this works
 				
 			if (network.getRow(nodely).get(columnName, Integer.class) == null) {
 					//set nodely to 0, okay?
@@ -149,13 +171,12 @@ public class NodeOutputStageI extends AbstractTask {
 					CyNode source = edge.getSource();
 					CyNode target = edge.getTarget(); //prev nodely
 					
+					selective.add(target); //Would this work? If I give the targets?
+					
 				//this is where I identify CYEDGE and write the algorithm
 				// if node >= edge and node > 0 = 1
 				// if edge <= node and node < 0 = -1
 				// if node = 0 = -1	
-					
-					//if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
-						//note del this if it doesn't work
 						
 					if (network.getRow(source).get(columnName, Integer.class) == 1) {
 						network.getRow(source).set(IMAGE_COLUMN, one);
@@ -386,7 +407,7 @@ public class NodeOutputStageI extends AbstractTask {
 				
 				}
 				
-			}
+			//}
 			
 			
 			if ((lab.contains(hip) || lab.contains(or) || lab.contains(and)) == true) {	 //check if this works
@@ -396,7 +417,7 @@ public class NodeOutputStageI extends AbstractTask {
 					network.getRow(nodely).set(columnName, Integer.valueOf(0));
 				}
 				
-				List<CyEdge> Edges = network.getAdjacentEdgeList(nodely, CyEdge.Type.INCOMING); //change back to nodely, incoming if not working
+				//List<CyEdge> Edges = network.getAdjacentEdgeList(nodely, CyEdge.Type.INCOMING); //change back to nodely, incoming if not working
 				for (CyEdge edge : Edges) { //consider switching order of edges -- look up for loop without for loop!!!!
 				
 					CyNode source = edge.getSource();
@@ -450,6 +471,8 @@ public class NodeOutputStageI extends AbstractTask {
 				
 				}
 				
+			
+			
 			}
 				
 					VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
@@ -460,6 +483,29 @@ public class NodeOutputStageI extends AbstractTask {
 					style.addVisualMappingFunction(map);
 					style.apply(netView);
 					netView.updateView();
+					
+					//right
+					
+					//random null error is occurring here. What is going on?
+					
+					//selective.clear(); maybe add it here?
+					
+					/*neighbors.clear(); //by adding it here, it will reiterate at the very end.
+					n = n++;
+					taskMonitor.setStatusMessage("Step " + n + " complete!");
+					
+					taskMonitor.setStatusMessage("hashsets cleared and renewed");*/
+					
+					
 		}
+			
+			neighbors.clear(); //by adding it here, it will reiterate at the very end.
+			n = n++;
+			taskMonitor.setStatusMessage("Step " + n + " complete!");
+			
+			taskMonitor.setStatusMessage("hashsets cleared and renewed");
+			
+		}
+			
 	}	
 }

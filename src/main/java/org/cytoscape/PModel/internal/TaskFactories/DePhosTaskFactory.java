@@ -1,6 +1,5 @@
 package org.cytoscape.PModel.internal.TaskFactories;
 import org.cytoscape.PModel.internal.Tasks.DePhosEdge;
-import org.cytoscape.PModel.internal.Tasks.EdgeShapeTask;
 import org.cytoscape.PModel.internal.Tasks.PhosEdge;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.model.CyEdge;

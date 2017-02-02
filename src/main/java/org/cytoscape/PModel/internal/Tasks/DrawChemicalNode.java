@@ -8,9 +8,11 @@ import java.awt.geom.Ellipse2D;
 import java.util.List;
 import java.util.Set;
 
+import org.cytoscape.PModel.internal.Tasks.DrawProcessNode.ParameterizeProcessNode;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
+import org.cytoscape.model.CyTable;
 import org.cytoscape.model.CyTableUtil;
 import org.cytoscape.service.util.CyServiceRegistrar;
 import org.cytoscape.view.model.CyNetworkView;
@@ -43,31 +45,23 @@ public class DrawChemicalNode extends AbstractTask {
 		this.network = network;
 		this.vmm = vmm;
 	}
-		
 
 	@Override
-	public void run(TaskMonitor task) throws Exception {
-
+	public void run(TaskMonitor task) {
+		
 		CyNetworkView netoView = applicationManager.getCurrentNetworkView();	
 		List<CyNode> Nodes = CyTableUtil.getNodesInState(network, "selected", true);
+		CyTable nodeTable = network.getDefaultNodeTable();
+		CharSequence hip = "process";
+		List<CyNode> nodes = network.getNodeList();
 		
-		VisualMappingManager vmm = registrar.getService(VisualMappingManager.class);
-
-		Set<VisualLexicon> lexSet = vmm.getAllVisualLexicon();
-		VisualProperty<?> cgProp = null;
-		for (VisualLexicon vl : lexSet) {
-			cgProp = vl.lookup(CyNode.class, "NODE_CUSTOMGRAPHICS_1");
-			if (cgProp != null)
-				break;
+		if (nodeTable.getColumn(col) == null) {
+			nodeTable.createColumn(col, Integer.class, true);
+			task.setStatusMessage("shape column created...");
 		}
-		if (cgProp == null) {
-			System.out.println("Can't find the CUSTOMGRAPHICS visual property!!!!");
-			return;
-		}
-
-		VisualStyle style = vmm.getVisualStyle(netView);
 		
-		for (CyNode node : Nodes) {
+		if (Nodes != null) {
+			for (CyNode node : Nodes) {
 			
 			// draw circle for chemical node
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL_FONT_SIZE, 10);
@@ -75,13 +69,93 @@ public class DrawChemicalNode extends AbstractTask {
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 1.0);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_TRANSPARENCY, 120);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_TRANSPARENCY, 240);
+			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_PAINT, new Color(0x000000, true));
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, 30.0);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_WIDTH, 30.0);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_SHAPE, NodeShapeVisualProperty.ELLIPSE);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_FILL_COLOR, new Color(0xFFFFFF, false));
 			
 			task.setStatusMessage("replacing with chemical node...");
+			
+			if (nodeTable.getColumn(col) != null) {
+				network.getRow(node).set(col, "chem");
+			}
+			
+			}
 		}
+		
+		insertTasksAfterCurrentTask(new CreateChem());
+		
+	}
+	
+	public final class CreateChem extends AbstractTask {
+
+		
+		public CreateChem() {
+		}
+		
+		@Override
+		public void run(TaskMonitor tasky) {
+				
+			CyNetworkView netoView = applicationManager.getCurrentNetworkView();	
+			List<CyNode> Nodes = CyTableUtil.getNodesInState(network, "selected", true);
+			CyTable nodeTable = network.getDefaultNodeTable();
+			CharSequence hip = "process";
+			List<CyNode> nodes = network.getNodeList();
+			
+			//currently no nodes selected no if statement	
+			
+			if (Nodes == null) { //may need to remove
+				CyNetwork net = netoView.getModel();
+				final CyNode node = net.addNode();
+				
+				if (nodeTable.getColumn(col) != null) {
+					network.getRow(node).set(col, "chem");
+				}
+			
+				netoView.updateView();
+				
+				insertTasksAfterCurrentTask(new ParameterizeChemNode());
+			
+			}
+		
+}
+
+public final class ParameterizeChemNode extends AbstractTask {
+
+	@Override
+	public void run(TaskMonitor task) {
+		
+		CyNetworkView netoView = applicationManager.getCurrentNetworkView();	
+		List<CyNode> Nodes = CyTableUtil.getNodesInState(network, "selected", true);
+		CyTable nodeTable = network.getDefaultNodeTable();
+		CharSequence hip = "chem";
+		List<CyNode> nodes = network.getNodeList();
+		
+		for (CyNode node : nodes) {
+			
+			String lab = network.getRow(node).get(col, String.class);
+				
+				if (lab.contains(hip)) {
+			
+		// draw circle for chemical node
+		netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL_FONT_SIZE, 10);
+		netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL_WIDTH, 110.0);
+		netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 1.0);
+		netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_TRANSPARENCY, 120);
+		netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_TRANSPARENCY, 240);
+		netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_PAINT, new Color(0x000000, true));
+		netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, 30.0);
+		netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_WIDTH, 30.0);
+		netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_SHAPE, NodeShapeVisualProperty.ELLIPSE);
+		netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_FILL_COLOR, new Color(0xFFFFFF, false));
+		
+		task.setStatusMessage("painting sbgn chemical node...");
+	
+			}
+		}	
+	}	
+}
 		
 	}
 	

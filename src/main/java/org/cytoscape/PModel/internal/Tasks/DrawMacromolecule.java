@@ -74,6 +74,7 @@ public class DrawMacromolecule extends AbstractTask {
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL_WIDTH, 110.0);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 2.0);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_TRANSPARENCY, 120);
+			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_PAINT, new Color(0x000000, true));
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_TRANSPARENCY, 240);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, 25.0);
 			netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_WIDTH, 60.0);
