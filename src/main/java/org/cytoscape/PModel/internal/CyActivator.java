@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.cytoscape.PModel.internal.TaskFactories.ActivationEdgeFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ActivationNodeFactory;
+import org.cytoscape.PModel.internal.TaskFactories.ActivationNodeViewTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.AndTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ClearEdgeBoolTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ClearImagesTaskFactory;
@@ -91,6 +92,15 @@ public class CyActivator extends AbstractCyActivator {
 		pnprops.setProperty("menuGravity", "8.5");
 		registerService(context, phosNeg, TaskFactory.class, pnprops);
 		
+/*		//Activate Node Label via NodeView
+		ActivationNodeViewTaskFactory activeNode = new ActivationNodeViewTaskFactory();
+		Properties amnprops = new Properties();
+		amnprops.setProperty("preferredMenu", "Apps.Modeler.Node Label");
+		amnprops.setProperty("title", "Activated");
+		amnprops.setProperty("inMenuBar", "true");
+		amnprops.setProperty("menuGravity", "8.3");
+		registerService(context, activeNode, TaskFactory.class, amnprops);*/
+		
 		//Activate Node label
 		ActivationNodeFactory activateNode = new ActivationNodeFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties anprops = new Properties();
@@ -103,7 +113,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Activate Node label
 		ResetNodeFactory resetNode = new ResetNodeFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties reprops = new Properties();
-		reprops.setProperty("preferredMenu", "Apps.Modeler.Compound Label");
+		reprops.setProperty("preferredMenu", "Apps.Modeler.Node Label");
 		reprops.setProperty("title", "Reset");
 		reprops.setProperty("inMenuBar", "true");
 		reprops.setProperty("menuGravity", "8.5");
@@ -112,7 +122,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Inhibit Node label
 		InhibitionNodeFactory inhibitNode = new InhibitionNodeFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties inprops = new Properties();
-		inprops.setProperty("preferredMenu", "Apps.Modeler.Compound Label");
+		inprops.setProperty("preferredMenu", "Apps.Modeler.Node Label");
 		inprops.setProperty("title", "Inhibited");
 		inprops.setProperty("inMenuBar", "true");
 		inprops.setProperty("menuGravity", "8.4");

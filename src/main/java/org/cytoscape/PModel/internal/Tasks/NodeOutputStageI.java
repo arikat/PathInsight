@@ -136,7 +136,9 @@ public class NodeOutputStageI extends AbstractTask {
 			CharSequence or = "OR";
 			String lab = network.getRow(nodely).get(shape, String.class);
 			
-			if ((lab.contains(hip) || lab.contains(or) || lab.contains(and)) == false) {	//check if this works
+			if (lab == null) {
+			
+			//if ((lab.contains(hip) || lab.contains(or) || lab.contains(and)) == false) {	//check if this works
 				
 			if (network.getRow(nodely).get(columnName, Integer.class) == null) {
 					//set nodely to 0, okay?
@@ -388,8 +390,9 @@ public class NodeOutputStageI extends AbstractTask {
 				
 			}
 			
+			if (lab != null) {
 			
-			if ((lab.contains(hip) || lab.contains(or) || lab.contains(and)) == true) {	 //check if this works
+			//if ((lab.contains(hip) || lab.contains(or) || lab.contains(and))) {	 //check if this works
 				
 			if (network.getRow(nodely).get(columnName, Integer.class) == null) {
 					//set nodely to 0, okay?
@@ -422,19 +425,19 @@ public class NodeOutputStageI extends AbstractTask {
 					nodeTable.getRow(target.getSUID()).set(columnName, --attempt);
 				}
 				
-				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) >= 1)) {
+				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) > 1)) {
 					nodeTable.getRow(target.getSUID()).set(columnName, --attempt - 1);
 				}
 				
-				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) <= -1)) {
+				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) < -1)) {
 					nodeTable.getRow(target.getSUID()).set(columnName, --attempt - 1);
 				}
 				
-				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) >= 1)) {
+				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) > 1)) {
 					nodeTable.getRow(target.getSUID()).set(columnName, ++attempt + 1);
 				}
 				
-				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) <= -1)) {
+				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) < -1)) {
 					nodeTable.getRow(target.getSUID()).set(columnName, ++attempt + 1);
 				}
 				

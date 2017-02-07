@@ -25,7 +25,7 @@ import org.cytoscape.view.vizmap.mappings.PassthroughMapping;
 import org.cytoscape.application.CyApplicationManager;
 
 public class ActivationNodeView extends AbstractNodeViewTask {
-	public ActivationNodeView(View<CyNode> nodeView, CyNetworkView netView, CyNetwork network, CyServiceRegistrar registrar) {
+	public ActivationNodeView(View<CyNode> nodeView, CyNetworkView netView) {
 		super(nodeView, netView);
 		// TODO Auto-generated constructor stub
 	}

@@ -53,7 +53,7 @@ public class DrawProcessNode extends AbstractTask {
 		
 		CyTable nodeTable = network.getDefaultNodeTable();
 		if (nodeTable.getColumn(col) == null) {
-			nodeTable.createColumn(col, Integer.class, true);
+			nodeTable.createColumn(col, String.class, true);
 			task.setStatusMessage("shape column created...");
 			
 		}

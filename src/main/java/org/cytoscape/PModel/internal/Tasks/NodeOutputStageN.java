@@ -57,7 +57,7 @@ public class NodeOutputStageN extends AbstractTask {
 	String plusplus = "http://i.imgur.com/mWmyPNl.png";
 	String negneg = "http://i.imgur.com/MXvZ8rG.png";
 	
-	@Tunable(description="Enter number of Steps", groups=("Steps"), params="displayState=collapsed")
+	@Tunable(description="Enter Number of Steps", groups=("Steps"), params="displayState=collapsed")
 	public Integer getSteps() {
 		return x;
 	}
@@ -130,7 +130,7 @@ public class NodeOutputStageN extends AbstractTask {
 		
 		
 		//Introduce the while loop here, if n!=x, may need to introduce above the for loop?
-		while (n != x) { //replaced while loop with if -- maybe this works better
+		while (n < x) { //replaced while loop with if -- maybe this works better
 			taskMonitor.setStatusMessage("loop begins");
 		
 		for (CyNode node : selective) { //let's see if this changes anything
@@ -152,13 +152,15 @@ public class NodeOutputStageN extends AbstractTask {
 			for (CyNode nodely : neighbors) {
 				
 			selective.clear(); //introduce this here, by clearing it, you can add to it again at the end. 
+			taskMonitor.setStatusMessage("Selected node hashset cleared");
+			
 			
 			CharSequence hip = "process";	
 			CharSequence and = "AND";
 			CharSequence or = "OR";
 			String lab = network.getRow(nodely).get(shape, String.class);
 			
-			//if ((lab.contains(hip) || lab.contains(or) || lab.contains(and)) == false) {	//check if this works
+			if (lab == null) {	//check if this works
 				
 			if (network.getRow(nodely).get(columnName, Integer.class) == null) {
 					//set nodely to 0, okay?
@@ -407,17 +409,17 @@ public class NodeOutputStageN extends AbstractTask {
 				
 				}
 				
-			//}
+			}
 			
 			
-			if ((lab.contains(hip) || lab.contains(or) || lab.contains(and)) == true) {	 //check if this works
+			if (lab != null) {	 //check if this works
 				
 			if (network.getRow(nodely).get(columnName, Integer.class) == null) {
 					//set nodely to 0, okay?
 					network.getRow(nodely).set(columnName, Integer.valueOf(0));
 				}
 				
-				//List<CyEdge> Edges = network.getAdjacentEdgeList(nodely, CyEdge.Type.INCOMING); //change back to nodely, incoming if not working
+				List<CyEdge> Edges = network.getAdjacentEdgeList(nodely, CyEdge.Type.INCOMING); //change back to nodely, incoming if not working
 				for (CyEdge edge : Edges) { //consider switching order of edges -- look up for loop without for loop!!!!
 				
 					CyNode source = edge.getSource();
@@ -443,19 +445,19 @@ public class NodeOutputStageN extends AbstractTask {
 					nodeTable.getRow(target.getSUID()).set(columnName, --attempt);
 				}
 				
-				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) >= 1)) {
+				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) > 1)) {
 					nodeTable.getRow(target.getSUID()).set(columnName, --attempt - 1);
 				}
 				
-				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) <= -1)) {
+				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) < -1)) {
 					nodeTable.getRow(target.getSUID()).set(columnName, --attempt - 1);
 				}
 				
-				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) >= 1)) {
+				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) > 1)) {
 					nodeTable.getRow(target.getSUID()).set(columnName, ++attempt + 1);
 				}
 				
-				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) <= -1)) {
+				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) < -1)) {
 					nodeTable.getRow(target.getSUID()).set(columnName, ++attempt + 1);
 				}
 				
@@ -490,7 +492,7 @@ public class NodeOutputStageN extends AbstractTask {
 					
 					//selective.clear(); maybe add it here?
 					
-					/*neighbors.clear(); //by adding it here, it will reiterate at the very end.
+				/*	neighbors.clear(); //by adding it here, it will reiterate at the very end.
 					n = n++;
 					taskMonitor.setStatusMessage("Step " + n + " complete!");
 					
@@ -500,10 +502,10 @@ public class NodeOutputStageN extends AbstractTask {
 		}
 			
 			neighbors.clear(); //by adding it here, it will reiterate at the very end.
-			n = n++;
+			n = n+1;
 			taskMonitor.setStatusMessage("Step " + n + " complete!");
 			
-			taskMonitor.setStatusMessage("hashsets cleared and renewed");
+			taskMonitor.setStatusMessage("neighbor hashset cleared and renewed");
 			
 		}
 			

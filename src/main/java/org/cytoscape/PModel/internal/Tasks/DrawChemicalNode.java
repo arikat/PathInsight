@@ -56,7 +56,7 @@ public class DrawChemicalNode extends AbstractTask {
 		List<CyNode> nodes = network.getNodeList();
 		
 		if (nodeTable.getColumn(col) == null) {
-			nodeTable.createColumn(col, Integer.class, true);
+			nodeTable.createColumn(col, String.class, true);
 			task.setStatusMessage("shape column created...");
 		}
 		
@@ -83,13 +83,12 @@ public class DrawChemicalNode extends AbstractTask {
 			
 			}
 		}
-		
-		insertTasksAfterCurrentTask(new CreateChem());
+				
+		insertTasksAfterCurrentTask(new CreateChem()); //need to put something here to prevent it from creating a node unnecessarily
 		
 	}
 	
 	public final class CreateChem extends AbstractTask {
-
 		
 		public CreateChem() {
 		}
@@ -98,14 +97,14 @@ public class DrawChemicalNode extends AbstractTask {
 		public void run(TaskMonitor tasky) {
 				
 			CyNetworkView netoView = applicationManager.getCurrentNetworkView();	
-			List<CyNode> Nodes = CyTableUtil.getNodesInState(network, "selected", true);
+			List<CyNode> Nodes = CyTableUtil.getNodesInState(network, "selected", false);
 			CyTable nodeTable = network.getDefaultNodeTable();
 			CharSequence hip = "process";
 			List<CyNode> nodes = network.getNodeList();
 			
 			//currently no nodes selected no if statement	
 			
-			if (Nodes == null) { //may need to remove
+				//if (Nodes == null) { //may need to remove
 				CyNetwork net = netoView.getModel();
 				final CyNode node = net.addNode();
 				
@@ -117,7 +116,7 @@ public class DrawChemicalNode extends AbstractTask {
 				
 				insertTasksAfterCurrentTask(new ParameterizeChemNode());
 			
-			}
+		//	}
 		
 }
 
