@@ -20,7 +20,7 @@ import org.cytoscape.view.presentation.property.LineTypeVisualProperty;
 import org.cytoscape.application.CyApplicationManager;
 
 public class PhosEdge extends AbstractTask {
-	public String columnName = "bool";
+	public String columnName = "setBool";
 	private CyNetwork network;
 	private CyApplicationManager appMgr;
 	private CyNetworkView netView;
@@ -51,7 +51,7 @@ public class PhosEdge extends AbstractTask {
 		CyNetworkView netoView = appMgr.getCurrentNetworkView();
 
 		if (edgeTable.getColumn(phosLab) == null) {
-			edgeTable.createColumn(phosLab, String.class, true);
+			edgeTable.createColumn(phosLab, String.class, false);
 			
 			List<CyEdge> Edges = CyTableUtil.getEdgesInState(network, "selected", true);
 			monitor.setStatusMessage("Warning: null column - creating column and setting values");

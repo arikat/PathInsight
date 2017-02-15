@@ -11,6 +11,7 @@ import java.util.Set;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
+import org.cytoscape.model.CyTable;
 import org.cytoscape.model.CyTableUtil;
 import org.cytoscape.service.util.CyServiceRegistrar;
 import org.cytoscape.view.model.CyNetworkView;
@@ -30,7 +31,7 @@ public class DrawMacromolecule extends AbstractTask {
 	private CyServiceRegistrar registrar;
 	private CyNode cyNode;
 	private CyNetwork network;
-	String col = "shape";
+	String col = "setShape";
 	private VisualMappingManager vmm;
 	//get the network
 	//select the node, if node not selected, create the node
@@ -43,13 +44,20 @@ public class DrawMacromolecule extends AbstractTask {
 		this.network = network;
 		this.vmm = vmm;
 	}
-		
+	
+	
 
+	
 	@Override
 	public void run(TaskMonitor task) throws Exception {
 
 		CyNetworkView netoView = applicationManager.getCurrentNetworkView();	
 		List<CyNode> Nodes = CyTableUtil.getNodesInState(network, "selected", true);
+		CyTable nodeTable = network.getDefaultNodeTable();
+		
+		if (nodeTable.getColumn(col) == null) {
+			nodeTable.createColumn(col, String.class, false);
+		}
 		
 		VisualMappingManager vmm = registrar.getService(VisualMappingManager.class);
 

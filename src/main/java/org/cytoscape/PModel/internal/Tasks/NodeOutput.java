@@ -35,8 +35,9 @@ public class NodeOutput extends AbstractTask {
 	public static final String IMAGE_COLUMN = "Image URL";
 	private CyNode cyNode;
 	private CyNetwork network;
-	String columnName = "bool";
+	String columnName = "setBool";
 	String question = "qMark";
+	String shape = "setShape";
 	
 	public NodeOutput(CyApplicationManager applicationManager, CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) { 
 		this.netView = netView;
@@ -96,12 +97,19 @@ public class NodeOutput extends AbstractTask {
 		VisualStyle style = vmm.getVisualStyle(netView);
 		
 		if (nodeTable.getColumn(columnName) == null) {
-			nodeTable.createColumn(columnName, Integer.class, true);
-			//insert continue or something here to get it to go to the next if statements		
+			nodeTable.createColumn(columnName, Integer.class, false);
+		}
+		
+		if (nodeTable.getColumn(question) == null) {
+			nodeTable.createColumn(question, String.class, false);
 		}
 		
 		if (nodeTable.getColumn(IMAGE_COLUMN) == null) {
-			nodeTable.createColumn(IMAGE_COLUMN, String.class, true);
+			nodeTable.createColumn(IMAGE_COLUMN, String.class, false);
+		}
+		
+		if (nodeTable.getColumn(shape) == null) {
+			nodeTable.createColumn(shape, String.class, false);
 		}
 		
 		for (CyNode node : nodes) {
@@ -122,6 +130,13 @@ public class NodeOutput extends AbstractTask {
 			//^ may be the issue - iterating twice based on number of edges - need to fix with an array perhaps? Write hash map - read up on deleting duplicate values
 			
 			for (CyNode nodely : neighbors) {
+				
+				CharSequence hip = "process";	
+				CharSequence and = "AND";
+				CharSequence or = "OR";
+				String lab = network.getRow(nodely).get(shape, String.class);
+				
+			if (lab == null) {
 				
 			if (network.getRow(nodely).get(columnName, Integer.class) == null) {
 					//set nodely to 0, okay?
@@ -331,6 +346,8 @@ public class NodeOutput extends AbstractTask {
 						}
 					}
 				
+				//during this, I should create a for loop that allows for detection of whether or not outgoing edges have a value and if not, send out ?
+				
 				if (network.getRow(source).get(columnName, Integer.class) == 0) {
 					//set nodely to 0, okay?
 					nodeTable.getRow(target.getSUID()).set(columnName, attempt); //remember to test node visibility on this.
@@ -379,7 +396,9 @@ public class NodeOutput extends AbstractTask {
 				adjnodes.addAll(network.getNeighborList(nodely, Type.OUTGOING));
 				
 				}
+				
 			}
+		}
 				
 				//List<CyNode> adjnodes = network.getNeighborList(nodely, Type.OUTGOING);
 				//or perhaps just create a hashset of adjnodes put it in nodely and then call it here?

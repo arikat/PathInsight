@@ -34,7 +34,7 @@ public class ClearImages extends AbstractTask {
 		List<CyNode> nodes = network.getNodeList();
 		
 		if (nodeTable.getColumn(images) == null) {
-			nodeTable.createColumn(images, String.class, true);
+			nodeTable.createColumn(images, String.class, false);
 			tasky.setStatusMessage("Warning: 'Image URL' column does not exist - creating this column.");
 	}
 		

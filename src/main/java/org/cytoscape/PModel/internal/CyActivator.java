@@ -3,6 +3,7 @@ package org.cytoscape.PModel.internal;
 import java.util.Properties;
 
 import org.cytoscape.PModel.internal.TaskFactories.ActivationEdgeFactory;
+import org.cytoscape.PModel.internal.TaskFactories.ActivationEdgeViewTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ActivationNodeFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ActivationNodeViewTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.AndTaskFactory;
@@ -14,7 +15,9 @@ import org.cytoscape.PModel.internal.TaskFactories.DrawProcessNodeTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.DrawSbgnChemNodeTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.DrawSbgnMacromoleculeTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.InhibitionEdgeFactory;
+import org.cytoscape.PModel.internal.TaskFactories.InhibitionEdgeViewFactory;
 import org.cytoscape.PModel.internal.TaskFactories.InhibitionNodeFactory;
+import org.cytoscape.PModel.internal.TaskFactories.InhibitionNodeViewTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.NodeOutputFactory;
 import org.cytoscape.PModel.internal.TaskFactories.NodeOutputStageITaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.NodeOutputStageNTaskFactory;
@@ -23,7 +26,10 @@ import org.cytoscape.PModel.internal.TaskFactories.OrTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.PaintFactory;
 import org.cytoscape.PModel.internal.TaskFactories.PhosTaskFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ResetEdgeFactory;
+import org.cytoscape.PModel.internal.TaskFactories.ResetEdgeViewFactory;
 import org.cytoscape.PModel.internal.TaskFactories.ResetNodeFactory;
+import org.cytoscape.PModel.internal.TaskFactories.ResetNodeViewFactory;
+import org.cytoscape.PModel.internal.TaskFactories.ResetQuestionFactory;
 import org.cytoscape.app.swing.AbstractCySwingApp;
 import org.cytoscape.app.swing.CySwingAppAdapter;
 import org.cytoscape.service.util.AbstractCyActivator;
@@ -92,14 +98,53 @@ public class CyActivator extends AbstractCyActivator {
 		pnprops.setProperty("menuGravity", "8.5");
 		registerService(context, phosNeg, TaskFactory.class, pnprops);
 		
-/*		//Activate Node Label via NodeView
-		ActivationNodeViewTaskFactory activeNode = new ActivationNodeViewTaskFactory();
+		//Activate Edge Label via edgeView
+		ActivationEdgeViewTaskFactory ectiveNode = new ActivationEdgeViewTaskFactory(); //registrar
+		Properties emnprops = new Properties();
+		emnprops.setProperty("preferredMenu", "Apps.Modeler.Edge Label");
+		emnprops.setProperty("title", "Activating");
+		emnprops.setProperty("menuGravity", "8.1");
+		registerService(context, ectiveNode, EdgeViewTaskFactory.class, emnprops);
+		
+		//Inhibit Edge Label via edgeView
+		InhibitionEdgeViewFactory ictiveNode = new InhibitionEdgeViewFactory(); //registrar
+		Properties imnprops = new Properties();
+		imnprops.setProperty("preferredMenu", "Apps.Modeler.Edge Label");
+		imnprops.setProperty("title", "Inhibiting");
+		imnprops.setProperty("menuGravity", "8.2");
+		registerService(context, ictiveNode, EdgeViewTaskFactory.class, imnprops);
+		
+		//Reset Edge Label via edgeView
+		ResetEdgeViewFactory rctiveNode = new ResetEdgeViewFactory(); //registrar
+		Properties rmnprops = new Properties();
+		rmnprops.setProperty("preferredMenu", "Apps.Modeler.Edge Label");
+		rmnprops.setProperty("title", "Reset");
+		rmnprops.setProperty("menuGravity", "8.3");
+		registerService(context, rctiveNode, EdgeViewTaskFactory.class, rmnprops);
+		
+		//Activate Node Label via NodeView
+		ActivationNodeViewTaskFactory activeNode = new ActivationNodeViewTaskFactory(); //registrar
 		Properties amnprops = new Properties();
 		amnprops.setProperty("preferredMenu", "Apps.Modeler.Node Label");
 		amnprops.setProperty("title", "Activated");
-		amnprops.setProperty("inMenuBar", "true");
-		amnprops.setProperty("menuGravity", "8.3");
-		registerService(context, activeNode, TaskFactory.class, amnprops);*/
+		amnprops.setProperty("menuGravity", "8.1");
+		registerService(context, activeNode, NodeViewTaskFactory.class, amnprops);
+		
+		//Inhibit Node Label via NodeView
+		InhibitionNodeViewTaskFactory inhibNode = new InhibitionNodeViewTaskFactory(); //registrar
+		Properties innprops = new Properties();
+		innprops.setProperty("preferredMenu", "Apps.Modeler.Node Label");
+		innprops.setProperty("title", "Inhibited");
+		innprops.setProperty("menuGravity", "8.2");
+		registerService(context, inhibNode, NodeViewTaskFactory.class, innprops);
+		
+		//Reset Node Label via NodeView
+		ResetNodeViewFactory resibNode = new ResetNodeViewFactory(); //registrar
+		Properties resprops = new Properties();
+		resprops.setProperty("preferredMenu", "Apps.Modeler.Node Label");
+		resprops.setProperty("title", "Reset");
+		resprops.setProperty("menuGravity", "8.3");
+		registerService(context, resibNode, NodeViewTaskFactory.class, resprops);
 		
 		//Activate Node label
 		ActivationNodeFactory activateNode = new ActivationNodeFactory(cyNetworkView, registrar, cyApplicationManagerService);
@@ -145,6 +190,15 @@ public class CyActivator extends AbstractCyActivator {
 		rprops.setProperty("inMenuBar", "true");
 		rprops.setProperty("menuGravity", "8.4");
 		registerService(context, reset, TaskFactory.class, rprops);
+		
+		//label question Reset
+		ResetQuestionFactory qreset = new ResetQuestionFactory(cyNetworkView, registrar, cyApplicationManagerService);
+		Properties qrprops = new Properties();
+		qrprops.setProperty("preferredMenu", "Apps.Modeler.Reset Values");
+		qrprops.setProperty("title", "Clear Questions");
+		qrprops.setProperty("inMenuBar", "true");
+		qrprops.setProperty("menuGravity", "8.8");
+		registerService(context, qreset, TaskFactory.class, qrprops);
 		
 		//Clear boolean values of all edges
 		ClearEdgeBoolTaskFactory clears = new ClearEdgeBoolTaskFactory(cyApplicationManagerService);
@@ -204,7 +258,7 @@ public class CyActivator extends AbstractCyActivator {
 		TaskFactory paintStructure = new PaintFactory(cyNetworkView, registrar, cyApplicationManagerService, mappy); //figure out how implement sbuild into this
 		Properties paintStructureProps = new Properties();
 		paintStructureProps.setProperty("preferredMenu", "Apps.Modeler");
-		paintStructureProps.setProperty("title", "Paint All Nodes");
+		paintStructureProps.setProperty("title", "KEGG Prepare");
 		paintStructureProps.setProperty("inMenuBar", "true");
 		paintStructureProps.setProperty("menuGravity", "8.6");
 		registerService(context, paintStructure, TaskFactory.class, paintStructureProps);

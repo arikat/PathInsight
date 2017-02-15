@@ -18,10 +18,11 @@ public class ActivationNodeViewTaskFactory extends AbstractNodeViewTaskFactory{
 	private CyNetworkView netView;
 	private CyNetwork network;
 	
+	/*public ActivationNodeViewTaskFactory(CyServiceRegistrar registrar) {
+		// TODO Auto-generated constructor stub
+	}*/
 	
-	@Override
 	public TaskIterator createTaskIterator(View<CyNode> nodeView, CyNetworkView netView) {
-		// TODO Auto-generated method stub
 		return new TaskIterator(new ActivationNodeView(nodeView, netView));
 		
 	}

@@ -32,7 +32,7 @@ public class DrawAnd extends AbstractTask {
 	private CyServiceRegistrar registrar;
 	private CyNode cyNode;
 	private CyNetwork network;
-	String col = "shape";
+	String col = "setShape";
 	private VisualMappingManager vmm;
 	//get the network
 	//select the node, if node not selected, create the node
@@ -52,7 +52,7 @@ public void run(TaskMonitor task) {
 		
 		CyTable nodeTable = network.getDefaultNodeTable();
 		if (nodeTable.getColumn(col) == null) {
-			nodeTable.createColumn(col, Integer.class, true);
+			nodeTable.createColumn(col, Integer.class, false);
 			task.setStatusMessage("shape column created...");
 			
 		}

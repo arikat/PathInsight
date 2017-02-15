@@ -27,7 +27,7 @@ public class ActivationNode extends AbstractTask {
 	private CyApplicationManager applicationManager;
 	private CyServiceRegistrar registrar;
 	public static final String IMAGE_COLUMN = "Image URL";
-	public String columnName = "bool";
+	public String columnName = "setBool";
 	private CyNetwork network;
 
 	public ActivationNode(CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) { 
@@ -53,6 +53,12 @@ public class ActivationNode extends AbstractTask {
 		
 		if (nodeTable.getColumn(IMAGE_COLUMN) == null) {
 			nodeTable.createColumn(IMAGE_COLUMN, String.class, false);
+			monitor.setStatusMessage("Warning: null column - creating column and setting values");
+		}
+		
+		if (nodeTable.getColumn(columnName) == null) {
+			nodeTable.createColumn(columnName, Integer.class, false);
+			monitor.setStatusMessage("Warning: null column - creating column and setting values");
 		}
 		
 		VisualMappingManager vmm = registrar.getService(VisualMappingManager.class);
@@ -71,27 +77,12 @@ public class ActivationNode extends AbstractTask {
 
 		VisualStyle style = vmm.getVisualStyle(netView);
 
-		if (nodeTable.getColumn(columnName) == null) {
-			nodeTable.createColumn(columnName, Integer.class, true);
 			
 			List<CyNode> Nodes = CyTableUtil.getNodesInState(network, "selected", true);
-			monitor.setStatusMessage("Warning: null column - creating column and setting values");
 
 			for (CyNode node : Nodes) {
 				nodeTable.getRow(node.getSUID()).set(columnName, Integer.valueOf(1));
 				network.getRow(node).set(IMAGE_COLUMN, one); 
-			}
-		} 
-		
-		if (nodeTable.getColumn(columnName) != null) {
-			List<CyNode> Nodes = CyTableUtil.getNodesInState(network, "selected", true);
-			monitor.setStatusMessage("Setting values");
-
-			for (CyNode node : Nodes) {
-				nodeTable.getRow(node.getSUID()).set(columnName, Integer.valueOf(1));
-				network.getRow(node).set(IMAGE_COLUMN, one); 
-			}
-
 		} 
 		
 		VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,

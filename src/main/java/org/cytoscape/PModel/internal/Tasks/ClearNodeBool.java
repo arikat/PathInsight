@@ -21,7 +21,7 @@ import org.cytoscape.work.Tunable;
 
 public class ClearNodeBool extends AbstractTask {
 
-	public String columnName = "bool";
+	public String columnName = "setBool";
 	public static final String IMAGE_COLUMN = "Image URL";
 	private CyNetwork network;
 	private CyNetworkView netView;
@@ -68,11 +68,11 @@ public class ClearNodeBool extends AbstractTask {
 		VisualStyle style = vmm.getVisualStyle(netView);
 		
 		if (nodeTable.getColumn(IMAGE_COLUMN) == null) {
-			nodeTable.createColumn(IMAGE_COLUMN, String.class, true);
+			nodeTable.createColumn(IMAGE_COLUMN, String.class, false);
 		}
 		
 		if (nodeTable.getColumn(columnName) == null) {
-			nodeTable.createColumn(columnName, Integer.class, true);
+			nodeTable.createColumn(columnName, Integer.class, false);
 			tasky.setStatusMessage("Warning: 'bool' column does not exist - creating this column and setting all nodes to zero.");
 			
 		for (CyNode node : Nodes) {

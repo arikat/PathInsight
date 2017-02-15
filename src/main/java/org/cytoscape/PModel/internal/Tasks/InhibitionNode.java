@@ -23,7 +23,7 @@ import org.cytoscape.view.vizmap.mappings.PassthroughMapping;
 import org.cytoscape.application.CyApplicationManager;
 
 public class InhibitionNode extends AbstractTask {
-	public String columnName = "bool";
+	public String columnName = "setBool";
 	private CyNetwork network;
 	private CyNetworkView netView;
 	private CyApplicationManager applicationManager;
@@ -75,7 +75,7 @@ public class InhibitionNode extends AbstractTask {
 		}
 
 		if (nodeTable.getColumn(columnName) == null) {
-			nodeTable.createColumn(columnName, Integer.class, true);
+			nodeTable.createColumn(columnName, Integer.class, false);
 			
 			List<CyNode> Nodes = CyTableUtil.getNodesInState(network, "selected", true);
 			monitor.setStatusMessage("Warning: null column - creating column and setting values");

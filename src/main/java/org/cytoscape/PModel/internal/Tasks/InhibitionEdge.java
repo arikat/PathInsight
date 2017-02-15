@@ -18,7 +18,7 @@ import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.application.CyApplicationManager;
 
 public class InhibitionEdge extends AbstractTask {
-	public String columnName = "bool";
+	public String columnName = "setBool";
 	private CyNetwork network;
 	private CyApplicationManager appMgr;
 	private CyNetworkView netView;
@@ -43,7 +43,7 @@ public class InhibitionEdge extends AbstractTask {
 		CyNetworkView netoView = appMgr.getCurrentNetworkView();
 
 		if (edgeTable.getColumn(columnName) == null) {
-			edgeTable.createColumn(columnName, Integer.class, true);
+			edgeTable.createColumn(columnName, Integer.class, false);
 			//insert continue or something here to get it to go to the next if statements
 			List<CyEdge> Edges = CyTableUtil.getEdgesInState(network, "selected", true);
 			monitor.setStatusMessage("Warning: null column - creating column and setting values");

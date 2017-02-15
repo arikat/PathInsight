@@ -12,7 +12,7 @@ import org.cytoscape.work.Tunable;
 
 public class ClearEdgeBool extends AbstractTask {
 
-	public String columnName = "bool";
+	public String columnName = "setBool";
 	private CyNetwork network;
 
 	public ClearEdgeBool(CyNetwork network) {
@@ -34,7 +34,7 @@ public class ClearEdgeBool extends AbstractTask {
 		List<CyEdge> edges = network.getEdgeList();
 		
 		if (edgeTable.getColumn(columnName) == null) {
-			edgeTable.createColumn(columnName, Integer.class, true);
+			edgeTable.createColumn(columnName, Integer.class, false);
 			tasky.setStatusMessage("Warning: 'bool' column does not exist - creating this column and setting all edges to zero.");
 		
 		for (CyEdge edge : edges) {

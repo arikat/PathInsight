@@ -41,8 +41,9 @@ public class Painter extends AbstractTask {
 	public static final String name = "name";
 	private CyNode cyNode;
 	private CyNetwork network;
-	String columnName = "bool";
+	String columnName = "setBool";
 	private VisualMappingManager vmm;
+	int x = 0;
 	
 	//private StyleTemp sbuild; //let's see if this works?
 	private VisualStyle stylo = null;
@@ -78,17 +79,17 @@ public class Painter extends AbstractTask {
 		//CyTable edgeTable = network.getDefaultEdgeTable();
 		CyTable nodeTable = network.getDefaultNodeTable();
 		if (nodeTable.getColumn(IMAGE_COLUMN) == null) {
-			nodeTable.createColumn(IMAGE_COLUMN, String.class, true);
+			nodeTable.createColumn(IMAGE_COLUMN, String.class, false);
 			taskMonitor.setStatusMessage("Image URL column created...");
 		}
 		
 		if (nodeTable.getColumn(columnName) == null) {
-			nodeTable.createColumn(columnName, Integer.class, true);
+			nodeTable.createColumn(columnName, Integer.class, false);
 			taskMonitor.setStatusMessage("bool column created...");
 		}
 		
 		if (nodeTable.getColumn(label) == null) {
-			nodeTable.createColumn(label, Integer.class, true);
+			nodeTable.createColumn(label, Integer.class, false);
 			taskMonitor.setStatusMessage("label column created...");
 			
 		}
@@ -111,8 +112,6 @@ public class Painter extends AbstractTask {
 
 			VisualStyle style = vmm.getVisualStyle(netView); //make this null temporarily and fix painting or create new private VisualStyle stylo = null 
 
-			String columnName = "bool";
-
 			//List<CyNode> nodes = CyTableUtil.getNodesInState(network, "selected", true);
 			List<CyNode> nodes = network.getNodeList();
 			
@@ -121,14 +120,15 @@ public class Painter extends AbstractTask {
 				
 				if (stylo == null) {
 					
-					taskMonitor.setStatusMessage("visual style added...");
-					
 					netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL_FONT_SIZE, 10);
 					netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_LABEL_WIDTH, 110.0);
 					netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 2.0);
 					netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_TRANSPARENCY, 120);
 					netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_BORDER_TRANSPARENCY, 225);
 					
+					x = x + 1;
+					
+					taskMonitor.setStatusMessage("visual style added for " + x + " nodes.");
 					//remember to make stylo != null
 			
 				}
@@ -136,7 +136,12 @@ public class Painter extends AbstractTask {
 				
 				if (nodeTable.getColumn(label) != null) {
 					String john = network.getRow(node).get(label, String.class);
-					network.getRow(node).set(name, john);
+					if (john != null) {
+					network.getRow(node).set(name, john); //note: hopefully this if statement works.
+					
+					x = x+1;
+					taskMonitor.setStatusMessage("name set for " + x + " nodes.");
+					}
 				}
 				
 				///WRITE CODE HERE LOOKING AT NEIGHBOR NODES - THEN GET THOSE ADJACENT EDGE LISTS - THEN REPEAT ONCE MORE FOR TERTIARY INTERACTIONS?
@@ -230,7 +235,7 @@ public class Painter extends AbstractTask {
 	}
 	
 	public final class EdgeShapeTask extends AbstractTask {
-		String columnName = "bool";
+		String columnName = "setBool";
 		String phosLab = "RelationValue2";
 		String subby = "ArrowShape";
 		private CyNetwork network;
@@ -257,7 +262,7 @@ public class Painter extends AbstractTask {
 			CyNetworkView netoView = appMgr.getCurrentNetworkView();
 			
 			if (edgeTable.getColumn(columnName) == null) {
-				edgeTable.createColumn(columnName, Integer.class, true);
+				edgeTable.createColumn(columnName, Integer.class, false);
 			}
 			
 			

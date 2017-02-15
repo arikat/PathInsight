@@ -27,7 +27,7 @@ public class ResetNode extends AbstractTask {
 	private CyApplicationManager applicationManager;
 	private CyServiceRegistrar registrar;
 	public static final String IMAGE_COLUMN = "Image URL";
-	public String columnName = "bool";
+	public String columnName = "setBool";
 	private CyNetwork network;
 
 	public ResetNode(CyNetworkView netView, CyServiceRegistrar registrar, CyNetwork network) { 
@@ -72,7 +72,7 @@ public class ResetNode extends AbstractTask {
 		VisualStyle style = vmm.getVisualStyle(netView);
 
 		if (nodeTable.getColumn(columnName) == null) {
-			nodeTable.createColumn(columnName, Integer.class, true);
+			nodeTable.createColumn(columnName, Integer.class, false);
 			
 			List<CyNode> Nodes = CyTableUtil.getNodesInState(network, "selected", true);
 			monitor.setStatusMessage("Warning: null column - creating column and setting values");

@@ -36,9 +36,9 @@ public class NodeOutputStageN extends AbstractTask {
 	public static final String IMAGE_COLUMN = "Image URL";
 	private CyNode cyNode;
 	private CyNetwork network;
-	String columnName = "bool";
+	String columnName = "setBool";
 	String question = "qMark";
-	String shape = "Shape";
+	String shape = "setShape";
 	Integer n = 0;
 	Integer x = 0;
 	
@@ -111,20 +111,20 @@ public class NodeOutputStageN extends AbstractTask {
 		VisualStyle style = vmm.getVisualStyle(netView);
 		
 		if (nodeTable.getColumn(columnName) == null) {
-			nodeTable.createColumn(columnName, Integer.class, true);
+			nodeTable.createColumn(columnName, Integer.class, false);
 			//insert continue or something here to get it to go to the next if statements		
 		}
 		
 		if (nodeTable.getColumn(question) == null) {
-			nodeTable.createColumn(question, String.class, true);
+			nodeTable.createColumn(question, String.class, false);
 		}
 		
 		if (nodeTable.getColumn(IMAGE_COLUMN) == null) {
-			nodeTable.createColumn(IMAGE_COLUMN, String.class, true);
+			nodeTable.createColumn(IMAGE_COLUMN, String.class, false);
 		}
 		
 		if (nodeTable.getColumn(shape) == null) {
-			nodeTable.createColumn(shape, String.class, true);
+			nodeTable.createColumn(shape, String.class, false);
 		}
 		
 		
@@ -172,6 +172,9 @@ public class NodeOutputStageN extends AbstractTask {
 				
 					CyNode source = edge.getSource();
 					CyNode target = edge.getTarget(); //prev nodely
+					
+					List<CyEdge> qEdges = network.getAdjacentEdgeList(source, CyEdge.Type.OUTGOING);	
+
 					
 					selective.add(target); //Would this work? If I give the targets?
 					
@@ -362,47 +365,53 @@ public class NodeOutputStageN extends AbstractTask {
 						}
 					}
 				
-				if (network.getRow(source).get(columnName, Integer.class) == 0) {
-					//set nodely to 0, okay?
-					nodeTable.getRow(target.getSUID()).set(columnName, attempt); //may need to insert attempt + 0, instead of just inserting zero - remember to test this.
+				for (CyEdge qEdge : qEdges) {
 					
-					if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
-					
-					if (network.getRow(target).get(columnName, Integer.class) == 1) {
-						network.getRow(target).set(IMAGE_COLUMN, one);
-						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
-					}
+					CyNode qsource = qEdge.getSource();
+					CyNode qtarget = qEdge.getTarget();
 				
-					if (network.getRow(target).get(columnName, Integer.class) > 2) {
-						network.getRow(target).set(IMAGE_COLUMN, plusplus);
-						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
-					}
-			
-					if (network.getRow(target).get(columnName, Integer.class) < -2) { 
-						network.getRow(target).set(IMAGE_COLUMN, negneg);
-						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
-					}
-			
-					if (network.getRow(target).get(columnName, Integer.class) == 2) {
-						network.getRow(target).set(IMAGE_COLUMN, two);
-						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
-					}
+					if (network.getRow(qsource).get(columnName, Integer.class) == 0) {
+						//set nodely to 0, okay?
+						nodeTable.getRow(qtarget.getSUID()).set(columnName, attempt); //may need to insert attempt + 0, instead of just inserting zero - remember to test this.
+						
+						if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
+						
+						if (network.getRow(qtarget).get(columnName, Integer.class) == 1) {
+							network.getRow(qtarget).set(IMAGE_COLUMN, one);
+							netoView.getEdgeView(qEdge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+						}
 					
-					if (network.getRow(target).get(columnName, Integer.class) == 0) {
-						network.getRow(target).set(IMAGE_COLUMN, zero); 
-						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+						if (network.getRow(qtarget).get(columnName, Integer.class) > 2) {
+							network.getRow(qtarget).set(IMAGE_COLUMN, plusplus);
+							netoView.getEdgeView(qEdge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+						}
+				
+						if (network.getRow(qtarget).get(columnName, Integer.class) < -2) { 
+							network.getRow(qtarget).set(IMAGE_COLUMN, negneg);
+							netoView.getEdgeView(qEdge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+						}
+				
+						if (network.getRow(qtarget).get(columnName, Integer.class) == 2) {
+							network.getRow(qtarget).set(IMAGE_COLUMN, two);
+							netoView.getEdgeView(qEdge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+						}
+						
+						if (network.getRow(qtarget).get(columnName, Integer.class) == 0) {
+							network.getRow(qtarget).set(IMAGE_COLUMN, zero); 
+							netoView.getEdgeView(qEdge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+						}
+						
+						if (network.getRow(qtarget).get(columnName, Integer.class) == -1) { 
+							network.getRow(qtarget).set(IMAGE_COLUMN, negone);
+							netoView.getEdgeView(qEdge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+						}
+						
+						if (network.getRow(qtarget).get(columnName, Integer.class) == -2) {
+							network.getRow(qtarget).set(IMAGE_COLUMN, negtwo);
+							netoView.getEdgeView(qEdge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?"); //note may need to remove and check
+						} 
+					
 					}
-					
-					if (network.getRow(target).get(columnName, Integer.class) == -1) { 
-						network.getRow(target).set(IMAGE_COLUMN, negone);
-						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
-					}
-					
-					if (network.getRow(target).get(columnName, Integer.class) == -2) {
-						network.getRow(target).set(IMAGE_COLUMN, negtwo);
-						netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?"); //note may need to remove and check
-					} 
-					
 					}
 
 				}

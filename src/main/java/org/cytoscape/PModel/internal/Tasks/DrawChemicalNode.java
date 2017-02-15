@@ -32,7 +32,7 @@ public class DrawChemicalNode extends AbstractTask {
 	private CyServiceRegistrar registrar;
 	private CyNode cyNode;
 	private CyNetwork network;
-	String col = "shape";
+	String col = "setShape";
 	private VisualMappingManager vmm;
 	//get the network
 	//select the node, if node not selected, create the node
@@ -56,7 +56,7 @@ public class DrawChemicalNode extends AbstractTask {
 		List<CyNode> nodes = network.getNodeList();
 		
 		if (nodeTable.getColumn(col) == null) {
-			nodeTable.createColumn(col, String.class, true);
+			nodeTable.createColumn(col, String.class, false);
 			task.setStatusMessage("shape column created...");
 		}
 		
