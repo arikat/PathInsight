@@ -4,7 +4,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 	<properties>
-		<bundle.symbolicName>org.cytoscape.PModel.PathwayModelling</bundle.symbolicName>
+		<bundle.symbolicName>Modeler</bundle.symbolicName>
 		<bundle.namespace>org.cytoscape.PModel</bundle.namespace>
 		<bundle.name>Modeler</bundle.name>
 	</properties>
@@ -14,7 +14,7 @@
     <artifactId>PathwayModeling</artifactId>
 	<version>1.0.8</version>
 
-	<name>${bundle.name} [${bundle.namespace}]</name>
+	<name>${bundle.symbolicName}</name>
 
 	<packaging>bundle</packaging>
 
