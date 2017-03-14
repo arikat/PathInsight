@@ -88,8 +88,7 @@ public class NodeOutputStageN extends AbstractTask {
 		List<CyNode> nodes = CyTableUtil.getNodesInState(network, "selected", true);
 		//List<CyNode> Nodes = network.getNodeList();
 		//create HASHSET
-		//final Set<CyEdge> Edges = new HashSet<CyEdge>();
-		//final Set<CyNode> neighbors = new HashSet<CyNode>();
+		HashSet<CyEdge> Edges = new HashSet<CyEdge>();
 		HashSet<CyNode> neighbors = new HashSet<CyNode>();
 		HashSet<CyNode> selective = new HashSet<CyNode>();
 		selective.addAll(nodes);
@@ -133,390 +132,314 @@ public class NodeOutputStageN extends AbstractTask {
 		while (n < x) { //replaced while loop with if -- maybe this works better
 			taskMonitor.setStatusMessage("loop begins");
 		
-		for (CyNode node : selective) { //let's see if this changes anything
-			taskMonitor.setStatusMessage("Number of nodes: " + nodes);
-			//List<CyEdge> Edges = network.getAdjacentEdgeList(node, CyEdge.Type.OUTGOING);
-			//Edges.addAll(network.getAdjacentEdgeList(node, CyEdge.Type.OUTGOING));
-			//neighbors.addAll(network.getNeighborList(node, Type.OUTGOING));
-			List<CyNode> neighborinos = network.getNeighborList(node, Type.OUTGOING); //SOMETHING STRANGE IS GOING ON HERE?
-			taskMonitor.setStatusMessage("Number of neighborinos: " + neighborinos);
-			
-			for (CyNode nebs : neighborinos) {
-				if (!neighbors.contains(nebs)) {
-					neighbors.add(nebs);
-					taskMonitor.setStatusMessage("Number of neighbors: " + neighbors);
+			for (CyNode node : selective) { //let's see if this changes anything
+				taskMonitor.setStatusMessage("Number of nodes: " + node);
+				//List<CyEdge> Edges = network.getAdjacentEdgeList(node, CyEdge.Type.OUTGOING);
+				//Edges.addAll(network.getAdjacentEdgeList(node, CyEdge.Type.OUTGOING));
+				//neighbors.addAll(network.getNeighborList(node, Type.OUTGOING));
+				List<CyNode> neighborinos = network.getNeighborList(node, Type.OUTGOING); //SOMETHING STRANGE IS GOING ON HERE?
+				//taskMonitor.setStatusMessage("Number of neighborinos: " + neighborinos);
+				List<CyEdge> Edgess = network.getAdjacentEdgeList(node, CyEdge.Type.OUTGOING); //change back to nodely, incoming if not working
+				Edges.addAll(Edgess);
+				
+				
+				for (CyNode nebs : neighborinos) {
+					if (!neighbors.contains(nebs)) {
+						neighbors.add(nebs);
+						taskMonitor.setStatusMessage("Number of neighbors: " + neighbors);
+					}
 				}
-			}
-		} //This cuts off the for loop to node and nodes - you can eliminate this if it doesn't work.		
-		
-			for (CyNode nodely : neighbors) {
-				
-			selective.clear(); //introduce this here, by clearing it, you can add to it again at the end. 
-			taskMonitor.setStatusMessage("Selected node hashset cleared");
+			} //This cuts off the for loop to node and nodes - you can eliminate this if it doesn't work.		
 			
+			selective.clear(); //introduce this here, by clearing it, you can add to it again at the end. change position?
+			//taskMonitor.setStatusMessage("Selected node hashset cleared"); //selective.remove(target);?
 			
-			CharSequence hip = "process";	
-			CharSequence and = "AND";
-			CharSequence or = "OR";
-			String lab = network.getRow(nodely).get(shape, String.class);
-			
-			if (lab == null) {	//check if this works
-				
-			if (network.getRow(nodely).get(columnName, Integer.class) == null) {
-					//set nodely to 0, okay?
-					network.getRow(nodely).set(columnName, Integer.valueOf(0));
-				}
-				
-				List<CyEdge> Edges = network.getAdjacentEdgeList(nodely, CyEdge.Type.INCOMING); //change back to nodely, incoming if not working
-				for (CyEdge edge : Edges) { //consider switching order of edges -- look up for loop without for loop!!!!
-				
-					CyNode source = edge.getSource();
-					CyNode target = edge.getTarget(); //prev nodely
+				for (CyNode nodely : neighbors) {
 					
-					List<CyEdge> qEdges = network.getAdjacentEdgeList(source, CyEdge.Type.OUTGOING);	
-
-					
-					selective.add(target); //Would this work? If I give the targets?
-					
-				//this is where I identify CYEDGE and write the algorithm
-				// if node >= edge and node > 0 = 1
-				// if edge <= node and node < 0 = -1
-				// if node = 0 = -1	
-						
-					if (network.getRow(source).get(columnName, Integer.class) == 1) {
-						network.getRow(source).set(IMAGE_COLUMN, one);
-					}
-				
-					if (network.getRow(source).get(columnName, Integer.class) > 2) {
-						network.getRow(source).set(IMAGE_COLUMN, plusplus);
-					}
-			
-					if (network.getRow(source).get(columnName, Integer.class) < -2) { 
-						network.getRow(source).set(IMAGE_COLUMN, negneg);
-					}
-			
-					if (network.getRow(source).get(columnName, Integer.class) == 2) {
-						network.getRow(source).set(IMAGE_COLUMN, two);
-					}
-					
-					if (network.getRow(source).get(columnName, Integer.class) == 0) {
-						network.getRow(source).set(IMAGE_COLUMN, zero); 
-					}
-					
-					if (network.getRow(source).get(columnName, Integer.class) == -1) { 
-						network.getRow(source).set(IMAGE_COLUMN, negone);
-					}
-					
-					if (network.getRow(source).get(columnName, Integer.class) == -2) {
-						network.getRow(source).set(IMAGE_COLUMN, negtwo);
-					}	
-					
-					
-				int attempt = nodeTable.getRow(target.getSUID()).get(columnName, Integer.class);
-				
-				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) >= 1)) {
-					//set nodely to 1, okay?
-						nodeTable.getRow(target.getSUID()).set(columnName, (++attempt)); //instead of 2, a = 4
-						
-						if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
-								if (network.getRow(target).get(columnName, Integer.class) == 1) {
-									network.getRow(target).set(IMAGE_COLUMN, one);
-								}
-							
-								if (network.getRow(target).get(columnName, Integer.class) > 2) {
-									network.getRow(target).set(IMAGE_COLUMN, plusplus);
-								}
-						
-								if (network.getRow(target).get(columnName, Integer.class) < -2) { 
-									network.getRow(target).set(IMAGE_COLUMN, negneg);
-								}
-						
-								if (network.getRow(target).get(columnName, Integer.class) == 2) {
-									network.getRow(target).set(IMAGE_COLUMN, two);
-								}
+				CharSequence hip = "process";	
+				CharSequence and = "AND";
+				CharSequence or = "OR";
+				//String lab = network.getRow(nodely).get(shape, String.class);
 								
-								if (network.getRow(target).get(columnName, Integer.class) == 0) {
-									network.getRow(target).set(IMAGE_COLUMN, zero); 
-								}
-								
-								if (network.getRow(target).get(columnName, Integer.class) == -1) { 
-									network.getRow(target).set(IMAGE_COLUMN, negone);
-								}
-								
-								if (network.getRow(target).get(columnName, Integer.class) == -2) {
-									network.getRow(target).set(IMAGE_COLUMN, negtwo);
-								}
-								
-						}
-					
-				}
-				
-				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) >= 1)) {
-					//set nodely to -1, okaay
-						nodeTable.getRow(target.getSUID()).set(columnName, (--attempt));
-						
-						
-						if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
-							
-						
-						if (network.getRow(target).get(columnName, Integer.class) == 1) {
-							network.getRow(target).set(IMAGE_COLUMN, one);
-						}
-					
-						if (network.getRow(target).get(columnName, Integer.class) > 2) {
-							network.getRow(target).set(IMAGE_COLUMN, plusplus);
-						}
-				
-						if (network.getRow(target).get(columnName, Integer.class) < -2) { 
-							network.getRow(target).set(IMAGE_COLUMN, negneg);
-						}
-				
-						if (network.getRow(target).get(columnName, Integer.class) == 2) {
-							network.getRow(target).set(IMAGE_COLUMN, two);
-						}
-						
-						if (network.getRow(target).get(columnName, Integer.class) == 0) {
-							network.getRow(target).set(IMAGE_COLUMN, zero); 
-						}
-						
-						if (network.getRow(target).get(columnName, Integer.class) == -1) { 
-							network.getRow(target).set(IMAGE_COLUMN, negone);
-						}
-						
-						if (network.getRow(target).get(columnName, Integer.class) == -2) {
-							network.getRow(target).set(IMAGE_COLUMN, negtwo);
-						}
-						
-						}
-
-				}
-				
-				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) <= -1)) {
-					//set nodely to -1, okay?
-						nodeTable.getRow(target.getSUID()).set(columnName, (--attempt));
-						
-						if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
-						
-						if (network.getRow(target).get(columnName, Integer.class) == 1) {
-							network.getRow(target).set(IMAGE_COLUMN, one);
-						}
-					
-						if (network.getRow(target).get(columnName, Integer.class) > 2) {
-							network.getRow(target).set(IMAGE_COLUMN, plusplus);
-						}
-				
-						if (network.getRow(target).get(columnName, Integer.class) < -2) { 
-							network.getRow(target).set(IMAGE_COLUMN, negneg);
-						}
-				
-						if (network.getRow(target).get(columnName, Integer.class) == 2) {
-							network.getRow(target).set(IMAGE_COLUMN, two);
-						}
-						
-						if (network.getRow(target).get(columnName, Integer.class) == 0) {
-							network.getRow(target).set(IMAGE_COLUMN, zero); 
-						}
-						
-						if (network.getRow(target).get(columnName, Integer.class) == -1) { 
-							network.getRow(target).set(IMAGE_COLUMN, negone);
-						}
-						
-						if (network.getRow(target).get(columnName, Integer.class) == -2) {
-							network.getRow(target).set(IMAGE_COLUMN, negtwo);
-						}
-						
-						}
-					}
-				
-				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) <= -1)) {
-					//set nodely to 1, okay?
-						nodeTable.getRow(target.getSUID()).set(columnName, (++attempt));
-						
-						if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
-						
-						if (network.getRow(target).get(columnName, Integer.class) == 1) {
-							network.getRow(target).set(IMAGE_COLUMN, one);
-						}
-					
-						if (network.getRow(target).get(columnName, Integer.class) > 2) {
-							network.getRow(target).set(IMAGE_COLUMN, plusplus);
-						}
-				
-						if (network.getRow(target).get(columnName, Integer.class) < -2) { 
-							network.getRow(target).set(IMAGE_COLUMN, negneg);
-						}
-				
-						if (network.getRow(target).get(columnName, Integer.class) == 2) {
-							network.getRow(target).set(IMAGE_COLUMN, two);
-						}
-						
-						if (network.getRow(target).get(columnName, Integer.class) == 0) {
-							network.getRow(target).set(IMAGE_COLUMN, zero); 
-						}
-						
-						if (network.getRow(target).get(columnName, Integer.class) == -1) { 
-							network.getRow(target).set(IMAGE_COLUMN, negone);
-						}
-						
-						if (network.getRow(target).get(columnName, Integer.class) == -2) {
-							network.getRow(target).set(IMAGE_COLUMN, negtwo);
-						}
-						
-						}
-					}
-				
-				for (CyEdge qEdge : qEdges) {
-					
-					CyNode qsource = qEdge.getSource();
-					CyNode qtarget = qEdge.getTarget();
-				
-					if (network.getRow(qsource).get(columnName, Integer.class) == 0) {
+				if (network.getRow(nodely).get(columnName, Integer.class) == null) {
 						//set nodely to 0, okay?
-						nodeTable.getRow(qtarget.getSUID()).set(columnName, attempt); //may need to insert attempt + 0, instead of just inserting zero - remember to test this.
+						network.getRow(nodely).set(columnName, Integer.valueOf(0));
+					}
+					//List<CyEdge> qEdges = network.getAdjacentEdgeList(nodely, CyEdge.Type.OUTGOING); //For question marks
+					for (CyEdge edge : Edges) { //consider switching order of edges -- look up for loop without for loop!!!!
+					
+						CyNode source = edge.getSource();
+						CyNode target = edge.getTarget(); //prev nodely
+						//selective.remove(target); //need to remove if not working
+						//List<CyEdge> qEdges = network.getAdjacentEdgeList(source, CyEdge.Type.OUTGOING);
 						
-						if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
-						
-						if (network.getRow(qtarget).get(columnName, Integer.class) == 1) {
-							network.getRow(qtarget).set(IMAGE_COLUMN, one);
-							netoView.getEdgeView(qEdge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+						selective.add(target); //Would this work? If I give the targets?
+						//taskMonitor.setStatusMessage("target added");
+					//this is where I identify CYEDGE and write the algorithm
+					// if node >= edge and node > 0 = 1
+					// if edge <= node and node < 0 = -1
+					// if node = 0 = -1	
+							
+						if (network.getRow(source).get(columnName, Integer.class) == 1) {
+							network.getRow(source).set(IMAGE_COLUMN, one);
 						}
 					
-						if (network.getRow(qtarget).get(columnName, Integer.class) > 2) {
-							network.getRow(qtarget).set(IMAGE_COLUMN, plusplus);
-							netoView.getEdgeView(qEdge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+						if (network.getRow(source).get(columnName, Integer.class) > 2) {
+							network.getRow(source).set(IMAGE_COLUMN, plusplus);
 						}
 				
-						if (network.getRow(qtarget).get(columnName, Integer.class) < -2) { 
-							network.getRow(qtarget).set(IMAGE_COLUMN, negneg);
-							netoView.getEdgeView(qEdge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+						if (network.getRow(source).get(columnName, Integer.class) < -2) { 
+							network.getRow(source).set(IMAGE_COLUMN, negneg);
 						}
 				
-						if (network.getRow(qtarget).get(columnName, Integer.class) == 2) {
-							network.getRow(qtarget).set(IMAGE_COLUMN, two);
-							netoView.getEdgeView(qEdge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+						if (network.getRow(source).get(columnName, Integer.class) == 2) {
+							network.getRow(source).set(IMAGE_COLUMN, two);
 						}
 						
-						if (network.getRow(qtarget).get(columnName, Integer.class) == 0) {
-							network.getRow(qtarget).set(IMAGE_COLUMN, zero); 
-							netoView.getEdgeView(qEdge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+						if (network.getRow(source).get(columnName, Integer.class) == 0) {
+							network.getRow(source).set(IMAGE_COLUMN, zero); 
 						}
 						
-						if (network.getRow(qtarget).get(columnName, Integer.class) == -1) { 
-							network.getRow(qtarget).set(IMAGE_COLUMN, negone);
-							netoView.getEdgeView(qEdge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+						if (network.getRow(source).get(columnName, Integer.class) == -1) { 
+							network.getRow(source).set(IMAGE_COLUMN, negone);
 						}
 						
-						if (network.getRow(qtarget).get(columnName, Integer.class) == -2) {
-							network.getRow(qtarget).set(IMAGE_COLUMN, negtwo);
-							netoView.getEdgeView(qEdge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?"); //note may need to remove and check
-						} 
+						if (network.getRow(source).get(columnName, Integer.class) == -2) {
+							network.getRow(source).set(IMAGE_COLUMN, negtwo);
+						}	
+						
+						
+					int attempt = nodeTable.getRow(target.getSUID()).get(columnName, Integer.class);
 					
+					if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) >= 1)) {
+						//set nodely to 1, okay?
+							nodeTable.getRow(target.getSUID()).set(columnName, (++attempt)); //instead of 2, a = 4
+							
+							if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
+									if (network.getRow(target).get(columnName, Integer.class) == 1) {
+										network.getRow(target).set(IMAGE_COLUMN, one);
+									}
+								
+									if (network.getRow(target).get(columnName, Integer.class) > 2) {
+										network.getRow(target).set(IMAGE_COLUMN, plusplus);
+									}
+							
+									if (network.getRow(target).get(columnName, Integer.class) < -2) { 
+										network.getRow(target).set(IMAGE_COLUMN, negneg);
+									}
+							
+									if (network.getRow(target).get(columnName, Integer.class) == 2) {
+										network.getRow(target).set(IMAGE_COLUMN, two);
+									}
+									
+									if (network.getRow(target).get(columnName, Integer.class) == 0) {
+										network.getRow(target).set(IMAGE_COLUMN, zero); 
+									}
+									
+									if (network.getRow(target).get(columnName, Integer.class) == -1) { 
+										network.getRow(target).set(IMAGE_COLUMN, negone);
+									}
+									
+									if (network.getRow(target).get(columnName, Integer.class) == -2) {
+										network.getRow(target).set(IMAGE_COLUMN, negtwo);
+									}
+									
+							}
+						
 					}
-					}
+					
+					if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) >= 1)) {
+						//set nodely to -1, okaay
+							nodeTable.getRow(target.getSUID()).set(columnName, (--attempt));
+							
+							
+							if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
+								
+							
+							if (network.getRow(target).get(columnName, Integer.class) == 1) {
+								network.getRow(target).set(IMAGE_COLUMN, one);
+							}
+						
+							if (network.getRow(target).get(columnName, Integer.class) > 2) {
+								network.getRow(target).set(IMAGE_COLUMN, plusplus);
+							}
+					
+							if (network.getRow(target).get(columnName, Integer.class) < -2) { 
+								network.getRow(target).set(IMAGE_COLUMN, negneg);
+							}
+					
+							if (network.getRow(target).get(columnName, Integer.class) == 2) {
+								network.getRow(target).set(IMAGE_COLUMN, two);
+							}
+							
+							if (network.getRow(target).get(columnName, Integer.class) == 0) {
+								network.getRow(target).set(IMAGE_COLUMN, zero); 
+							}
+							
+							if (network.getRow(target).get(columnName, Integer.class) == -1) { 
+								network.getRow(target).set(IMAGE_COLUMN, negone);
+							}
+							
+							if (network.getRow(target).get(columnName, Integer.class) == -2) {
+								network.getRow(target).set(IMAGE_COLUMN, negtwo);
+							}
+							
+							}
 
+					}
+					
+					if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) <= -1)) {
+						//set nodely to -1, okay?
+							nodeTable.getRow(target.getSUID()).set(columnName, (--attempt));
+							
+							if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
+							
+							if (network.getRow(target).get(columnName, Integer.class) == 1) {
+								network.getRow(target).set(IMAGE_COLUMN, one);
+							}
+						
+							if (network.getRow(target).get(columnName, Integer.class) > 2) {
+								network.getRow(target).set(IMAGE_COLUMN, plusplus);
+							}
+					
+							if (network.getRow(target).get(columnName, Integer.class) < -2) { 
+								network.getRow(target).set(IMAGE_COLUMN, negneg);
+							}
+					
+							if (network.getRow(target).get(columnName, Integer.class) == 2) {
+								network.getRow(target).set(IMAGE_COLUMN, two);
+							}
+							
+							if (network.getRow(target).get(columnName, Integer.class) == 0) {
+								network.getRow(target).set(IMAGE_COLUMN, zero); 
+							}
+							
+							if (network.getRow(target).get(columnName, Integer.class) == -1) { 
+								network.getRow(target).set(IMAGE_COLUMN, negone);
+							}
+							
+							if (network.getRow(target).get(columnName, Integer.class) == -2) {
+								network.getRow(target).set(IMAGE_COLUMN, negtwo);
+							}
+							
+							}
+						}
+					
+					if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) <= -1)) {
+						//set nodely to 1, okay?
+							nodeTable.getRow(target.getSUID()).set(columnName, (++attempt));
+							
+							if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
+							
+							if (network.getRow(target).get(columnName, Integer.class) == 1) {
+								network.getRow(target).set(IMAGE_COLUMN, one);
+							}
+						
+							if (network.getRow(target).get(columnName, Integer.class) > 2) {
+								network.getRow(target).set(IMAGE_COLUMN, plusplus);
+							}
+					
+							if (network.getRow(target).get(columnName, Integer.class) < -2) { 
+								network.getRow(target).set(IMAGE_COLUMN, negneg);
+							}
+					
+							if (network.getRow(target).get(columnName, Integer.class) == 2) {
+								network.getRow(target).set(IMAGE_COLUMN, two);
+							}
+							
+							if (network.getRow(target).get(columnName, Integer.class) == 0) {
+								network.getRow(target).set(IMAGE_COLUMN, zero); 
+							}
+							
+							if (network.getRow(target).get(columnName, Integer.class) == -1) { 
+								network.getRow(target).set(IMAGE_COLUMN, negone);
+							}
+							
+							if (network.getRow(target).get(columnName, Integer.class) == -2) {
+								network.getRow(target).set(IMAGE_COLUMN, negtwo);
+							}
+							
+							}
+						}
+					
+					
+						if (network.getRow(source).get(columnName, Integer.class) == 0) {
+							//set nodely to 0, okay?
+							nodeTable.getRow(target.getSUID()).set(columnName, attempt); //may need to insert attempt + 0, instead of just inserting zero - remember to test this.
+							
+							if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
+							
+							if (network.getRow(target).get(columnName, Integer.class) == 1) {
+								network.getRow(target).set(IMAGE_COLUMN, one);
+								netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+							}
+						
+							if (network.getRow(target).get(columnName, Integer.class) > 2) {
+								network.getRow(target).set(IMAGE_COLUMN, plusplus);
+								netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+							}
+					
+							if (network.getRow(target).get(columnName, Integer.class) < -2) { 
+								network.getRow(target).set(IMAGE_COLUMN, negneg);
+								netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+							}
+					
+							if (network.getRow(target).get(columnName, Integer.class) == 2) {
+								network.getRow(target).set(IMAGE_COLUMN, two);
+								netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+							}
+							
+							if (network.getRow(target).get(columnName, Integer.class) == 0) {
+								network.getRow(target).set(IMAGE_COLUMN, zero); 
+								netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+							}
+							
+							if (network.getRow(target).get(columnName, Integer.class) == -1) { 
+								network.getRow(target).set(IMAGE_COLUMN, negone);
+								netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?");
+							}
+							
+							if (network.getRow(target).get(columnName, Integer.class) == -2) {
+								network.getRow(target).set(IMAGE_COLUMN, negtwo);
+								netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LABEL, "?"); //note may need to remove and check
+							} 
+						
+						
+						}
+
+					}
+					
 				}
+					
+						Edges.clear(); //something is going wrong with edges clearing.
+					//	taskMonitor.setStatusMessage("Edges cleared");		
+						
+						
+			}
 				
-				}
+				//You have to clear either selective again or neighbors at some point to get it to fully restart.
+				neighbors.clear(); //by adding it here, it will reiterate at the very end.
+			//	taskMonitor.setStatusMessage("neighbor hashset cleared");
+				
+				n = n+1;
+				taskMonitor.setStatusMessage("Step " + n + " complete!");
+				
+				
+				
+				//Edges.clear(); //something is going wrong with edges clearing.
+				//taskMonitor.setStatusMessage("Edges cleared");
 				
 			}
 			
+			VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
+					"(mapping.type=passthrough)");
+			PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
+					cgProp);
 			
-			if (lab != null) {	 //check if this works
-				
-			if (network.getRow(nodely).get(columnName, Integer.class) == null) {
-					//set nodely to 0, okay?
-					network.getRow(nodely).set(columnName, Integer.valueOf(0));
-				}
-				
-				List<CyEdge> Edges = network.getAdjacentEdgeList(nodely, CyEdge.Type.INCOMING); //change back to nodely, incoming if not working
-				for (CyEdge edge : Edges) { //consider switching order of edges -- look up for loop without for loop!!!!
-				
-					CyNode source = edge.getSource();
-					CyNode target = edge.getTarget(); //prev nodely		
-					
-					
-				int attempt = nodeTable.getRow(target.getSUID()).get(columnName, Integer.class);
-				
-				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) == 1)) {
-					//set nodely to 1, okay?
-						nodeTable.getRow(target.getSUID()).set(columnName, (++attempt)); //instead of 2, a = 4
-						
-				}
-				
-				
-				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) == -1)) {
-					//set nodely to -1, okay?
-						nodeTable.getRow(target.getSUID()).set(columnName, (++attempt));
-						
-					}
-				
-				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) == 1)) {
-					nodeTable.getRow(target.getSUID()).set(columnName, --attempt);
-				}
-				
-				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) > 1)) {
-					nodeTable.getRow(target.getSUID()).set(columnName, --attempt - 1);
-				}
-				
-				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) < -1)) {
-					nodeTable.getRow(target.getSUID()).set(columnName, --attempt - 1);
-				}
-				
-				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) > 1)) {
-					nodeTable.getRow(target.getSUID()).set(columnName, ++attempt + 1);
-				}
-				
-				if ((network.getRow(edge).get(columnName, Integer.class) == -1) && (network.getRow(source).get(columnName, Integer.class) < -1)) {
-					nodeTable.getRow(target.getSUID()).set(columnName, ++attempt + 1);
-				}
-				
-				if (network.getRow(source).get(columnName, Integer.class) == 0) {
-					//set nodely to 0, okay?
-					nodeTable.getRow(target.getSUID()).set(columnName, attempt);	
+			style.addVisualMappingFunction(map);
+			style.apply(netView);
+			netView.updateView();
+			
+		}	
 
-				}
-				
-				if ((network.getRow(edge).get(columnName, Integer.class) == 1) && (network.getRow(source).get(columnName, Integer.class) == -1)) {
-					nodeTable.getRow(target.getSUID()).set(columnName, --attempt);
-				}
-				
-				}
-				
-			
-			
-			}
-				
-					VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
-							"(mapping.type=passthrough)");
-					PassthroughMapping map = (PassthroughMapping) factory.createVisualMappingFunction(IMAGE_COLUMN, String.class,
-							cgProp);
-					
-					style.addVisualMappingFunction(map);
-					style.apply(netView);
-					netView.updateView();
-					
-					//right
-					
-					//random null error is occurring here. What is going on?
-					
-					//selective.clear(); maybe add it here?
-					
-				/*	neighbors.clear(); //by adding it here, it will reiterate at the very end.
-					n = n++;
-					taskMonitor.setStatusMessage("Step " + n + " complete!");
-					
-					taskMonitor.setStatusMessage("hashsets cleared and renewed");*/
-					
-					
-		}
-			
-			neighbors.clear(); //by adding it here, it will reiterate at the very end.
-			n = n+1;
-			taskMonitor.setStatusMessage("Step " + n + " complete!");
-			
-			taskMonitor.setStatusMessage("neighbor hashset cleared and renewed");
-			
-		}
-			
-	}	
-}
+	}

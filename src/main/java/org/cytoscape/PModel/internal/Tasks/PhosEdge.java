@@ -52,7 +52,8 @@ public class PhosEdge extends AbstractTask {
 
 		if (edgeTable.getColumn(phosLab) == null) {
 			edgeTable.createColumn(phosLab, String.class, false);
-			
+		}
+		
 			List<CyEdge> Edges = CyTableUtil.getEdgesInState(network, "selected", true);
 			monitor.setStatusMessage("Warning: null column - creating column and setting values");
 
@@ -63,19 +64,6 @@ public class PhosEdge extends AbstractTask {
 				monitor.setStatusMessage("changing phosphorylated edges");
 			}
 		} 
-		
-		if (edgeTable.getColumn(phosLab) != null) {
-			List<CyEdge> Edges = CyTableUtil.getEdgesInState(network, "selected", true);
-			monitor.setStatusMessage("Setting values");
-
-			for (CyEdge edge : Edges) {
-				edgeTable.getRow(edge.getSUID()).set(phosLab, act);
-				netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_PAINT, Color.YELLOW);
-				netoView.getEdgeView(edge).setLockedValue(BasicVisualLexicon.EDGE_LINE_TYPE, LineTypeVisualProperty.DASH_DOT);
-				monitor.setStatusMessage("changing phosphorylated edges");
-				}
-		}
-	}
 
 	public void cancel() {
 		cancelled = true;

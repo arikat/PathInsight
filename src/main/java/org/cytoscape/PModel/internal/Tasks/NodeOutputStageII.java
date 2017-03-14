@@ -58,7 +58,7 @@ public class NodeOutputStageII extends AbstractTask {
 	String negneg = "http://i.imgur.com/MXvZ8rG.png";
 	
 	@Override
-	public void run(TaskMonitor taskMonitor) throws Exception {
+	public void run(TaskMonitor taskMonitor) { //throws Exception {
 		if (network == null) {
 			System.out.println("There is no network.");
 			taskMonitor.setTitle("There is no network.");
@@ -79,11 +79,9 @@ public class NodeOutputStageII extends AbstractTask {
 		List<CyNode> nodes = CyTableUtil.getNodesInState(network, "selected", true);
 		//List<CyNode> Nodes = network.getNodeList();
 		//create HASHSET
-		//final Set<CyEdge> Edges = new HashSet<CyEdge>();
-		//final Set<CyNode> neighbors = new HashSet<CyNode>();
+		HashSet<CyEdge> Edges = new HashSet<CyEdge>();
 		HashSet<CyNode> neighbors = new HashSet<CyNode>();
 		HashSet<CyNode> selective = new HashSet<CyNode>();
-		selective.addAll(nodes);
 		
 		VisualMappingManager vmm = registrar.getService(VisualMappingManager.class);
 
@@ -123,42 +121,50 @@ public class NodeOutputStageII extends AbstractTask {
 		//Introduce the while loop here, if n!=x, may need to introduce above the for loop?
 		while (n < x) { //replaced while loop with if -- maybe this works better
 			taskMonitor.setStatusMessage("loop begins");
+			
+		if (n == 0) {	
+			for (CyNode node : nodes) {
+				selective.add(node);
+				taskMonitor.setStatusMessage("Selected Nodes Detected: " + selective);
+			}	
+		}
 		
-		for (CyNode node : selective) { //let's see if this changes anything
-			taskMonitor.setStatusMessage("Number of nodes: " + nodes);
+		for (CyNode nodesy : selective) { //let's see if this changes anything
+			taskMonitor.setStatusMessage("Number of nodes: " + nodesy);
 			//List<CyEdge> Edges = network.getAdjacentEdgeList(node, CyEdge.Type.OUTGOING);
 			//Edges.addAll(network.getAdjacentEdgeList(node, CyEdge.Type.OUTGOING));
 			//neighbors.addAll(network.getNeighborList(node, Type.OUTGOING));
-			List<CyNode> neighborinos = network.getNeighborList(node, Type.OUTGOING); //SOMETHING STRANGE IS GOING ON HERE?
+			List<CyNode> neighborinos = network.getNeighborList(nodesy, Type.OUTGOING); //SOMETHING STRANGE IS GOING ON HERE?
 			taskMonitor.setStatusMessage("Number of neighborinos: " + neighborinos);
 			
 			for (CyNode nebs : neighborinos) {
 				if (!neighbors.contains(nebs)) {
 					neighbors.add(nebs);
 					taskMonitor.setStatusMessage("Number of neighbors: " + neighbors);
-				}
+				}			
 			}
-		} //This cuts off the for loop to node and nodes - you can eliminate this if it doesn't work.		
+		} //This cuts off the for loop to node and nodes - you can eliminate this if it doesn't work.
 		
+			selective.clear(); //introduce this here, by clearing it, you can add to it again at the end. Or remove all nodes?
+			taskMonitor.setStatusMessage("Selected node hashset cleared: " + selective); // what if I didn't clear it?
+		
+			
 			for (CyNode nodely : neighbors) {
 				
-			selective.clear(); //introduce this here, by clearing it, you can add to it again at the end. 
-			taskMonitor.setStatusMessage("Selected node hashset cleared");
-			
-			
 			CharSequence hip = "process";	
 			CharSequence and = "AND";
 			CharSequence or = "OR";
 			String lab = network.getRow(nodely).get(shape, String.class);
 			
-			if (lab == null) {	//check if this works
+			//if (lab == null) {	//check if this works -- rethink this lab -- null thing
 				
 			if (network.getRow(nodely).get(columnName, Integer.class) == null) {
 					//set nodely to 0, okay?
 					network.getRow(nodely).set(columnName, Integer.valueOf(0));
 				}
 				//List<CyEdge> qEdges = network.getAdjacentEdgeList(nodely, CyEdge.Type.OUTGOING); //For question marks
-				List<CyEdge> Edges = network.getAdjacentEdgeList(nodely, CyEdge.Type.INCOMING); //change back to nodely, incoming if not working
+				List<CyEdge> Edgess = network.getAdjacentEdgeList(nodely, CyEdge.Type.INCOMING); //change back to nodely, incoming if not working
+				Edges.addAll(Edgess); //consider deleting this if it doesn't work. I think it works.				
 				for (CyEdge edge : Edges) { //consider switching order of edges -- look up for loop without for loop!!!!
 				
 					CyNode source = edge.getSource();
@@ -167,6 +173,11 @@ public class NodeOutputStageII extends AbstractTask {
 					List<CyEdge> qEdges = network.getAdjacentEdgeList(source, CyEdge.Type.OUTGOING);
 					
 					selective.add(target); //Would this work? If I give the targets?
+					taskMonitor.setStatusMessage("Next Node Selected " + selective); // this is where the issue is.
+					
+					//Attempting to replace selective.add(target) with nodely. Perhaps this will work?	
+					
+					//selective.add(target); //Would this work? If I give the targets?
 					
 				//this is where I identify CYEDGE and write the algorithm
 				// if node >= edge and node > 0 = 1
@@ -406,12 +417,13 @@ public class NodeOutputStageII extends AbstractTask {
 
 				}
 				
-				}
-				
+				//}
+								
 			}
 			
-			
-			if (lab != null) {	 //check if this works
+				Edges.clear();
+				
+			/*if (lab != null) {	 //check if this works
 				
 			if (network.getRow(nodely).get(columnName, Integer.class) == null) {
 					//set nodely to 0, okay?
@@ -474,7 +486,7 @@ public class NodeOutputStageII extends AbstractTask {
 				
 			
 			
-			}
+			}*/
 				
 					VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
 							"(mapping.type=passthrough)");
@@ -484,6 +496,8 @@ public class NodeOutputStageII extends AbstractTask {
 					style.addVisualMappingFunction(map);
 					style.apply(netView);
 					netView.updateView();
+					
+					//neighbors.clear(); //by adding it here, it will reiterate at the very end.
 					
 					//right
 					
@@ -500,11 +514,12 @@ public class NodeOutputStageII extends AbstractTask {
 					
 		}
 			
+			//selective.removeAll(nodes);
 			neighbors.clear(); //by adding it here, it will reiterate at the very end.
 			n = n+1;
 			taskMonitor.setStatusMessage("Step " + n + " complete!");
-			
 			taskMonitor.setStatusMessage("neighbor hashset cleared and renewed");
+			
 			
 		}
 			

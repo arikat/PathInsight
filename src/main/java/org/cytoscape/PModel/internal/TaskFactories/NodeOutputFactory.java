@@ -1,5 +1,6 @@
 package org.cytoscape.PModel.internal.TaskFactories;
 
+import org.cytoscape.PModel.internal.Tasks.NodeOutput;
 import org.cytoscape.PModel.internal.Tasks.NodeOutputStageII;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.service.util.CyServiceRegistrar;
@@ -20,7 +21,7 @@ public class NodeOutputFactory extends AbstractTaskFactory {
 	}
 	
 	public TaskIterator createTaskIterator(){
-		return new TaskIterator(new NodeOutputStageII(appMgr, netView, registrar, this.appMgr.getCurrentNetwork()));
+		return new TaskIterator(new NodeOutput(appMgr, netView, registrar, this.appMgr.getCurrentNetwork()));
 		//changed to stage II, check if working.
 		
 	}

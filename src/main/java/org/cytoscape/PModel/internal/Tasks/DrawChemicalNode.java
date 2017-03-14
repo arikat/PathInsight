@@ -60,6 +60,12 @@ public class DrawChemicalNode extends AbstractTask {
 			task.setStatusMessage("shape column created...");
 		}
 		
+		if (Nodes == null) {
+			insertTasksAfterCurrentTask(new CreateChem());
+			task.setStatusMessage("creating chemical node...");
+			//need to put something here to prevent it from creating a node unnecessarily
+		}
+		
 		if (Nodes != null) {
 			for (CyNode node : Nodes) {
 			
@@ -83,8 +89,6 @@ public class DrawChemicalNode extends AbstractTask {
 			
 			}
 		}
-				
-		insertTasksAfterCurrentTask(new CreateChem()); //need to put something here to prevent it from creating a node unnecessarily
 		
 	}
 	
@@ -149,7 +153,7 @@ public final class ParameterizeChemNode extends AbstractTask {
 		netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_SHAPE, NodeShapeVisualProperty.ELLIPSE);
 		netoView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_FILL_COLOR, new Color(0xFFFFFF, false));
 		
-		task.setStatusMessage("painting sbgn chemical node...");
+		task.setStatusMessage("painting chemical node...");
 	
 			}
 		}	

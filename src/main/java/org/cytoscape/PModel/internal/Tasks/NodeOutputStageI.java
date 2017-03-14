@@ -75,7 +75,7 @@ public class NodeOutputStageI extends AbstractTask {
 		List<CyNode> nodes = CyTableUtil.getNodesInState(network, "selected", true);
 		//List<CyNode> Nodes = network.getNodeList();
 		//create HASHSET
-		//final Set<CyEdge> Edges = new HashSet<CyEdge>();
+		HashSet<CyEdge> Edges = new HashSet<CyEdge>();
 		//final Set<CyNode> neighbors = new HashSet<CyNode>();
 		HashSet<CyNode> neighbors = new HashSet<CyNode>();
 		
@@ -136,7 +136,7 @@ public class NodeOutputStageI extends AbstractTask {
 			CharSequence or = "OR";
 			String lab = network.getRow(nodely).get(shape, String.class);
 			
-			if (lab == null) {
+			//if (lab == null) {
 			
 			//if ((lab.contains(hip) || lab.contains(or) || lab.contains(and)) == false) {	//check if this works
 				
@@ -146,14 +146,17 @@ public class NodeOutputStageI extends AbstractTask {
 				}
 			
 				//List<CyEdge> qEdges = network.getAdjacentEdgeList(nodely, CyEdge.Type.OUTGOING); //attempt for question marks
-				List<CyEdge> Edges = network.getAdjacentEdgeList(nodely, CyEdge.Type.INCOMING); //change back to nodely, incoming if not working
+				List<CyEdge> Edgess = network.getAdjacentEdgeList(nodely, CyEdge.Type.INCOMING); //change back to nodely, incoming if not working
+				Edges.addAll(Edgess);
 				for (CyEdge edge : Edges) { //consider switching order of edges -- look up for loop without for loop!!!!
+					
+					//consider making these edges incoming and creating a hashset, then clear the hashset at the end for the next round
 				
 					CyNode source = edge.getSource();
 					CyNode target = edge.getTarget(); //prev nodely
 					
-				List<CyEdge> qEdges = network.getAdjacentEdgeList(source, CyEdge.Type.OUTGOING);	
-					
+				List<CyEdge> qEdges = network.getAdjacentEdgeList(source, CyEdge.Type.OUTGOING);
+				
 				//this is where I identify CYEDGE and write the algorithm
 				// if node >= edge and node > 0 = 1
 				// if edge <= node and node < 0 = -1
@@ -311,6 +314,8 @@ public class NodeOutputStageI extends AbstractTask {
 					//set nodely to 1, okay?
 						nodeTable.getRow(target.getSUID()).set(columnName, (++attempt));
 						
+						//all I did was add q, see if this works.
+						
 						if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
 						
 						if (network.getRow(target).get(columnName, Integer.class) == 1) {
@@ -344,14 +349,14 @@ public class NodeOutputStageI extends AbstractTask {
 						}
 					}
 				
-				for (CyEdge qEdge : qEdges) {
-					
-					CyNode qsource = qEdge.getSource();
-					CyNode qtarget = qEdge.getTarget();
-				
-				if (network.getRow(qsource).get(columnName, Integer.class) == 0) {
+				if (network.getRow(source).get(columnName, Integer.class) == 0) {
 					//set nodely to 0, okay?
-					nodeTable.getRow(qtarget.getSUID()).set(columnName, attempt); //may need to insert attempt + 0, instead of just inserting zero - remember to test this.
+					nodeTable.getRow(target.getSUID()).set(columnName, attempt); //may need to insert attempt + 0, instead of just inserting zero - remember to test this.
+					
+					for (CyEdge qEdge : qEdges) {
+						
+						CyNode qsource = qEdge.getSource();
+						CyNode qtarget = qEdge.getTarget();
 					
 					if (netoView.getNodeView(nodely).getVisualProperty(BasicVisualLexicon.NODE_VISIBLE) == true) {
 					
@@ -394,11 +399,13 @@ public class NodeOutputStageI extends AbstractTask {
 				}
 				}
 				
-				}
+				//}
 				
 			}
+				
+			Edges.clear();
 			
-			if (lab != null) {
+			/*if (lab != null) { // why did you forget to instantiate lab, #sad :(
 			
 			//if ((lab.contains(hip) || lab.contains(or) || lab.contains(and))) {	 //check if this works
 				
@@ -461,7 +468,7 @@ public class NodeOutputStageI extends AbstractTask {
 				
 				}
 				
-			}
+			}*/
 				
 					VisualMappingFunctionFactory factory = registrar.getService(VisualMappingFunctionFactory.class,
 							"(mapping.type=passthrough)");
