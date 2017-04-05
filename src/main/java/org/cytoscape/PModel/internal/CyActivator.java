@@ -74,7 +74,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Label edge activation
 		ActivationEdgeFactory createcolumn = new ActivationEdgeFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties aprops = new Properties();
-		aprops.setProperty("preferredMenu", "Apps.Modeler.Edge Label");
+		aprops.setProperty("preferredMenu", "Apps.PathInsight.Edge Label");
 		aprops.setProperty("title", "Activating");
 		aprops.setProperty("inMenuBar", "true");
 		aprops.setProperty("menuGravity", "8.3");
@@ -83,7 +83,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Phosphorylating Edge
 		PhosTaskFactory phosPos = new PhosTaskFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties ppprops = new Properties();
-		ppprops.setProperty("preferredMenu", "Apps.Modeler.Phosphorylation");
+		ppprops.setProperty("preferredMenu", "Apps.PathInsight.Phosphorylation");
 		ppprops.setProperty("title", "Phosphorylating");
 		ppprops.setProperty("inMenuBar", "true");
 		ppprops.setProperty("menuGravity", "8.3");
@@ -92,7 +92,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Dephosphorylating Edge
 		DePhosTaskFactory phosNeg = new DePhosTaskFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties pnprops = new Properties();
-		pnprops.setProperty("preferredMenu", "Apps.Modeler.Phosphorylation");
+		pnprops.setProperty("preferredMenu", "Apps.PathInsight.Phosphorylation");
 		pnprops.setProperty("title", "Dephosphorylating");
 		pnprops.setProperty("inMenuBar", "true");
 		pnprops.setProperty("menuGravity", "8.5");
@@ -101,7 +101,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Activate Edge Label via edgeView
 		ActivationEdgeViewTaskFactory ectiveNode = new ActivationEdgeViewTaskFactory(); //registrar
 		Properties emnprops = new Properties();
-		emnprops.setProperty("preferredMenu", "Apps.Modeler.Edge Label");
+		emnprops.setProperty("preferredMenu", "Apps.PathInsight.Edge Label");
 		emnprops.setProperty("title", "Activating");
 		emnprops.setProperty("menuGravity", "8.1");
 		registerService(context, ectiveNode, EdgeViewTaskFactory.class, emnprops);
@@ -109,7 +109,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Inhibit Edge Label via edgeView
 		InhibitionEdgeViewFactory ictiveNode = new InhibitionEdgeViewFactory(); //registrar
 		Properties imnprops = new Properties();
-		imnprops.setProperty("preferredMenu", "Apps.Modeler.Edge Label");
+		imnprops.setProperty("preferredMenu", "Apps.PathInsight.Edge Label");
 		imnprops.setProperty("title", "Inhibiting");
 		imnprops.setProperty("menuGravity", "8.2");
 		registerService(context, ictiveNode, EdgeViewTaskFactory.class, imnprops);
@@ -117,7 +117,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Reset Edge Label via edgeView
 		ResetEdgeViewFactory rctiveNode = new ResetEdgeViewFactory(); //registrar
 		Properties rmnprops = new Properties();
-		rmnprops.setProperty("preferredMenu", "Apps.Modeler.Edge Label");
+		rmnprops.setProperty("preferredMenu", "Apps.PathInsight.Edge Label");
 		rmnprops.setProperty("title", "Reset");
 		rmnprops.setProperty("menuGravity", "8.3");
 		registerService(context, rctiveNode, EdgeViewTaskFactory.class, rmnprops);
@@ -125,7 +125,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Activate Node Label via NodeView
 		ActivationNodeViewTaskFactory activeNode = new ActivationNodeViewTaskFactory(); //registrar
 		Properties amnprops = new Properties();
-		amnprops.setProperty("preferredMenu", "Apps.Modeler.Node Label");
+		amnprops.setProperty("preferredMenu", "Apps.PathInsight.Node Label");
 		amnprops.setProperty("title", "Activated");
 		amnprops.setProperty("menuGravity", "8.1");
 		registerService(context, activeNode, NodeViewTaskFactory.class, amnprops);
@@ -133,7 +133,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Inhibit Node Label via NodeView
 		InhibitionNodeViewTaskFactory inhibNode = new InhibitionNodeViewTaskFactory(); //registrar
 		Properties innprops = new Properties();
-		innprops.setProperty("preferredMenu", "Apps.Modeler.Node Label");
+		innprops.setProperty("preferredMenu", "Apps.PathInsight.Node Label");
 		innprops.setProperty("title", "Inhibited");
 		innprops.setProperty("menuGravity", "8.2");
 		registerService(context, inhibNode, NodeViewTaskFactory.class, innprops);
@@ -141,7 +141,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Reset Node Label via NodeView
 		ResetNodeViewFactory resibNode = new ResetNodeViewFactory(); //registrar
 		Properties resprops = new Properties();
-		resprops.setProperty("preferredMenu", "Apps.Modeler.Node Label");
+		resprops.setProperty("preferredMenu", "Apps.PathInsight.Node Label");
 		resprops.setProperty("title", "Reset");
 		resprops.setProperty("menuGravity", "8.3");
 		registerService(context, resibNode, NodeViewTaskFactory.class, resprops);
@@ -149,7 +149,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Activate Node label
 		ActivationNodeFactory activateNode = new ActivationNodeFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties anprops = new Properties();
-		anprops.setProperty("preferredMenu", "Apps.Modeler.Node Label");
+		anprops.setProperty("preferredMenu", "Apps.PathInsight.Node Label");
 		anprops.setProperty("title", "Activated");
 		anprops.setProperty("inMenuBar", "true");
 		anprops.setProperty("menuGravity", "8.3");
@@ -158,7 +158,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Activate Node label
 		ResetNodeFactory resetNode = new ResetNodeFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties reprops = new Properties();
-		reprops.setProperty("preferredMenu", "Apps.Modeler.Node Label");
+		reprops.setProperty("preferredMenu", "Apps.PathInsight.Node Label");
 		reprops.setProperty("title", "Reset");
 		reprops.setProperty("inMenuBar", "true");
 		reprops.setProperty("menuGravity", "8.5");
@@ -167,7 +167,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Inhibit Node label
 		InhibitionNodeFactory inhibitNode = new InhibitionNodeFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties inprops = new Properties();
-		inprops.setProperty("preferredMenu", "Apps.Modeler.Node Label");
+		inprops.setProperty("preferredMenu", "Apps.PathInsight.Node Label");
 		inprops.setProperty("title", "Inhibited");
 		inprops.setProperty("inMenuBar", "true");
 		inprops.setProperty("menuGravity", "8.4");
@@ -176,7 +176,7 @@ public class CyActivator extends AbstractCyActivator {
 		//label edge inhibition
 		InhibitionEdgeFactory inhibit = new InhibitionEdgeFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties iprops = new Properties();
-		iprops.setProperty("preferredMenu", "Apps.Modeler.Edge Label");
+		iprops.setProperty("preferredMenu", "Apps.PathInsight.Edge Label");
 		iprops.setProperty("title", "Inhibiting");
 		iprops.setProperty("inMenuBar", "true");
 		iprops.setProperty("menuGravity", "8.4");
@@ -185,7 +185,7 @@ public class CyActivator extends AbstractCyActivator {
 		//label edge Reset
 		ResetEdgeFactory reset = new ResetEdgeFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties rprops = new Properties();
-		rprops.setProperty("preferredMenu", "Apps.Modeler.Edge Label");
+		rprops.setProperty("preferredMenu", "Apps.PathInsight.Edge Label");
 		rprops.setProperty("title", "Reset");
 		rprops.setProperty("inMenuBar", "true");
 		rprops.setProperty("menuGravity", "8.4");
@@ -194,7 +194,7 @@ public class CyActivator extends AbstractCyActivator {
 		//label question Reset
 		ResetQuestionFactory qreset = new ResetQuestionFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties qrprops = new Properties();
-		qrprops.setProperty("preferredMenu", "Apps.Modeler.Reset Values");
+		qrprops.setProperty("preferredMenu", "Apps.PathInsight.Reset Values");
 		qrprops.setProperty("title", "Clear Questions");
 		qrprops.setProperty("inMenuBar", "true");
 		qrprops.setProperty("menuGravity", "8.8");
@@ -203,7 +203,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Clear boolean values of all edges
 		ClearEdgeBoolTaskFactory clears = new ClearEdgeBoolTaskFactory(cyApplicationManagerService);
 		Properties ppropsy = new Properties();
-		ppropsy.setProperty("preferredMenu", "Apps.Modeler.Reset Values");
+		ppropsy.setProperty("preferredMenu", "Apps.PathInsight.Reset Values");
 		ppropsy.setProperty("title", "Clear Edges");
 		ppropsy.setProperty("inMenuBar", "true");
 		ppropsy.setProperty("menuGravity", "8.4");
@@ -212,7 +212,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Clear boolean values of all nodes
 		ClearNodeBoolTaskFactory cleary = new ClearNodeBoolTaskFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties pprops = new Properties();
-		pprops.setProperty("preferredMenu", "Apps.Modeler.Reset Values");
+		pprops.setProperty("preferredMenu", "Apps.PathInsight.Reset Values");
 		pprops.setProperty("title", "Clear Nodes");
 		pprops.setProperty("inMenuBar", "true");
 		pprops.setProperty("menuGravity", "8.5");
@@ -221,7 +221,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Clear values of Images
 		ClearImagesTaskFactory clearys = new ClearImagesTaskFactory(cyApplicationManagerService);
 		Properties pcprops = new Properties();
-		pcprops.setProperty("preferredMenu", "Apps.Modeler.Reset Values");
+		pcprops.setProperty("preferredMenu", "Apps.PathInsight.Reset Values");
 		pcprops.setProperty("title", "Clear Images");
 		pcprops.setProperty("inMenuBar", "true");
 		pcprops.setProperty("menuGravity", "8.6");
@@ -230,7 +230,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Node Output Stage I algorithm
 		NodeOutputStageITaskFactory stageI = new NodeOutputStageITaskFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties corpse = new Properties();
-		corpse.setProperty("preferredMenu", "Apps.Modeler.Node Analysis");
+		corpse.setProperty("preferredMenu", "Apps.PathInsight.Node Analysis");
 		corpse.setProperty("title", "One Step");
 		corpse.setProperty("inMenuBar", "true");
 		corpse.setProperty("menuGravity", "8.7");
@@ -239,7 +239,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Node Output Stage II algorithm
 		NodeOutputFactory creety = new NodeOutputFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties cops = new Properties();
-		cops.setProperty("preferredMenu", "Apps.Modeler.Node Analysis");
+		cops.setProperty("preferredMenu", "Apps.PathInsight.Node Analysis");
 		cops.setProperty("title", "Two Steps");
 		cops.setProperty("inMenuBar", "true");
 		cops.setProperty("menuGravity", "8.8");
@@ -248,7 +248,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Node Output Stage N algorithm
 		NodeOutputStageNTaskFactory crepety = new NodeOutputStageNTaskFactory(cyNetworkView, registrar, cyApplicationManagerService);
 		Properties scops = new Properties();
-		scops.setProperty("preferredMenu", "Apps.Modeler.Node Analysis");
+		scops.setProperty("preferredMenu", "Apps.PathInsight.Node Analysis");
 		scops.setProperty("title", "N Steps");
 		scops.setProperty("inMenuBar", "true");
 		scops.setProperty("menuGravity", "8.9");
@@ -257,7 +257,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Paint All Nodes
 		TaskFactory paintStructure = new PaintFactory(cyNetworkView, registrar, cyApplicationManagerService, mappy); //figure out how implement sbuild into this
 		Properties paintStructureProps = new Properties();
-		paintStructureProps.setProperty("preferredMenu", "Apps.Modeler");
+		paintStructureProps.setProperty("preferredMenu", "Apps.PathInsight");
 		paintStructureProps.setProperty("title", "KEGG Prepare");
 		paintStructureProps.setProperty("inMenuBar", "true");
 		paintStructureProps.setProperty("menuGravity", "8.6");
@@ -268,7 +268,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Draw Chemical Node
 		DrawSbgnChemNodeTaskFactory chemNode = new DrawSbgnChemNodeTaskFactory(cyNetworkView, registrar, cyApplicationManagerService, mappy);
 		Properties chprops = new Properties();
-		chprops.setProperty("preferredMenu", "Apps.Modeler.SBGN");
+		chprops.setProperty("preferredMenu", "Apps.PathInsight.SBGN");
 		chprops.setProperty("title", "Draw Simple Chemical");
 		chprops.setProperty("inMenuBar", "true");
 		chprops.setProperty("menuGravity", "8.4");
@@ -277,7 +277,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Draw Macromolecule Node
 		DrawSbgnMacromoleculeTaskFactory macNode = new DrawSbgnMacromoleculeTaskFactory(cyNetworkView, registrar, cyApplicationManagerService, mappy);
 		Properties maprops = new Properties();
-		maprops.setProperty("preferredMenu", "Apps.Modeler.SBGN");
+		maprops.setProperty("preferredMenu", "Apps.PathInsight.SBGN");
 		maprops.setProperty("title", "Draw Macromolecule");
 		maprops.setProperty("inMenuBar", "true");
 		maprops.setProperty("menuGravity", "8.5");
@@ -286,7 +286,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Draw Nucleic Acid Node
 		NucleicAcidNodeTaskFactory nucNode = new NucleicAcidNodeTaskFactory(cyNetworkView, registrar, cyApplicationManagerService, mappy);
 		Properties nucprops = new Properties();
-		nucprops.setProperty("preferredMenu", "Apps.Modeler.SBGN");
+		nucprops.setProperty("preferredMenu", "Apps.PathInsight.SBGN");
 		nucprops.setProperty("title", "Draw Nucleic Acid Node");
 		nucprops.setProperty("inMenuBar", "true");
 		nucprops.setProperty("menuGravity", "8.6");
@@ -295,7 +295,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Draw Process Node
 		DrawProcessNodeTaskFactory procNode = new DrawProcessNodeTaskFactory(cyNetworkView, registrar, cyApplicationManagerService, mappy);
 		Properties procprops = new Properties();
-		procprops.setProperty("preferredMenu", "Apps.Modeler.SBGN");
+		procprops.setProperty("preferredMenu", "Apps.PathInsight.SBGN");
 		procprops.setProperty("title", "Draw Process Node");
 		procprops.setProperty("inMenuBar", "true");
 		procprops.setProperty("menuGravity", "8.7");
@@ -304,7 +304,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Draw AND Node
 		AndTaskFactory andNode = new AndTaskFactory(cyNetworkView, registrar, cyApplicationManagerService, mappy);
 		Properties andprops = new Properties();
-		andprops.setProperty("preferredMenu", "Apps.Modeler.SBGN");
+		andprops.setProperty("preferredMenu", "Apps.PathInsight.SBGN");
 		andprops.setProperty("title", "Draw AND Gate");
 		andprops.setProperty("inMenuBar", "true");
 		andprops.setProperty("menuGravity", "8.8");
@@ -313,7 +313,7 @@ public class CyActivator extends AbstractCyActivator {
 		//Draw OR Node
 		OrTaskFactory orNode = new OrTaskFactory(cyNetworkView, registrar, cyApplicationManagerService, mappy);
 		Properties orprops = new Properties();
-		orprops.setProperty("preferredMenu", "Apps.Modeler.SBGN");
+		orprops.setProperty("preferredMenu", "Apps.PathInsight.SBGN");
 		orprops.setProperty("title", "Draw OR Gate");
 		orprops.setProperty("inMenuBar", "true");
 		orprops.setProperty("menuGravity", "8.9");

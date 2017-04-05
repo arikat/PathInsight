@@ -54,13 +54,14 @@ public class InhibitionNode extends AbstractTask {
 
 		VisualStyle style = vmm.getVisualStyle(netView);
 		
-		String two = "http://i.imgur.com/gBkmqwX.png";
-		String one = "http://i.imgur.com/y1VbITV.png";
-		String zero = "http://i.imgur.com/UfTJo4N.png";
-		String negone = "http://i.imgur.com/fsEggSs.png";
-		String negtwo = "http://i.imgur.com/qQ5JvTy.png";
-		String plusplus = "http://i.imgur.com/mWmyPNl.png";
-		String negneg = "http://i.imgur.com/MXvZ8rG.png";
+		String two = "http://i.imgur.com/0gmeOHH.png";
+		String one = "http://i.imgur.com/tdPe5At.png";
+		String zero = "http://i.imgur.com/tu2XzsP.png";
+		String negone = "http://i.imgur.com/y0845Hl.png";
+		String negtwo = "http://i.imgur.com/R7PVjVw.png";
+		String plusplus = "http://i.imgur.com/S7RykhX.png";
+		String negneg = "http://i.imgur.com/Y3j8Jl0.png";
+		
 		/*if (network == null) {
 			System.out.println("There is no network.");
 			return;

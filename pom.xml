@@ -4,9 +4,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 	<properties>
-		<bundle.symbolicName>Modeler</bundle.symbolicName>
+		<bundle.symbolicName>PathInsight</bundle.symbolicName>
 		<bundle.namespace>org.cytoscape.PModel</bundle.namespace>
-		<bundle.name>Modeler</bundle.name>
+		<bundle.name>PathInsight</bundle.name>
 	</properties>
 
 	<modelVersion>4.0.0</modelVersion>
